@@ -5,6 +5,7 @@
 				<ivy pattern="${ivy.settings.dir}/ivy-repo/[organization]-[module]-[revision].xml" />
 			</filesystem>
 			<ibiblio name="maven-repo2" m2compatible="true" root="https://repo1.maven.org/maven2" />
+            <ibiblio name="openlegacy-maven-repo" m2compatible="true" root="http://maven.openlegacy.org/maven2/release/"/>
 		</chain>
 	</resolvers>
 	<settings defaultResolver="projectRepos" validate="false" />
