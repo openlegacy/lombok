@@ -239,7 +239,7 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor</echo>
 			<format property="releaseTimestamp" pattern="yyyy-MM-dd" />
 		</tstamp>
 		<echo file="release-timestamp.txt">${releaseTimestamp}</echo>
-		<zip destfile="dist/lombok-${lombok.version}.jar">
+		<zip destfile="dist/openlegacy-lombok-${lombok.version}.jar">
 			<fileset dir="build" includes="changelog.txt" />
 			<fileset dir="." includes="LICENSE" />
 			<fileset dir="." includes="AUTHORS" />
@@ -268,7 +268,7 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor</echo>
 				</firstmatchmapper>
 			</mappedresources>
 		</zip>
-		<jar destfile="dist/lombok-${lombok.version}.jar" update="true">
+		<jar destfile="dist/openlegacy-lombok-${lombok.version}.jar" update="true">
 			<manifest>
 				<attribute name="Premain-Class" value="lombok.launch.Agent" />
 				<attribute name="Agent-Class" value="lombok.launch.Agent" />
@@ -278,7 +278,7 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor</echo>
 			</manifest>
 		</jar>
 		<delete file="release-timestamp.txt" />
-		<copy file="dist/lombok-${lombok.version}.jar" tofile="dist/lombok.jar" />
+		<copy file="dist/openlegacy-lombok-${lombok.version}.jar" tofile="dist/openlegacy-lombok.jar" />
 		<property name="lombok.dist.built" value="true" />
 	</target>
 	

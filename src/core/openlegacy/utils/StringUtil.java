@@ -8,8 +8,8 @@
  * Contributors:
  *     OpenLegacy Inc. - initial API and implementation
  *
- * Copyright (C) 2009-2015 The Project Lombok Authors.
- *
+ * Copyright (C) 2009-2016 The Project Lombok Authors.
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -27,25 +27,49 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+
  *******************************************************************************/
 
-package lombok;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package openlegacy.utils;
 
 /**
  * @author Ivan Bort
  * @since 3.6.0-SNAPSHOT
  */
-@Retention(RetentionPolicy.SOURCE) 
-@Target(ElementType.TYPE)
-public @interface Implements {
-	Class<?> value();
+public final class StringUtil {
+
+	public static String char2dArrayToSingleString(char[][] chars) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < chars.length; i++) {
+			for (int j = 0; j < chars[i].length; j++) {
+				builder.append(chars[i][j]);
+			}
+			builder.append(".");
+		}
+		return builder.toString()
+				.substring(0, builder.length() - 1);
+	}
+
+	public static char[][] singleStringToChar2dArray(String source) {
+		String[] split = source.split("\\.");
+		char[][] char2dArray = new char[split.length][0];
+
+		for (int i = 0; i < split.length; i++) {
+			String value = split[i];
+			char2dArray[i] = value.toCharArray();
+		}
+
+		return char2dArray;
+	}
 	
-	boolean getters() default true;
-	
-	boolean setters() default true;
+	public static String getVariableName(String source){
+		if (source == null || source.trim().isEmpty()){
+			return null;
+		}
+		String[] split = source.split("\\.");
+		String variable = split[split.length-1];
+		char c[] = variable.toCharArray();
+		c[0] = Character.toLowerCase(c[0]);
+		return new String(c);
+	}
 }

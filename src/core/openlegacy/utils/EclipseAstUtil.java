@@ -8,8 +8,8 @@
  * Contributors:
  *     OpenLegacy Inc. - initial API and implementation
  *
- * Copyright (C) 2009-2015 The Project Lombok Authors.
- *
+ * Copyright (C) 2009-2016 The Project Lombok Authors.
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -27,25 +27,50 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+
  *******************************************************************************/
 
-package lombok;
+package openlegacy.utils;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.eclipse.jdt.internal.compiler.ast.ParameterizedQualifiedTypeReference;
+import org.eclipse.jdt.internal.compiler.ast.ParameterizedSingleTypeReference;
+import org.eclipse.jdt.internal.compiler.ast.QualifiedTypeReference;
+import org.eclipse.jdt.internal.compiler.ast.SingleTypeReference;
+import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 
 /**
  * @author Ivan Bort
  * @since 3.6.0-SNAPSHOT
  */
-@Retention(RetentionPolicy.SOURCE) 
-@Target(ElementType.TYPE)
-public @interface Implements {
-	Class<?> value();
+public final class EclipseAstUtil {
+
+	public static TypeReference createTypeReference(String name){
+		String simpleName = name;
+		if (simpleName.contains(".")) {
+			String[] split = simpleName.split("\\.");
+			simpleName = split[split.length - 1];
+		}
+		TypeReference typeReference = null;
+		if (name.contains(".")) {
+			char[][] tokens = StringUtil.singleStringToChar2dArray(name);
+			typeReference = new QualifiedTypeReference(tokens, new long[tokens.length]);
+		} else {
+			typeReference = new SingleTypeReference(simpleName.toCharArray(), 0);
+		}
+		return typeReference;
+	}
 	
-	boolean getters() default true;
+	public static TypeReference createParametrizedTypeReference(String name, TypeReference typeArg){
+		if (name.contains(".")){
+			char[][] tokens = StringUtil.singleStringToChar2dArray(name);
+			TypeReference[][] typeArgs = new TypeReference[tokens.length][];
+			typeArgs[tokens.length-1] = new TypeReference[]{typeArg}; 
+			return new ParameterizedQualifiedTypeReference(tokens, typeArgs, 0, new long[tokens.length]);
+		} else {
+			TypeReference[] typeArgs = new TypeReference[1];
+			typeArgs[0] = typeArg; 
+			return new ParameterizedSingleTypeReference(name.toCharArray(), typeArgs, 0, 0);
+		}
+	}
 	
-	boolean setters() default true;
 }

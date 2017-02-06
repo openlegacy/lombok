@@ -1,1 +1,0 @@
-1) on RELEASE update url of openlegacy maven repo in buildScripts/ivysettings.xml

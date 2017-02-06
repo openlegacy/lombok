@@ -36,17 +36,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
-import org.eclipse.jdt.internal.compiler.ast.SingleTypeReference;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.mangosdk.spi.ProviderFor;
+import org.openlegacy.annotations.screen.ScreenEntitySuperClass;
+import org.openlegacy.terminal.ScreenEntity;
 
 import lombok.AccessLevel;
 import lombok.Implements;
 import lombok.core.AnnotationValues;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
+import openlegacy.ScreenEntityInterfaceHandler;
+import openlegacy.utils.EclipseAstUtil;
+import openlegacy.utils.StringUtil;
 
 /**
  * Handles the {@code lombok.Implements} annotation for eclipse.
@@ -59,7 +63,7 @@ public class HandleImplements extends EclipseAnnotationHandler<Implements> {
 
 	@Override
 	public void handle(AnnotationValues<Implements> annotationValues, Annotation annotation, EclipseNode annotationNode) {
-		//get type node
+		// get type node
 		EclipseNode typeNode = annotationNode.up();
 		TypeDeclaration typeDecl = checkAnnotation(typeNode, annotationNode);
 
@@ -67,78 +71,72 @@ public class HandleImplements extends EclipseAnnotationHandler<Implements> {
 			return;
 		}
 
-		//get classes to be added into the implements 
-		Implements instance = annotationValues.getInstance();
+		String probableFQType = annotationValues.getProbableFQType("value");
+		generateImplementsForType(typeNode, annotationNode, probableFQType);
 
-		generateImplementsForType(typeNode, annotationNode, annotationValues.getProbableFQTypes("value"), instance.getters(), instance.setters());
+		Implements instance = annotationValues.getInstance();
+		if (ScreenEntity.class.getName().equals(probableFQType)) {
+			new ScreenEntityInterfaceHandler().handle(typeNode, annotationNode);
+		}
+
+		if (instance.getters()) {
+			new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
+		}
+		if (instance.setters()) {
+			new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
+		}
 	}
 
 	/**
 	 * Generates new or extends existing "implements"
 	 */
-	public boolean generateImplementsForType(EclipseNode typeNode, EclipseNode annotationNode, List<String> types,
-			boolean getters, boolean setters) {
+	public boolean generateImplementsForType(EclipseNode typeNode, EclipseNode annotationNode, String type) {
 		TypeDeclaration typeDecl = checkAnnotation(typeNode, annotationNode);
 
-		if (typeDecl == null || types == null || types.isEmpty()) {
+		if (typeDecl == null || type == null || type.isEmpty()) {
 			return false;
 		}
 
-		List<TypeReference> resultingList = new ArrayList<TypeReference>();
-		long pos = 0;
-		// represents a list of full qualified declared interfaces
-		List<String> existingFqInterfacesNames = new ArrayList<String>();
-		// represents a list of simple declared interfaces
-		List<String> existingInterfacesNames = new ArrayList<String>();
+		//we cannot add implements for class that annotated as super class
+		if (!EclipseHandlerUtil.hasAnnotation(ScreenEntitySuperClass.class, typeNode)) {
+			List<TypeReference> resultingList = new ArrayList<TypeReference>();
+			// represents a list of full qualified declared interfaces
+			List<String> existingFqInterfacesNames = new ArrayList<String>();
+			// represents a list of simple declared interfaces
+			List<String> existingInterfacesNames = new ArrayList<String>();
 
-		if (typeDecl.superInterfaces != null) {
-			for (TypeReference reference : typeDecl.superInterfaces) {
-				resultingList.add(reference);
-				char[][] typeName = reference.getTypeName();
-				if (typeName.length > 1) {
-					// add to fq list
-					existingFqInterfacesNames.add(char2dArrayToSingleString(typeName));
-				} else {
-					existingInterfacesNames.add(String.valueOf(reference.getLastToken()));
-				}
-				if (pos < reference.sourceEnd) {
-					pos = reference.sourceEnd;
+			if (typeDecl.superInterfaces != null) {
+				for (TypeReference reference : typeDecl.superInterfaces) {
+					resultingList.add(reference);
+					char[][] typeName = reference.getTypeName();
+					if (typeName.length > 1) {
+						// add to fq list
+						existingFqInterfacesNames.add(StringUtil.char2dArrayToSingleString(typeName));
+					} else {
+						existingInterfacesNames.add(String.valueOf(reference.getLastToken()));
+					}
 				}
 			}
-		}
-		
-		for (String clazz : types) {
-			//check that current clazz
-			if (existingFqInterfacesNames.contains(clazz)){
-				continue;
-			}
-			String simpleName = clazz;
+
+			String simpleName = type;
 			if (simpleName.contains(".")) {
-				String[] split = simpleName.split(".");
-				simpleName = split[split.length-1];
+				String[] split = simpleName.split("\\.");
+				simpleName = split[split.length - 1];
 			}
-			if (existingInterfacesNames.contains(simpleName)){
-				continue;
+			// check that current type was not already declared
+			if (!existingFqInterfacesNames.contains(type) && !existingInterfacesNames.contains(simpleName)) {
+				String fromImports = typeNode.getAst().getImportList().getFullyQualifiedNameForSimpleName(simpleName);
+				TypeReference typeReference = EclipseAstUtil.createTypeReference(fromImports == null ? type : simpleName);
+				resultingList.add(typeReference);
 			}
-			SingleTypeReference singleTypeReference = new SingleTypeReference(clazz.toCharArray(), pos);
-			resultingList.add(singleTypeReference);
-			if (pos < singleTypeReference.sourceEnd) {
-				pos = singleTypeReference.sourceEnd;
-			}
-		}
-		//set new list of interfaces
-		typeDecl.superInterfaces = resultingList.toArray(new TypeReference[] {});
+			// set new list of interfaces
+			typeDecl.superInterfaces = resultingList.toArray(new TypeReference[] {});
 
-		if (getters) {
-			new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
-		}
-		if (setters) {
-			new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
 		}
 		return true;
 	}
 
-	private static TypeDeclaration checkAnnotation(EclipseNode typeNode, EclipseNode annotationNode) {
+	public static TypeDeclaration checkAnnotation(EclipseNode typeNode, EclipseNode annotationNode) {
 		TypeDeclaration typeDecl = null;
 		if (typeNode.get() instanceof TypeDeclaration) {
 			typeDecl = (TypeDeclaration) typeNode.get();
@@ -154,13 +152,4 @@ public class HandleImplements extends EclipseAnnotationHandler<Implements> {
 		return typeDecl;
 	}
 
-	private static String char2dArrayToSingleString(char[][] chars) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < chars.length; i++) {
-			for (int j = 0; j < chars[i].length; j++) {
-				builder.append(chars[i][j]);
-			}
-		}
-		return builder.toString();
-	}
 }
