@@ -32,11 +32,23 @@
 
 package openlegacy.utils;
 
+import static lombok.eclipse.Eclipse.poss;
+
+import org.eclipse.jdt.internal.compiler.ast.Annotation;
+import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
+import org.eclipse.jdt.internal.compiler.ast.MemberValuePair;
+import org.eclipse.jdt.internal.compiler.ast.NormalAnnotation;
 import org.eclipse.jdt.internal.compiler.ast.ParameterizedQualifiedTypeReference;
 import org.eclipse.jdt.internal.compiler.ast.ParameterizedSingleTypeReference;
 import org.eclipse.jdt.internal.compiler.ast.QualifiedTypeReference;
 import org.eclipse.jdt.internal.compiler.ast.SingleTypeReference;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.eclipse.Eclipse;
+import lombok.eclipse.handlers.EclipseHandlerUtil;
 
 /**
  * @author Ivan Bort
@@ -44,7 +56,7 @@ import org.eclipse.jdt.internal.compiler.ast.TypeReference;
  */
 public final class EclipseAstUtil {
 
-	public static TypeReference createTypeReference(String name){
+	public static TypeReference createTypeReference(String name) {
 		String simpleName = name;
 		if (simpleName.contains(".")) {
 			String[] split = simpleName.split("\\.");
@@ -52,25 +64,70 @@ public final class EclipseAstUtil {
 		}
 		TypeReference typeReference = null;
 		if (name.contains(".")) {
-			char[][] tokens = StringUtil.singleStringToChar2dArray(name);
+			char[][] tokens = Eclipse.fromQualifiedName(name);
 			typeReference = new QualifiedTypeReference(tokens, new long[tokens.length]);
 		} else {
 			typeReference = new SingleTypeReference(simpleName.toCharArray(), 0);
 		}
 		return typeReference;
 	}
-	
-	public static TypeReference createParametrizedTypeReference(String name, TypeReference typeArg){
-		if (name.contains(".")){
-			char[][] tokens = StringUtil.singleStringToChar2dArray(name);
+
+	public static TypeReference createParametrizedTypeReference(String name, TypeReference typeArg, int dimension) {
+		if (name.contains(".")) {
+			char[][] tokens = Eclipse.fromQualifiedName(name);
 			TypeReference[][] typeArgs = new TypeReference[tokens.length][];
-			typeArgs[tokens.length-1] = new TypeReference[]{typeArg}; 
+			TypeReference[] innerTypeArgs = new TypeReference[dimension];
+			for (int i = 0; i< dimension; i++){
+				innerTypeArgs[i] = typeArg;
+			}
+			typeArgs[tokens.length - 1] = innerTypeArgs;
 			return new ParameterizedQualifiedTypeReference(tokens, typeArgs, 0, new long[tokens.length]);
 		} else {
-			TypeReference[] typeArgs = new TypeReference[1];
-			typeArgs[0] = typeArg; 
+			TypeReference[] typeArgs = new TypeReference[dimension];
+			for (int i = 0; i< dimension; i++){
+				typeArgs[i] = typeArg;
+			}
 			return new ParameterizedSingleTypeReference(name.toCharArray(), typeArgs, 0, 0);
 		}
 	}
-	
+
+	public static void addLombokGetterOnField(FieldDeclaration fieldDeclaration, AccessLevel level) {
+		char[][] qualifiedName = Eclipse.fromQualifiedName(Getter.class.getName());
+		QualifiedTypeReference qtr = new QualifiedTypeReference(qualifiedName, poss(fieldDeclaration, qualifiedName.length));
+		EclipseHandlerUtil.setGeneratedBy(qtr, fieldDeclaration);
+		NormalAnnotation na = new NormalAnnotation(qtr, fieldDeclaration.sourceStart());
+		MemberValuePair pair = new MemberValuePair(new char[] { 'v', 'a', 'l', 'u', 'e' }, 0, 0,
+				EclipseHandlerUtil.createNameReference(AccessLevel.class.getName() + "." + level.name(), na));
+		na.memberValuePairs = new MemberValuePair[] { pair };
+		na.sourceStart = 1;
+		EclipseHandlerUtil.setGeneratedBy(na, fieldDeclaration);
+		if (fieldDeclaration.annotations == null) {
+			fieldDeclaration.annotations = new Annotation[] { na };
+			return;
+		}
+		Annotation[] newAnnotationArray = new Annotation[fieldDeclaration.annotations.length + 1];
+		System.arraycopy(fieldDeclaration.annotations, 0, newAnnotationArray, 0, fieldDeclaration.annotations.length);
+		newAnnotationArray[fieldDeclaration.annotations.length] = na;
+		fieldDeclaration.annotations = newAnnotationArray;
+	}
+
+	public static void addLombokSetterOnField(FieldDeclaration fieldDeclaration, AccessLevel level) {
+		char[][] qualifiedName = Eclipse.fromQualifiedName(Setter.class.getName());
+		QualifiedTypeReference qtr = new QualifiedTypeReference(qualifiedName, poss(fieldDeclaration, qualifiedName.length));
+		EclipseHandlerUtil.setGeneratedBy(qtr, fieldDeclaration);
+		NormalAnnotation na = new NormalAnnotation(qtr, fieldDeclaration.sourceStart());
+		MemberValuePair pair = new MemberValuePair(new char[] { 'v', 'a', 'l', 'u', 'e' }, 0, 0,
+				EclipseHandlerUtil.createNameReference(AccessLevel.class.getName() + "." + level.name(), na));
+		na.memberValuePairs = new MemberValuePair[] { pair };
+		na.sourceStart = 1;
+		EclipseHandlerUtil.setGeneratedBy(na, fieldDeclaration);
+		if (fieldDeclaration.annotations == null) {
+			fieldDeclaration.annotations = new Annotation[] { na };
+			return;
+		}
+		Annotation[] newAnnotationArray = new Annotation[fieldDeclaration.annotations.length + 1];
+		System.arraycopy(fieldDeclaration.annotations, 0, newAnnotationArray, 0, fieldDeclaration.annotations.length);
+		newAnnotationArray[fieldDeclaration.annotations.length] = na;
+		fieldDeclaration.annotations = newAnnotationArray;
+	}
 }

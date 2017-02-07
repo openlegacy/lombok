@@ -38,30 +38,6 @@ package openlegacy.utils;
  */
 public final class StringUtil {
 
-	public static String char2dArrayToSingleString(char[][] chars) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < chars.length; i++) {
-			for (int j = 0; j < chars[i].length; j++) {
-				builder.append(chars[i][j]);
-			}
-			builder.append(".");
-		}
-		return builder.toString()
-				.substring(0, builder.length() - 1);
-	}
-
-	public static char[][] singleStringToChar2dArray(String source) {
-		String[] split = source.split("\\.");
-		char[][] char2dArray = new char[split.length][0];
-
-		for (int i = 0; i < split.length; i++) {
-			String value = split[i];
-			char2dArray[i] = value.toCharArray();
-		}
-
-		return char2dArray;
-	}
-	
 	public static String getVariableName(String source){
 		if (source == null || source.trim().isEmpty()){
 			return null;

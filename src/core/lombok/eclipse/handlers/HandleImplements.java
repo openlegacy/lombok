@@ -46,11 +46,11 @@ import org.openlegacy.terminal.ScreenEntity;
 import lombok.AccessLevel;
 import lombok.Implements;
 import lombok.core.AnnotationValues;
+import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
 import openlegacy.ScreenEntityInterfaceHandler;
 import openlegacy.utils.EclipseAstUtil;
-import openlegacy.utils.StringUtil;
 
 /**
  * Handles the {@code lombok.Implements} annotation for eclipse.
@@ -111,7 +111,7 @@ public class HandleImplements extends EclipseAnnotationHandler<Implements> {
 					char[][] typeName = reference.getTypeName();
 					if (typeName.length > 1) {
 						// add to fq list
-						existingFqInterfacesNames.add(StringUtil.char2dArrayToSingleString(typeName));
+						existingFqInterfacesNames.add(Eclipse.toQualifiedName(typeName));
 					} else {
 						existingInterfacesNames.add(String.valueOf(reference.getLastToken()));
 					}
@@ -119,14 +119,15 @@ public class HandleImplements extends EclipseAnnotationHandler<Implements> {
 			}
 
 			String simpleName = type;
-			if (simpleName.contains(".")) {
+			boolean qualified = simpleName.contains(".");
+			if (qualified) {
 				String[] split = simpleName.split("\\.");
 				simpleName = split[split.length - 1];
 			}
 			// check that current type was not already declared
 			if (!existingFqInterfacesNames.contains(type) && !existingInterfacesNames.contains(simpleName)) {
 				String fromImports = typeNode.getAst().getImportList().getFullyQualifiedNameForSimpleName(simpleName);
-				TypeReference typeReference = EclipseAstUtil.createTypeReference(fromImports == null ? type : simpleName);
+				TypeReference typeReference = EclipseAstUtil.createTypeReference(qualified || fromImports == null ? type : simpleName);
 				resultingList.add(typeReference);
 			}
 			// set new list of interfaces
