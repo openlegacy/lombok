@@ -894,16 +894,20 @@ public class JavacHandlerUtil {
 	static class ClassSymbolMembersField {
 		private static final Field membersField;
 		private static final Method removeMethod;
+		private static final Method enterMethod;
 		
 		static {
 			Field f = null;
-			Method m = null;
+			Method r = null;
+			Method e = null;
 			try {
 				f = ClassSymbol.class.getField("members_field");
-				m = f.getType().getMethod("remove", Symbol.class);
-			} catch (Exception e) {}
+				r = f.getType().getMethod("remove", Symbol.class);
+				e = f.getType().getMethod("enter", Symbol.class);
+			} catch (Exception ex) {}
 			membersField = f;
-			removeMethod = m;
+			removeMethod = r;
+			enterMethod = r;
 		}
 		
 		static void remove(ClassSymbol from, Symbol toRemove) {
@@ -912,6 +916,15 @@ public class JavacHandlerUtil {
 				Scope scope = (Scope) membersField.get(from);
 				if (scope == null) return;
 				removeMethod.invoke(scope, toRemove);
+			} catch (Exception e) {}
+		}
+		
+		static void enter(ClassSymbol from, Symbol toEnter) {
+			if (from == null) return;
+			try {
+				Scope scope = (Scope) membersField.get(from);
+				if (scope == null) return;
+				enterMethod.invoke(scope, toEnter);
 			} catch (Exception e) {}
 		}
 	}
@@ -959,7 +972,7 @@ public class JavacHandlerUtil {
 		if (typeMirror == null || paramTypes == null || returnType == null) return;
 		ClassSymbol cs = (ClassSymbol) typeMirror;
 		MethodSymbol methodSymbol = new MethodSymbol(access, methodName, new MethodType(paramTypes, returnType, List.<Type>nil(), Symtab.instance(context).methodClass), cs);
-		cs.members_field.enter(methodSymbol);
+		ClassSymbolMembersField.enter(cs, methodSymbol);
 	}
 	
 	/**
@@ -1025,10 +1038,10 @@ public class JavacHandlerUtil {
 	public static void addGenerated(JCModifiers mods, JavacNode node, int pos, JCTree source, Context context) {
 		if (!LombokOptionsFactory.getDelombokOptions(context).getFormatPreferences().generateGenerated()) return;
 		
-		if (HandlerUtil.shouldAddGenerated(node, ConfigurationKeys.ADD_JAVAX_GENERATED_ANNOTATIONS)) {
+		if (HandlerUtil.shouldAddGenerated(node)) {
 			addAnnotation(mods, node, pos, source, context, "javax.annotation.Generated", node.getTreeMaker().Literal("lombok"));
 		}
-		if (HandlerUtil.shouldAddGenerated(node, ConfigurationKeys.ADD_LOMBOK_GENERATED_ANNOTATIONS)) {
+		if (Boolean.TRUE.equals(node.getAst().readConfiguration(ConfigurationKeys.ADD_LOMBOK_GENERATED_ANNOTATIONS))) {
 			addAnnotation(mods, node, pos, source, context, "lombok.Generated", null);
 		}
 	}
