@@ -102,6 +102,12 @@ the common tasks and can be called on to run the main aspects of all the sub-scr
 		<ivy:retrieve />
 	</target>
 	
+	<target name="jackson" depends="config-ivy" description="Downloads and installs jackson-mapper">
+		<ivy:retrieve pattern="${ivy.lib.dir}/[artifact].[revision].[ext]"
+		                type="jar,bundle"
+		                sync="true" />
+    </target>
+	
 	<target name="ensureBuildDeps" depends="config-ivy">
 		<mkdir dir="lib/openJDK6Environment" />
 		<get src="https://projectlombok.org/ivyrepo/langtools/rt-openjdk6.jar" dest="lib/openJDK6Environment/rt-openjdk6.jar" verbose="true" usetimestamp="true" />

@@ -30,7 +30,7 @@
 
  *******************************************************************************/
 
-package openlegacy;
+package openlegacy.eclipse;
 
 import static lombok.eclipse.Eclipse.ECLIPSE_DO_NOT_TOUCH_FLAG;
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
@@ -42,6 +42,8 @@ import java.util.Map;
 import org.eclipse.jdt.internal.compiler.ast.AllocationExpression;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.Argument;
+import org.eclipse.jdt.internal.compiler.ast.Expression;
+import org.eclipse.jdt.internal.compiler.ast.FalseLiteral;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.FieldReference;
 import org.eclipse.jdt.internal.compiler.ast.MemberValuePair;
@@ -93,6 +95,7 @@ public class ScreenEntityInterfaceHandler {
 	/**
 	 * Main entry point, which will generate all required fields
 	 */
+
 	public void handle(EclipseNode typeNode, EclipseNode source) {
 		TypeDeclaration typeDecl = HandleImplements.checkAnnotation(typeNode, source);
 		if (typeDecl == null) {
@@ -133,7 +136,7 @@ public class ScreenEntityInterfaceHandler {
 			decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
 			decl.type = EclipseAstUtil.createTypeReference(terminalSnapshot);
 			//to hide setter need to add @Setter(value = AccessLevel.NONE)
-			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
+//			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
 			newFields.add(decl);
 		}
 		//create focusField field
@@ -164,7 +167,7 @@ public class ScreenEntityInterfaceHandler {
 					EclipseImportsUtil.getTypeName(typeNode.getAst(), ArrayList.class), typeArg, 1);
 			decl.initialization = allocationExpression;
 			//to hide setter need to add @Setter(value = AccessLevel.NONE)
-			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
+//			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
 			newFields.add(decl);
 		}
 	}
@@ -191,7 +194,7 @@ public class ScreenEntityInterfaceHandler {
 				decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
 				decl.type = EclipseAstUtil.createTypeReference(terminalField);
 				//to hide setter need to add @Setter(value = AccessLevel.NONE)
-				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
+//				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
 				newFields.add(decl);
 			}
 			//*****
@@ -247,10 +250,12 @@ public class ScreenEntityInterfaceHandler {
 				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
 				newFields.add(decl);
 			}
-			//*****
+			//***** ??
 			//try to create "private List<TerminalActionDefinition> *Actions = new ArrayList<TerminalActionDefinition>()"
 			//if field type is List
-			if (Eclipse.nameEquals(fieldType.getTypeName(), List.class.getSimpleName())) {
+			char[][] typeChar = fieldType.getTypeName();
+			String typeName = new String(typeChar[typeChar.length-1]);
+			if (typeName.equals("List")) {
 				String nameWithActionsSuffix = fieldNode.getName() + "Actions";
 				FieldDeclaration decl = new FieldDeclaration(nameWithActionsSuffix.toCharArray(), 0, 0);
 				decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
@@ -264,7 +269,7 @@ public class ScreenEntityInterfaceHandler {
 						EclipseImportsUtil.getTypeName(typeNode.getAst(), ArrayList.class), typeArg, 1);
 				decl.initialization = allocationExpression;
 				//to hide setter need to add @Setter(value = AccessLevel.NONE)
-				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
+//				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
 				newFields.add(decl);
 			}
 		}
@@ -311,6 +316,10 @@ public class ScreenEntityInterfaceHandler {
 			MemberValuePair[] pairs = ann.memberValuePairs();
 			for (MemberValuePair pair : pairs) {
 				if ("supportTerminalData".equals(new String(pair.name))) {
+					Expression expression = pair.value;
+					String clz =expression.getClass().getName();
+					if(FalseLiteral.class.isInstance(expression))
+						return false;
 					return true;
 				}
 			}
@@ -323,7 +332,7 @@ public class ScreenEntityInterfaceHandler {
 			return false;
 		}
 		for (FieldDeclaration declaration : fields) {
-			if (fieldName.equals(declaration.name)) {
+			if (fieldName.equals(new String(declaration.name))) {
 				return true;
 			}
 		}

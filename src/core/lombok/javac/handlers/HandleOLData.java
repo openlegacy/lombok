@@ -2,20 +2,16 @@ package lombok.javac.handlers;
 
 import static lombok.javac.handlers.JavacHandlerUtil.chainDotsString;
 
-import java.util.ArrayList;
-
-import javax.lang.model.element.Element;
-
-import openlegacy.RpcEntityInterfaceJavacHandler;
-import openlegacy.ScreenEntitiyInterfaceJavacHandler;
+import openlegacy.javac.DbEntityInterfaceHandler;
+import openlegacy.javac.RpcEntityInterfaceHandler;
+import openlegacy.javac.ScreenEntitiyInterfaceHandler;
+import openlegacy.utils.OLJavacHandlerUtil;
 import org.mangosdk.spi.ProviderFor;
 
 import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import com.sun.tools.javac.tree.JCTree.JCClassDecl;
 import com.sun.tools.javac.tree.JCTree.JCExpression;
-import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import com.sun.tools.javac.util.List;
 
 import lombok.AccessLevel;
@@ -23,8 +19,11 @@ import lombok.OLData;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
+import org.openlegacy.db.DbEntity;
 import org.openlegacy.rpc.RpcEntity;
 import org.openlegacy.terminal.ScreenEntity;
+
+import java.io.Serializable;
 
 /**
  * <h1>Prototype Handler</h1>
@@ -40,8 +39,9 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
 
     @Override
     public void handle(AnnotationValues<OLData> annotationValues, JCAnnotation ast, JavacNode annotationNode) {
+        boolean isRpcEntity = false;
         JavacNode typeNode = annotationNode.up();
-        JCClassDecl typeDecl = checkAnnotation(typeNode, annotationNode);
+        JCClassDecl typeDecl = OLJavacHandlerUtil.checkAnnotation(typeNode, annotationNode);
         if (typeDecl == null) {
             return;
         }
@@ -52,19 +52,27 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
         if (entityType.getName().equals(ScreenEntity.class.getName())) {
             String interfaceName = entityType.getName();
             generateImplemets(typeNode, interfaceName);
-            new ScreenEntitiyInterfaceJavacHandler().handle(typeNode, annotationNode);
+            new ScreenEntitiyInterfaceHandler().handle(typeNode, annotationNode);
         }
 
-        if(entityType.getName().equals(RpcEntity.class.getName())){
+        if(isRpcEntity = entityType.getName().equals(RpcEntity.class.getName())){
             String interfaceName = entityType.getName();
             generateImplemets(typeNode, interfaceName);
 
-            //TODO implement RpcEntityInterfaceJavacHandler
-            new RpcEntityInterfaceJavacHandler().handle(typeNode, annotationNode);
+            RpcEntityInterfaceHandler.handle(typeNode, annotationNode);
+        }
+
+        if (entityType.getName().equals(DbEntity.class.getName())) {
+            String interfaceName = entityType.getName();
+            generateImplemets(typeNode, interfaceName);
+            generateImplemets(typeNode, Serializable.class.getName());
+            DbEntityInterfaceHandler.handle(typeNode, annotationNode);
         }
 
         new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
         new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
+        if(isRpcEntity)
+            RpcEntityInterfaceHandler.createJacksonAnnotations(typeNode);
     }
 
     //TODO need to extend the method logic. take care of the edge cases.
@@ -76,69 +84,5 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
             return;
         implementing = implementing.append(ifExpression);
         classDecl.implementing = implementing;
-    }
-
-//    private void handleScreens(JavacNode typeNode) {
-//        JavacTreeMaker maker = typeNode.getTreeMaker();
-//        java.util.List<JCVariableDecl> varsList = new ArrayList<JCTree.JCVariableDecl>();
-//
-//        JCExpression listTypeRef = maker.TypeApply(
-//        		chainDotsString(typeNode, "java.util.List"),
-//        		List.<JCExpression>nil().append(chainDotsString(typeNode, "org.openlegacy.terminal.definitions.TerminalActionDefinition")));
-//
-//        JCExpression listInit = maker.NewClass(
-//                null, List.<JCExpression>nil(),
-//                chainDotsString(typeNode, "java.util.ArrayList"),
-//                List.<JCExpression>nil(),
-//                null);
-//
-//        JCVariableDecl actionsDecl = maker.VarDef(
-//                maker.Modifiers(Flags.PRIVATE),
-//                typeNode.toName("actions"),
-//                listTypeRef,
-//                listInit);
-//
-//        varsList.add(actionsDecl);
-//
-//        JCVariableDecl focusDecl = maker.VarDef(
-//                maker.Modifiers(Flags.PRIVATE),
-//                typeNode.toName("focusField"),
-//                JavacHandlerUtil.genJavaLangTypeRef(typeNode, "String"),
-//                null);
-//
-//        varsList.add(focusDecl);
-//        JCVariableDecl pcCommandDecl = maker.VarDef(
-//                maker.Modifiers(Flags.PRIVATE),
-//                typeNode.toName("pcCommand"),
-//                JavacHandlerUtil.genJavaLangTypeRef(typeNode, "String"),
-//                null);
-//        varsList.add(pcCommandDecl);
-//
-//        injectFields(typeNode, varsList);
-//    }
-//
-//    private void injectFields(JavacNode typeNode, java.util.List<JCVariableDecl> varsList) {
-//        if (typeNode == null || varsList == null || varsList.isEmpty())
-//            return;
-//        for (JCVariableDecl vd : varsList)
-//            JavacHandlerUtil.injectFieldAndMarkGenerated(typeNode, vd);
-//
-//    }
-
-    public static JCClassDecl checkAnnotation(JavacNode typeNode, JavacNode annotationNode) {
-        JCClassDecl typeDecl = null;
-        if (typeNode.get() instanceof JCClassDecl) {
-            typeDecl = (JCClassDecl) typeNode.get();
-        }
-
-        long modifiers = typeDecl == null ? 0 : typeDecl.mods.flags;
-        boolean notAClass = (modifiers & (Flags.INTERFACE | Flags.ANNOTATION | Flags.ENUM)) != 0;
-
-        if (typeDecl == null | notAClass) {
-            annotationNode.addError("@Implements is only supported on a class.");
-            return null;
-        }
-
-        return typeDecl;
     }
 }

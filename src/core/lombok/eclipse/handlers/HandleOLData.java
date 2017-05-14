@@ -1,9 +1,14 @@
 package lombok.eclipse.handlers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import openlegacy.ScreenEntitiyInterfaceJavacHandler;
+import openlegacy.eclipse.DbEntityInterfaceHandler;
+import openlegacy.eclipse.ScreenEntityInterfaceHandler;
+
+import openlegacy.eclipse.RpcEntityInterfaceHandler;
 import org.eclipse.jdt.internal.compiler.ast.AllocationExpression;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
@@ -22,10 +27,13 @@ import lombok.eclipse.EclipseNode;
 import openlegacy.utils.EclipseAstUtil;
 import openlegacy.utils.EclipseImportsUtil;
 import openlegacy.utils.StringUtil;
+import org.openlegacy.db.DbEntity;
+import org.openlegacy.rpc.RpcEntity;
 import org.openlegacy.terminal.ScreenEntity;
 
 /**
- * Created by matve on 24-Apr-17.
+ * Created by  on 24-Apr-17.
+ *
  * @since 3.6.0-SNAPSHOT
  */
 
@@ -44,9 +52,25 @@ public class HandleOLData extends EclipseAnnotationHandler<OLData> {
         OLData instance = annotation.getInstance();
         Class<?> entityType = instance.value();
 
-        if(entityType.getName().equals(ScreenEntity.class.getName())){
+        if (entityType.getName().equals(ScreenEntity.class.getName())) {
             addImplements(typeDecl, entityType.getName());
-            handleScreens(typeNode, entityType.getName());
+//            handleScreens(typeNode, entityType.getName());
+            new ScreenEntityInterfaceHandler().handle(typeNode, annotationNode);
+        }
+
+        if (entityType.getName().equals(RpcEntity.class.getName())) {
+            String interfaceName = entityType.getName();
+            addImplements(typeDecl, interfaceName);
+
+            //TODO implement RpcEntityInterfaceHandler
+            new RpcEntityInterfaceHandler().handle(typeNode, annotationNode);
+        }
+
+        if (entityType.getName().equals(DbEntity.class.getName())) {
+            String interfaceName = entityType.getName();
+            addImplements(typeDecl, interfaceName);
+            addImplements(typeDecl, Serializable.class.getName());
+            DbEntityInterfaceHandler.handle(typeNode, annotationNode);
         }
 
         if (instance.getters()) {
@@ -77,10 +101,10 @@ public class HandleOLData extends EclipseAnnotationHandler<OLData> {
         if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("actions"))) {
             FieldDeclaration decl = new FieldDeclaration("actions".toCharArray(), 0, 0);
             decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-            char[][] terminalAction = Eclipse.fromQualifiedName("org.openlegacy.terminal.definitions.TerminalActionDefinition");
+            char[][] terminalAction = Eclipse.fromQualifiedName("TerminalActionDefinition");
 //            EclipseImportsUtil.getTypeName(typeNode.getAst(), TerminalActionDefinition.class);
             TypeReference typeRef = new QualifiedTypeReference(terminalAction,
-            		Eclipse.poss(typeNode.get(), terminalAction.length));
+                    Eclipse.poss(typeNode.get(), terminalAction.length));
 //            TypeReference typeArg = EclipseAstUtil.createTypeReference(EclipseImportsUtil.getTypeName(typeNode.getAst(), TerminalActionDefinition.class));
             //return type
             String list = EclipseImportsUtil.getTypeName(typeNode.getAst(), List.class);
@@ -97,16 +121,16 @@ public class HandleOLData extends EclipseAnnotationHandler<OLData> {
     }
 
     private void addImplements(TypeDeclaration typeDecl, String interfaceName) {
-        TypeReference [] implArr = null;
-        TypeReference [] newImplArr = null;
+        TypeReference[] implArr = null;
+        TypeReference[] newImplArr = null;
 
-        if(typeDecl.superInterfaces != null) {
+        if (typeDecl.superInterfaces != null) {
             implArr = typeDecl.superInterfaces;
         }
 
-        if(implArr != null && implArr.length > 0){
-            newImplArr = new TypeReference[implArr.length + 1];
-            newImplArr[implArr.length-1] = EclipseAstUtil.createTypeReference(interfaceName);
+        if (implArr != null && implArr.length > 0) {
+            newImplArr = Arrays.copyOf(implArr, implArr.length+1);
+            newImplArr[newImplArr.length - 1] = EclipseAstUtil.createTypeReference(interfaceName);
         } else {
             newImplArr = new TypeReference[1];
             newImplArr[0] = EclipseAstUtil.createTypeReference(interfaceName);

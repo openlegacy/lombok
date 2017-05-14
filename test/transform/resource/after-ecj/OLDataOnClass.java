@@ -1,5 +1,8 @@
-@lombok.OLData(org.openlegacy.terminal.ScreenEntity.class) class OLDataOnClass implements org.openlegacy.terminal.ScreenEntity {
-  private @lombok.Setter(value = lombok.AccessLevel.NONE) java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+import org.openlegacy.terminal.ScreenEntity;
+import org.openlegacy.terminal.definitions.TerminalActionDefinition;
+
+@lombok.OLData(ScreenEntity.class) class OLDataOnClass implements ScreenEntity {
+  private @lombok.Setter(value = lombok.AccessLevel.NONE) java.util.List<TerminalActionDefinition> actions = new java.util.ArrayList<TerminalActionDefinition>();
   private String pcCommand;
   private String focusField;
   private String stringField = "";
@@ -15,7 +18,7 @@
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") String getPcCommand() {
     return this.pcCommand;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<TerminalActionDefinition> getActions() {
     return this.actions;
   }
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setStringField(final String stringField) {

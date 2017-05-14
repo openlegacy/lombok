@@ -1,4 +1,7 @@
-@lombok.OLData("screen")
+import org.openlegacy.annotations.screen.ScreenEntity;
+import org.openlegacy.terminal.definitions.TerminalActionDefinition;
+
+@lombok.OLData(ScreenEntity.class) @ScreenEntity(supportTerminalData = true)
 class OLDataOnClass implements org.openlegacy.terminal.ScreenEntity {
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
@@ -8,7 +11,7 @@ class OLDataOnClass implements org.openlegacy.terminal.ScreenEntity {
 	private java.lang.String focusField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList();
+	private java.util.List<TerminalActionDefinition> actions = new java.util.ArrayList();
 	private String stringField = "";
 
 	@java.lang.SuppressWarnings("all")
@@ -19,7 +22,7 @@ class OLDataOnClass implements org.openlegacy.terminal.ScreenEntity {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+	public java.util.List<TerminalActionDefinition> getActions() {
 		return this.actions;
 	}
 
@@ -43,7 +46,7 @@ class OLDataOnClass implements org.openlegacy.terminal.ScreenEntity {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+	public void setActions(final java.util.List<TerminalActionDefinition> actions) {
 		this.actions = actions;
 	}
 

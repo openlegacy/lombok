@@ -31,8 +31,11 @@
  *******************************************************************************/
 package openlegacy.utils;
 
+import com.sun.source.tree.Tree;
+import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCExpression ;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
+import com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.JavacHandlerUtil;
 
@@ -42,7 +45,7 @@ import lombok.javac.handlers.JavacHandlerUtil;
  * <p>JCTree is a root class for abstract syntax tree nodes.
  * It provides definitions for specific tree nodes as subclasses nested inside.
  * JCTree is a superclass for many Java compiler nodes representations
- * e.g. JCExpression, JCImport, JCMethodDecl, JCStatement</p>
+ * e.g. {@link JCExpression}, JCImport, JCMethodDecl, JCStatement</p>
  * <p>JCExpression is a central abstraction class it is widely used for AST modifications
  * JCExpression has the following important subclasses:
  * JCCLassDecl, JCVariableDecl, NewClass, TypeApply, etc.</p>
@@ -98,5 +101,16 @@ public class JavacOLUtil {
             return;
         for (JCVariableDecl vd : varsList)
             JavacHandlerUtil.injectFieldAndMarkGenerated(typeNode, vd);
+    }
+
+    public static boolean isPrimitive(JavacNode fieldNode) {
+        return ((JCVariableDecl) fieldNode.get()).vartype.getKind() == Tree.Kind.PRIMITIVE_TYPE;
+    }
+
+    public static String toGetterName(String nameWithFieldSuffix) {
+        char [] charFieldName = nameWithFieldSuffix.toCharArray();
+        charFieldName[0] = Character.toUpperCase(charFieldName[0]);
+        String fieldGetterSufix = charFieldName.toString();
+        return "get"+fieldGetterSufix;
     }
 }
