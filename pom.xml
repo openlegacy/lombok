@@ -13,7 +13,6 @@
     </parent>
 
     <artifactId>openlegacy-lombok</artifactId>
-    <version>1.16.16</version>
     <packaging>pom</packaging>
 
     <name>OpenLegacyLombok</name>
@@ -31,33 +30,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     
-    <dependencies>
-		<dependency>
-		    <groupId>org.antlr</groupId>
-		    <artifactId>antlr4-runtime</artifactId>
-		    <version>4.7</version>
-		</dependency>
-    </dependencies>
-    
-    
     <build>
     <plugins>
-    	<plugin>
-		  <artifactId>maven-antrun-plugin</artifactId>
-		  <executions>
-		    <execution>
-		      <phase>process-resources</phase>
-		      <configuration>
-		        <tasks>
-		          <ant antfile="build.xml" target="dist"/>
-		        </tasks>
-		      </configuration>
-		      <goals>
-		        <goal>run</goal>
-		      </goals>
-		    </execution>
-		  </executions>
-		</plugin>
 		<plugin>
 			  <groupId>org.codehaus.mojo</groupId>
 			  <artifactId>build-helper-maven-plugin</artifactId>
@@ -72,7 +46,7 @@
 			      <configuration>
 			        <artifacts>
 			          <artifact>
-			            <file>dist/openlegacy-lombok-1.16.12.jar</file>
+			            <file>dist/openlegacy-lombok-1.16.15.jar</file>
 			            <type>jar</type>
 			          </artifact>
 			        </artifacts>
