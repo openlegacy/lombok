@@ -40,12 +40,12 @@ import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
-import openlegacy.utils.JavacOLUtil;
 import openlegacy.utils.StringUtil;
+
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
+
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.annotations.screen.ScreenTable;
-
-import static openlegacy.utils.OLJavacHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky

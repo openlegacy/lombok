@@ -29,7 +29,7 @@
  * THE SOFTWARE.
 
  *******************************************************************************/
-package openlegacy.javac;
+package lombok.javac.handlers.openlegacy;
 
 import com.sun.tools.javac.util.*;
 import com.sun.tools.javac.tree.JCTree;
@@ -51,9 +51,8 @@ import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
 import lombok.javac.handlers.HandleOLData;
 import lombok.javac.handlers.JavacHandlerUtil;
-
-import openlegacy.utils.JavacOLUtil;
-import openlegacy.utils.OLJavacHandlerUtil;
+import lombok.javac.handlers.JavacOLUtil;
+import lombok.javac.handlers.OLJavacHandlerUtil;
 import openlegacy.utils.StringUtil;
 import org.apache.tools.ant.taskdefs.Java;
 import org.openlegacy.annotations.screen.ScreenDescriptionField;
@@ -65,9 +64,9 @@ import org.openlegacy.terminal.TerminalField;
 import org.openlegacy.terminal.TerminalSnapshot;
 import org.openlegacy.terminal.definitions.TerminalActionDefinition;
 
-import java.util.*;
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
-import static openlegacy.utils.OLJavacHandlerUtil.*;
+import java.util.*;
 
 /**
  * @author Matvey Mitnitsky

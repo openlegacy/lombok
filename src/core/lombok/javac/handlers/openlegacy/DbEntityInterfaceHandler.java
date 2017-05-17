@@ -29,9 +29,9 @@
  * THE SOFTWARE.
 
  *******************************************************************************/
-package openlegacy.javac;
+package lombok.javac.handlers.openlegacy;
 
-import static openlegacy.utils.OLJavacHandlerUtil.*;
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 import java.util.ArrayList;
 
@@ -62,7 +62,7 @@ import lombok.javac.Javac;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
 import lombok.javac.handlers.JavacHandlerUtil;
-import openlegacy.utils.JavacOLUtil;
+import lombok.javac.handlers.JavacOLUtil;
 import openlegacy.utils.StringUtil;
 
 /**

@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import openlegacy.eclipse.DbEntityInterfaceHandler;
-import openlegacy.eclipse.ScreenEntityInterfaceHandler;
-
-import openlegacy.eclipse.RpcEntityInterfaceHandler;
 import org.eclipse.jdt.internal.compiler.ast.AllocationExpression;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
@@ -24,6 +20,9 @@ import lombok.core.AnnotationValues;
 import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
+import lombok.eclipse.handlers.openlegacy.DbEntityInterfaceHandler;
+import lombok.eclipse.handlers.openlegacy.RpcEntityInterfaceHandler;
+import lombok.eclipse.handlers.openlegacy.ScreenEntityInterfaceHandler;
 import openlegacy.utils.EclipseAstUtil;
 import openlegacy.utils.EclipseImportsUtil;
 import openlegacy.utils.StringUtil;

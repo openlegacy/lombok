@@ -29,7 +29,7 @@
  * THE SOFTWARE.
 
  *******************************************************************************/
-package openlegacy.utils;
+package lombok.javac.handlers;
 
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree;

@@ -29,7 +29,7 @@
  * THE SOFTWARE.
 
  *******************************************************************************/
-package openlegacy.utils;
+package lombok.javac.handlers;
 
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.tree.JCTree;
@@ -37,7 +37,6 @@ import com.sun.tools.javac.tree.JCTree.JCExpression ;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree;
 import lombok.javac.JavacNode;
-import lombok.javac.handlers.JavacHandlerUtil;
 
 /**
  * <h1>JavacOLUtil</h1>

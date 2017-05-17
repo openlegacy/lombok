@@ -29,7 +29,7 @@
  * THE SOFTWARE.
 
  *******************************************************************************/
-package openlegacy.eclipse;
+package lombok.eclipse.handlers.openlegacy;
 
 import lombok.AccessLevel;
 import lombok.core.AST;

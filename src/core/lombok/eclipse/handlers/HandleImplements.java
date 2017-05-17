@@ -49,7 +49,7 @@ import lombok.core.AnnotationValues;
 import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
-import openlegacy.ScreenEntityInterfaceHandler;
+import lombok.eclipse.handlers.openlegacy.ScreenEntityInterfaceHandler;
 import openlegacy.utils.EclipseAstUtil;
 
 /**

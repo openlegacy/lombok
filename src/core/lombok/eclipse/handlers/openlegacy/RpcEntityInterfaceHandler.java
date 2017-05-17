@@ -29,7 +29,7 @@
  * THE SOFTWARE.
 
  *******************************************************************************/
-package openlegacy.eclipse;
+package lombok.eclipse.handlers.openlegacy;
 
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.EclipseHandlerUtil;

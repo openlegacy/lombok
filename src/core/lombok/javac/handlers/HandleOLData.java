@@ -2,10 +2,6 @@ package lombok.javac.handlers;
 
 import static lombok.javac.handlers.JavacHandlerUtil.chainDotsString;
 
-import openlegacy.javac.DbEntityInterfaceHandler;
-import openlegacy.javac.RpcEntityInterfaceHandler;
-import openlegacy.javac.ScreenEntitiyInterfaceHandler;
-import openlegacy.utils.OLJavacHandlerUtil;
 import org.mangosdk.spi.ProviderFor;
 
 import com.sun.tools.javac.code.Flags;
@@ -19,6 +15,10 @@ import lombok.OLData;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
+import lombok.javac.handlers.openlegacy.DbEntityInterfaceHandler;
+import lombok.javac.handlers.openlegacy.RpcEntityInterfaceHandler;
+import lombok.javac.handlers.openlegacy.ScreenEntitiyInterfaceHandler;
+
 import org.openlegacy.db.DbEntity;
 import org.openlegacy.rpc.RpcEntity;
 import org.openlegacy.terminal.ScreenEntity;

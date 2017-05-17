@@ -30,7 +30,7 @@
 
  *******************************************************************************/
 
-package openlegacy.eclipse;
+package lombok.eclipse.handlers.openlegacy;
 
 import static lombok.eclipse.Eclipse.ECLIPSE_DO_NOT_TOUCH_FLAG;
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;

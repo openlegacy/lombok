@@ -29,7 +29,7 @@
  * THE SOFTWARE.
 
  *******************************************************************************/
-package openlegacy.javac;
+package lombok.javac.handlers.openlegacy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.tools.javac.code.Flags;
@@ -48,13 +48,13 @@ import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
 import lombok.javac.handlers.HandleOLData;
 import lombok.javac.handlers.JavacHandlerUtil;
-import openlegacy.utils.JavacOLUtil;
+import lombok.javac.handlers.JavacOLUtil;
 import openlegacy.utils.StringUtil;
 import org.openlegacy.definitions.RpcActionDefinition;
 
-import java.util.ArrayList;
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
-import static openlegacy.utils.OLJavacHandlerUtil.*;
+import java.util.ArrayList;
 
 /**
  * @author Matvey Mitnitsky
