@@ -48,4 +48,14 @@ public final class StringUtil {
 		c[0] = Character.toLowerCase(c[0]);
 		return new String(c);
 	}
+
+	public static String firstCharToUpperCase(String string){
+		char [] chars = string.toCharArray();
+		return firstCharToUpperCase(chars);
+	}
+
+	public static String firstCharToUpperCase(char [] chars){
+		chars[0] = Character.toUpperCase(chars[0]);
+		return new String(chars);
+	}
 }

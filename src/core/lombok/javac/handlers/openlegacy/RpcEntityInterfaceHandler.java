@@ -92,8 +92,10 @@ public class RpcEntityInterfaceHandler {
                     listInit);
 
             JavacHandlerUtil.injectField(typeNode, actionsDecl);
-        }
+
+            }
     }
+
 
     public static void createJacksonAnnotations(JavacNode typeNode){
         List<JCMethodDecl> methods = List.<JCMethodDecl>nil();

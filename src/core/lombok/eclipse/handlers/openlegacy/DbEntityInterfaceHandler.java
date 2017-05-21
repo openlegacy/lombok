@@ -63,7 +63,7 @@ public class DbEntityInterfaceHandler {
     private static java.util.List<EclipseNode> idNodes = null;
 
     public static void handle(EclipseNode typeNode, EclipseNode annotationNode) {
-        TypeDeclaration typeDecl = HandleImplements.checkAnnotation(typeNode, annotationNode);
+        TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
         if (typeDecl == null) {
             return;
         }

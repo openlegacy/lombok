@@ -1170,6 +1170,7 @@ public class EclipseHandlerUtil {
 						
 						
 						if (isTolerate(node, def)) continue top;
+
 						
 						return getGeneratedBy(def) == null ? MemberExistsResult.EXISTS_BY_USER : MemberExistsResult.EXISTS_BY_LOMBOK;
 					}

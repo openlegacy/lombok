@@ -9,7 +9,6 @@
         <groupId>org.openlegacy</groupId>
         <artifactId>openlegacy-dependencies-manager</artifactId>
         <version>3.6.0-SNAPSHOT</version>
-        <relativePath>../openlegacy-dependencies-manager/pom.xml</relativePath>
     </parent>
 
     <artifactId>openlegacy-lombok</artifactId>

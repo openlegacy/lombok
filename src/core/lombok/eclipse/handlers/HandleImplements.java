@@ -38,7 +38,6 @@ import java.util.List;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
-import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.annotations.screen.ScreenEntitySuperClass;
 import org.openlegacy.terminal.ScreenEntity;
@@ -51,6 +50,8 @@ import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.openlegacy.ScreenEntityInterfaceHandler;
 import openlegacy.utils.EclipseAstUtil;
+
+import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.checkAnnotation;
 
 /**
  * Handles the {@code lombok.Implements} annotation for eclipse.
@@ -76,7 +77,8 @@ public class HandleImplements extends EclipseAnnotationHandler<Implements> {
 
 		Implements instance = annotationValues.getInstance();
 		if (ScreenEntity.class.getName().equals(probableFQType)) {
-			new ScreenEntityInterfaceHandler().handle(typeNode, annotationNode);
+			boolean supportTerminalData = lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.supportTerminalData(typeDecl.annotations);
+			new ScreenEntityInterfaceHandler().handle(typeNode, supportTerminalData);
 		}
 
 		if (instance.getters()) {
@@ -135,22 +137,6 @@ public class HandleImplements extends EclipseAnnotationHandler<Implements> {
 
 		}
 		return true;
-	}
-
-	public static TypeDeclaration checkAnnotation(EclipseNode typeNode, EclipseNode annotationNode) {
-		TypeDeclaration typeDecl = null;
-		if (typeNode.get() instanceof TypeDeclaration) {
-			typeDecl = (TypeDeclaration) typeNode.get();
-		}
-		int modifiers = typeDecl == null ? 0 : typeDecl.modifiers;
-		boolean notAClass = (modifiers
-				& (ClassFileConstants.AccInterface | ClassFileConstants.AccAnnotation | ClassFileConstants.AccEnum)) != 0;
-
-		if (typeDecl == null || notAClass) {
-			annotationNode.addError("@Implements is only supported on a class.");
-			return null;
-		}
-		return typeDecl;
 	}
 
 }

@@ -33,16 +33,16 @@ package lombok.eclipse.handlers.openlegacy;
 
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.EclipseHandlerUtil;
-import lombok.eclipse.handlers.HandleImplements;
-import openlegacy.utils.EclipseAstUtil;
-import openlegacy.utils.EclipseImportsUtil;
+import lombok.eclipse.handlers.builders.FieldDeclBuilderImpl;
 import openlegacy.utils.StringUtil;
-import org.eclipse.jdt.internal.compiler.ast.*;
-import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
+import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
+import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.openlegacy.definitions.RpcActionDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky
@@ -50,50 +50,36 @@ import java.util.List;
  */
 public class RpcEntityInterfaceHandler {
 
-    private String rpcActionDefinition;
 
-    public void handle(EclipseNode typeNode, EclipseNode source) {
-        TypeDeclaration typeDecl = HandleImplements.checkAnnotation(typeNode, source);
-
-        if (typeDecl == null) {
-            return;
-        }
-
-        rpcActionDefinition = EclipseImportsUtil.getTypeName(typeNode.getAst(), RpcActionDefinition.class);
+    public static void handle(EclipseNode typeNode) {
 
         createNonSuperEntityFields(typeNode);
     }
 
-    private void createNonSuperEntityFields(EclipseNode typeNode) {
+    private static void createNonSuperEntityFields(EclipseNode typeNode) {
         TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
 
         if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("actions"))) {
-            FieldDeclaration decl = new FieldDeclaration("actions".toCharArray(), 0, 0);
-            decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-            TypeReference typeArg = EclipseAstUtil.createTypeReference(rpcActionDefinition);
-            //return type
-            String list = EclipseImportsUtil.getTypeName(typeNode.getAst(), List.class);
-            decl.type = EclipseAstUtil.createParametrizedTypeReference(list, typeArg, 1);
-            //initializer
-            AllocationExpression allocationExpression = new AllocationExpression();
-            allocationExpression.type = EclipseAstUtil.createParametrizedTypeReference(
-                    EclipseImportsUtil.getTypeName(typeNode.getAst(), ArrayList.class), typeArg, 1);
-            decl.initialization = allocationExpression;
+            FieldDeclaration decl = new FieldDeclBuilderImpl("actions")
+                    .withModifiers(EclipseModifier.PRIVATE)
+                    .withType(List.class)
+                    .withDiamondsType(RpcActionDefinition.class)
+                    .withInitialization(ArrayList.class)
+                    .build();
+//            FieldDeclaration decl = new FieldDeclaration("actions".toCharArray(), 0, 0);
+//            decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
+//            TypeReference typeArg = EclipseAstUtil.createTypeReference(rpcActionDefinition);
+//            //return type
+//            String list = EclipseImportsUtil.getTypeName(typeNode.getAst(), List.class);
+//            decl.type = EclipseAstUtil.createParametrizedTypeReference(list, typeArg, 1);
+//            //initializer
+//            AllocationExpression allocationExpression = new AllocationExpression();
+//            allocationExpression.type = EclipseAstUtil.createParametrizedTypeReference(
+//                    EclipseImportsUtil.getTypeName(typeNode.getAst(), ArrayList.class), typeArg, 1);
+//            decl.initialization = allocationExpression;
             //to hide setter need to add @Setter(value = AccessLevel.NONE)
 //			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
             EclipseHandlerUtil.injectField(typeNode, decl);
         }
-    }
-
-    private static boolean fieldExist(FieldDeclaration[] fields, String fieldName) {
-        if (fields == null || fields.length == 0 || fieldName == null || fieldName.trim().isEmpty()) {
-            return false;
-        }
-        for (FieldDeclaration declaration : fields) {
-            if (fieldName.equals(declaration.name)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
