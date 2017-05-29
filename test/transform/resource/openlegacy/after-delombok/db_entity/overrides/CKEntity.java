@@ -1,6 +1,7 @@
 package lombok.test;
 
 @org.openlegacy.annotations.db.DbEntity
+@javax.persistence.IdClass(CKEntity.CKEntityCompositeKey.class)
 class CKEntity implements org.openlegacy.db.DbEntity, java.io.Serializable {
 
   @java.lang.SuppressWarnings("all")

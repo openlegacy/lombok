@@ -1,6 +1,7 @@
 package lombok.test;
 
 @org.openlegacy.annotations.db.DbEntity
+@javax.persistence.IdClass(DbCKEntity2.DbCKEntity2CompositeKey.class)
 class DbCKEntity2 implements org.openlegacy.db.DbEntity, java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	@javax.persistence.Transient

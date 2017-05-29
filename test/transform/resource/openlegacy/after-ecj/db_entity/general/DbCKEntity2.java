@@ -65,7 +65,7 @@ package lombok.test;
     }
   }
   private static final long serialVersionUID = 1L;
-  private java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.db.definitions.DbActionDefinition>();
+  private @javax.persistence.Transient() java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.db.definitions.DbActionDefinition>();
   private @javax.persistence.Id String name;
   private @javax.persistence.Id String surname;
   private @javax.persistence.Id byte age;
