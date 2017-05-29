@@ -24,11 +24,18 @@ package lombok.transform;
 import java.io.File;
 
 import lombok.DirectoryRunner;
-
 import org.junit.runner.RunWith;
 
 @RunWith(DirectoryRunner.class)
 public class TestWithDelombok extends DirectoryRunner.TestParams {
+
+	public static final String OL_BEFORE_DIRECTORY = "test/transform/resource/openlegacy/before";
+	public static final String OL_AFTER_DIRECTORY = "test/transform/resource/openlegacy/after-delombok";
+
+	//set this directories to the getBeforeDirectory( ) and getAfterDirectory() to run tests on lombok annotations
+	public static final String LOMBOK_BEFORE_DIRECTORY = "test/transform/resource/before";
+	public static final String LOMBOK_AFTER_DIRECTORY = "test/transform/resource/after-ecj";
+
 	@Override
 	public DirectoryRunner.Compiler getCompiler() {
 		return DirectoryRunner.Compiler.DELOMBOK;
@@ -41,12 +48,12 @@ public class TestWithDelombok extends DirectoryRunner.TestParams {
 	
 	@Override
 	public File getBeforeDirectory() {
-		return new File("test/transform/resource/before");
+		return new File(OL_BEFORE_DIRECTORY);
 	}
 	
 	@Override
 	public File getAfterDirectory() {
-		return new File("test/transform/resource/after-delombok");
+		return new File(OL_AFTER_DIRECTORY);
 	}
 	
 	@Override

@@ -55,21 +55,18 @@ public class HandleOLData extends EclipseAnnotationHandler<OLData> {
         Class<?> entityType = instance.value();
 
         if (entityType.getName().equals(ScreenEntity.class.getName())) {
-            addImplements(typeNode, entityType);
             boolean supportTerminalData = EclipseHandlerUtil.supportTerminalData(typeDecl.annotations);
             ScreenEntityInterfaceHandler.handle(typeNode, supportTerminalData);
         }
 
         if (entityType.getName().equals(RpcEntity.class.getName())) {
-            addImplements(typeNode, entityType);
 
-            //TODO implement RpcEntityInterfaceHandler
             RpcEntityInterfaceHandler.handle(typeNode);
         }
 
         if (entityType.getName().equals(DbEntity.class.getName())) {
             addImplements(typeNode, entityType, Serializable.class);
-            DbEntityInterfaceHandler.handle(typeNode, annotationNode);
+            DbEntityInterfaceHandler.handle(typeNode);
         }
 
         if (instance.getters()) {

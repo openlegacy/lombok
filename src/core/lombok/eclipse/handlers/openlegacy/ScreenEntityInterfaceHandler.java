@@ -40,34 +40,25 @@ import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.EclipseHandlerUtil;
 import lombok.eclipse.handlers.EclipseHandlerUtil.*;
-import lombok.eclipse.handlers.builders.FieldDeclBuilderImpl;
+import lombok.eclipse.handlers.builders.FieldDeclarationBuilder;
 import lombok.experimental.Accessors;
 import openlegacy.utils.EclipseAstUtil;
 import openlegacy.utils.EclipseImportsUtil;
 import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.AllocationExpression;
-import org.eclipse.jdt.internal.compiler.ast.Argument;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
-import org.eclipse.jdt.internal.compiler.ast.FieldReference;
-import org.eclipse.jdt.internal.compiler.ast.MethodDeclaration;
-import org.eclipse.jdt.internal.compiler.ast.ReturnStatement;
-import org.eclipse.jdt.internal.compiler.ast.Statement;
-import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.openlegacy.annotations.screen.ScreenDescriptionField;
 import org.openlegacy.annotations.screen.ScreenField;
-import org.openlegacy.annotations.screen.ScreenFieldValues;
 import org.openlegacy.terminal.TerminalField;
 import org.openlegacy.terminal.TerminalSnapshot;
 import org.openlegacy.terminal.definitions.TerminalActionDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static lombok.eclipse.Eclipse.*;
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 
@@ -92,7 +83,7 @@ public class ScreenEntityInterfaceHandler {
             terminalField = EclipseImportsUtil.getTypeName(typeNode.getAst(), TerminalField.class);
             terminalSnapshot = EclipseImportsUtil.getTypeName(typeNode.getAst(), TerminalSnapshot.class);
         }
-        List<FieldDeclaration> newFields = new ArrayList();
+        List<FieldDeclaration> newFields = new ArrayList<FieldDeclaration>();
         addImplements(typeNode, org.openlegacy.terminal.ScreenEntity.class);
         createNonSuperEntityFields(typeNode, newFields, supportTerminalData);
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
@@ -107,7 +98,7 @@ public class ScreenEntityInterfaceHandler {
         TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
         //create terminalSnapshot field
         if (supportTerminalData && !fieldExist(typeDecl.fields, StringUtil.getVariableName(terminalSnapshot))) {
-            FieldDeclaration decl = new FieldDeclBuilderImpl(terminalSnapshot)
+            FieldDeclaration decl = new FieldDeclarationBuilder(terminalSnapshot)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(TerminalSnapshot.class)
                     .build();
@@ -120,7 +111,7 @@ public class ScreenEntityInterfaceHandler {
         }
         //create focusField field
         if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("focusField"))) {
-            FieldDeclaration decl = new FieldDeclBuilderImpl("focusField")
+            FieldDeclaration decl = new FieldDeclarationBuilder("focusField")
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
                     .build();
@@ -131,7 +122,7 @@ public class ScreenEntityInterfaceHandler {
         }
         // create pcCommand field
         if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("pcCommand"))) {
-            FieldDeclaration decl = new FieldDeclBuilderImpl("pcCommand")
+            FieldDeclaration decl = new FieldDeclarationBuilder("pcCommand")
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
                     .build();
@@ -142,7 +133,7 @@ public class ScreenEntityInterfaceHandler {
         }
         //create actions field
         if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("actions"))) {
-            FieldDeclaration decl = new FieldDeclBuilderImpl("actions")
+            FieldDeclaration decl = new FieldDeclarationBuilder("actions")
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(List.class)
                     .withDiamondsType(TerminalActionDefinition.class)
@@ -190,48 +181,7 @@ public class ScreenEntityInterfaceHandler {
 //				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
                 newFields.add(decl);
             }
-            //*****
-            //try to create "private Map<Object,Object> *Values"
-            if (EclipseHandlerUtil.hasAnnotation(ScreenFieldValues.class, fieldNode)) {
-                String nameWithValuesSuffix = fieldNode.getName() + "Values";
-                TypeReference typeArg = EclipseAstUtil.createTypeReference(Object.class.getName());
-                FieldDeclaration decl = new FieldDeclaration(nameWithValuesSuffix.toCharArray(), 0, 0);
-                decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-                decl.type = EclipseAstUtil.createParametrizedTypeReference(
-                        EclipseImportsUtil.getTypeName(typeNode.getAst(), Map.class), typeArg, 2);
-                //to hide setter need to add @Setter(value = AccessLevel.NONE)
-                EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
-                newFields.add(decl);
-                //TODO generate
-                /*method public Map<Object,Object> ${className}.get${field.name?cap_first}Values(String text) {
-                *return ${field.name}Values;
-				*}*/
-                int pS = decl.sourceStart, pE = decl.sourceEnd;
-                long p = (long) pS << 32 | pE;
-                FieldReference ref = new FieldReference(decl.name, p);
-                ref.receiver = new ThisReference(pS, pE);
-                setGeneratedBy(ref, decl);
-                setGeneratedBy(ref.receiver, decl);
-                ReturnStatement returnStatement = new ReturnStatement(ref, decl.sourceStart, decl.sourceEnd);
 
-                Argument arg = new Argument("text".toCharArray(), 0,
-                        EclipseAstUtil.createTypeReference(String.class.getSimpleName()), 0);
-                MethodDeclaration method = new MethodDeclaration(typeDecl.compilationResult);
-                method.modifiers = ClassFileConstants.AccPublic;
-                method.returnType = EclipseHandlerUtil.copyType(decl.type, decl);
-                method.annotations = null;
-                method.arguments = new Argument[]{arg};
-                method.selector = HandlerUtil.toGetterName(fieldNode.getAst(), AnnotationValues.of(Accessors.class, fieldNode),
-                        nameWithValuesSuffix, isBoolean).toCharArray();
-                method.binding = null;
-                method.thrownExceptions = null;
-                method.typeParameters = null;
-                method.bits |= ECLIPSE_DO_NOT_TOUCH_FLAG;
-                method.bodyStart = method.declarationSourceStart = method.sourceStart = decl.sourceStart;
-                method.bodyEnd = method.declarationSourceEnd = method.sourceEnd = decl.sourceEnd;
-                method.statements = new Statement[]{returnStatement};
-                EclipseHandlerUtil.injectMethod(typeNode, method);
-            }
             //*****
             //try to create "private String *Description"
             if (EclipseHandlerUtil.hasAnnotation(ScreenDescriptionField.class, fieldNode)) {
@@ -243,7 +193,7 @@ public class ScreenEntityInterfaceHandler {
                 EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
                 newFields.add(decl);
             }
-            //***** ??
+            //*****
             //try to create "private List<TerminalActionDefinition> *Actions = new ArrayList<TerminalActionDefinition>()"
             //if field type is List
             char[][] typeChar = fieldType.getTypeName();

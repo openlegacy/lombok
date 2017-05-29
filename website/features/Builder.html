@@ -27,7 +27,7 @@
 			The <code>@Builder</code> annotation produces complex builder APIs for your classes.
 			</p><p>
 			<code>@Builder</code> lets you automatically produce the code required to have your class be instantiable with code such as:<br />
-			<code>Person.builder().name("Adam Savage").city("San Francisco").job("Mythbusters").job("Unchained Reaction").build();</code>
+			<code>org.openlegacy.Person.builder().name("Adam Savage").city("San Francisco").job("Mythbusters").job("Unchained Reaction").build();</code>
 			</p><p>
 			<code>@Builder</code> can be placed on a class, or on a constructor, or on a method. While the "on a class" and "on a constructor"
 			mode are the most common use-case, <code>@Builder</code> is most easily explained with the "method" use-case.
@@ -49,7 +49,7 @@
 			on a builder class though; for example, you can not put <code>@EqualsAndHashCode</code> on the builder class.
 			</p><p>
 			<code>@Builder</code> can generate so-called 'singular' methods for collection parameters/fields. These take 1 element instead of an entire list, and add the
-			element to the list. For example: <code>Person.builder().job("Mythbusters").job("Unchained Reaction").build();</code> would result in the <code>List&lt;String&gt; jobs</code>
+			element to the list. For example: <code>org.openlegacy.Person.builder().job("Mythbusters").job("Unchained Reaction").build();</code> would result in the <code>List&lt;String&gt; jobs</code>
 			field to have 2 strings in it. To get this behaviour, the field/parameter needs to be annotated with <code>@Singular</code>. The feature has <a href="#singular">its own documentation</a>.
 			</p><p>
 			Now that the "method" mode is clear, putting a <code>@Builder</code> annotation on a constructor functions similarly; effectively,

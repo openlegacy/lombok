@@ -1,7 +1,6 @@
 package lombok.eclipse.handlers;
 
 import lombok.core.AnnotationValues;
-import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.openlegacy.RpcEntityInterfaceHandler;
@@ -10,7 +9,7 @@ import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.annotations.rpc.RpcEntity;
 
-import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.checkAnnotation;
+import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky on 21-May-17.
@@ -29,5 +28,7 @@ public class HandleRpcEntity extends EclipseAnnotationHandler<RpcEntity> {
         }
 
         RpcEntityInterfaceHandler.handle(typeNode);
+
+        getenerateLombokGetAndSet(typeNode, annotationNode);
     }
 }

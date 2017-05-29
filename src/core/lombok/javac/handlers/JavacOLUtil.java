@@ -65,26 +65,26 @@ public class JavacOLUtil {
 
     public static final String JAVA_UTIL_PACKAGE = "java.util";
 
-    public static JCExpression getJCExpresssionForType(JavacNode typeNode, Class<?> clazz){
+    public static JCExpression getJCExpressionForType(JavacNode typeNode, Class<?> clazz){
         if(typeNode == null)
             return null;
         return clazz != null ? JavacHandlerUtil.chainDotsString(typeNode, clazz.getName()) : null;
     }
 
-    public static JCExpression getJCExpresssionForType(JavacNode typeNode, String fullyQualifiedName){
+    public static JCExpression getJCExpressionForType(JavacNode typeNode, String fullyQualifiedName){
         if(typeNode == null)
             return null;
         return (fullyQualifiedName != null && !fullyQualifiedName.isEmpty()) ? JavacHandlerUtil.chainDotsString(typeNode, fullyQualifiedName) : null;
     }
 
-    public static JCExpression getJCExpresssionForJavaLangType(JavacNode typeNode, String simpleName){
+    public static JCExpression getJCExpressionForJavaLangType(JavacNode typeNode, String simpleName){
         if(typeNode == null)
             return null;
         return (simpleName != null && !simpleName.trim().isEmpty()) ?
                 JavacHandlerUtil.genJavaLangTypeRef(typeNode, simpleName) : null;
     }
 
-    public static JCExpression getJCExpresssionForJavaUtilType(JavacNode typeNode, String simpleName){
+    public static JCExpression getJCExpressionForJavaUtilType(JavacNode typeNode, String simpleName){
         if(simpleName == null || simpleName.trim().isEmpty())
             return null;
         String fqName = JAVA_UTIL_PACKAGE + simpleName;

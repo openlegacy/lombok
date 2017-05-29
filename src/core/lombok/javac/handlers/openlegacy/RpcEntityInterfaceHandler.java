@@ -31,30 +31,17 @@
  *******************************************************************************/
 package lombok.javac.handlers.openlegacy;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Type;
-import com.sun.tools.javac.tree.JCTree;
-import com.sun.tools.javac.tree.JCTree.JCExpression;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
-import com.sun.tools.javac.tree.JCTree.JCClassDecl;
-import com.sun.tools.javac.tree.JCTree.JCAnnotation;
-import com.sun.tools.javac.tree.JCTree.JCMethodDecl;
-import com.sun.tools.javac.util.List;
-import lombok.core.AST;
-import lombok.core.LombokImmutableList;
-import lombok.javac.JavacAST;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
-import lombok.javac.handlers.HandleOLData;
 import lombok.javac.handlers.JavacHandlerUtil;
-import lombok.javac.handlers.JavacOLUtil;
+import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
 import org.openlegacy.definitions.RpcActionDefinition;
+import org.openlegacy.rpc.RpcEntity;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
-
-import java.util.ArrayList;
 
 /**
  * @author Matvey Mitnitsky
@@ -62,12 +49,8 @@ import java.util.ArrayList;
  */
 public class RpcEntityInterfaceHandler {
 
-    public static void handle(JavacNode typeNode, JavacNode annotationNode) {
-        JCClassDecl typeDecl = checkAnnotation(typeNode, annotationNode);
-        if (typeDecl == null) {
-            return;
-        }
-
+    public static void handle(JavacNode typeNode) {
+        addImplements(typeNode, RpcEntity.class);
         createNonSuperEntityFields(typeNode);
     }
 
@@ -75,47 +58,17 @@ public class RpcEntityInterfaceHandler {
         JavacTreeMaker jcMaker = typeNode.getTreeMaker();
 
         if (!fieldExist(typeNode, StringUtil.getVariableName("actions"))) {
-            JCExpression listTypeRef = jcMaker.TypeApply(
-                    JavacOLUtil.getJCExpresssionForType(typeNode, java.util.List.class),
-                    List.<JCExpression>nil().append(JavacOLUtil.getJCExpresssionForType(typeNode, RpcActionDefinition.class)));
+            JCVariableDecl actionsDeclaration = new FieldDeclBuilder(typeNode, "actions")
+                    .withModifiers(Flags.PRIVATE)
+                    .withDiamondsType(java.util.List.class, RpcActionDefinition.class)
+                    .withDiamondsInitialization(
+                            java.util.ArrayList.class, RpcActionDefinition.class
+                    )
+                    .build();
 
-            JCExpression listInit = jcMaker.NewClass(
-                    null, List.<JCExpression>nil(),
-                    JavacOLUtil.getJCExpresssionForType(typeNode, ArrayList.class),
-                    List.<JCExpression>nil(),
-                    null);
-
-            JCVariableDecl actionsDecl = jcMaker.VarDef(
-                    jcMaker.Modifiers(Flags.PRIVATE),
-                    typeNode.toName("actions"),
-                    listTypeRef,
-                    listInit);
-
-            JavacHandlerUtil.injectField(typeNode, actionsDecl);
-
-            }
-    }
-
-
-    public static void createJacksonAnnotations(JavacNode typeNode){
-        List<JCMethodDecl> methods = List.<JCMethodDecl>nil();
-        JavacTreeMaker treeMaker = typeNode.getTreeMaker();
-
-        for (JavacNode child : typeNode.down()) {
-            if (child.getKind() != AST.Kind.METHOD || child.getName().contains("init")) {
-            	continue;
-            }
-
-            JCMethodDecl methodDecl = (JCMethodDecl) child.get();
-            List<JCAnnotation> annotationList = methodDecl.mods.annotations;
-            JCAnnotation ann = treeMaker.Annotation(
-                    JavacOLUtil.getJCExpresssionForType(typeNode, JsonProperty.class),
-                    List.<JCExpression>nil());
-            annotationList = annotationList.append(ann);
-            methodDecl.mods.annotations = annotationList;
+            JavacHandlerUtil.injectField(typeNode, actionsDeclaration);
 
         }
-
     }
 
 }

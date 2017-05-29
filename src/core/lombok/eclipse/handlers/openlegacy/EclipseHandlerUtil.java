@@ -1,7 +1,14 @@
 package lombok.eclipse.handlers.openlegacy;
 
+import lombok.AccessLevel;
+import lombok.core.AST;
 import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseNode;
+import lombok.eclipse.handlers.HandleConstructor;
+import lombok.eclipse.handlers.HandleEqualsAndHashCode;
+import lombok.eclipse.handlers.HandleGetter;
+import lombok.eclipse.handlers.HandleSetter;
+import lombok.eclipse.handlers.HandleToString;
 import openlegacy.utils.EclipseAstUtil;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.Expression;
@@ -13,9 +20,14 @@ import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.openlegacy.annotations.screen.ScreenEntity;
+import org.openlegacy.annotations.screen.ScreenEntitySuperClass;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,6 +35,34 @@ import java.util.Set;
  * @since 3.6.0-SNAPSHOT
  */
 public class EclipseHandlerUtil {
+
+    /**
+     * generates getters and setters
+     *
+     * @param typeNode
+     * @param annotationNode
+     */
+    public static void getenerateLombokGetAndSet(EclipseNode typeNode, EclipseNode annotationNode) {
+        new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
+        new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
+    }
+
+    /**
+     * generates getters, setters, equals, hashcode, toString, and constructor
+     *
+     * @param typeNode
+     * @param annotationNode
+     */
+    public static void generateLombokData(EclipseNode typeNode, EclipseNode annotationNode) {
+        new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
+        new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
+        new HandleEqualsAndHashCode().generateEqualsAndHashCodeForType(typeNode, annotationNode);
+        new HandleToString().generateToStringForType(typeNode, annotationNode);
+        new HandleConstructor().generateRequiredArgsConstructor(
+                typeNode, AccessLevel.PUBLIC, null, HandleConstructor.SkipIfConstructorExists.YES,
+                Collections.<Annotation>emptyList(), annotationNode);
+
+    }
 
     /**
      * The method checks if the annotation is set over class and not over interface, annotation or enum
@@ -43,15 +83,21 @@ public class EclipseHandlerUtil {
         return typeDecl;
     }
 
+    /**
+     * This method checks within fields array if fields with fieldName Exists
+     *
+     * @param fields    {@link FieldDeclaration} array
+     * @param fieldName Sting
+     * @return boolean result
+     */
     public static boolean fieldExist(FieldDeclaration[] fields, String fieldName) {
-        if (fields == null || fields.length == 0 || fieldName == null || fieldName.trim().isEmpty()) {
+        if (fields == null || fields.length == 0 || fieldName == null || fieldName.trim().isEmpty())
             return false;
-        }
-        for (FieldDeclaration declaration : fields) {
-            if (fieldName.equals(declaration.name)) {
+
+        for (FieldDeclaration declaration : fields)
+            if (fieldName.equals(String.valueOf(declaration.name)))
                 return true;
-            }
-        }
+
         return false;
     }
 
@@ -93,49 +139,59 @@ public class EclipseHandlerUtil {
      * @param typeNode   This is the node of type which interfaces list will be modified
      */
     public static void addImplements(EclipseNode typeNode, Class<?>... interfaces) {
-        TypeReference[] implArr = null;
-        TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
-
         if (interfaces == null || interfaces.length == 0)
             return;
 
-        implArr = typeDecl.superInterfaces;
-
-        TypeReference[] newInterfaces = getTypeReferenceArray   (interfaces);
-
-        typeDecl.superInterfaces = mergeArraysAndRemoveDuplicates(implArr, newInterfaces);
+        for (Class iFace : interfaces)
+            generateImplementsForType(typeNode, iFace.getName());
 
     }
 
+    private static boolean generateImplementsForType(EclipseNode typeNode, String type) {
+        TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
 
-    /**
-     * Takes 2 arrays of TypeReference type and merges into one array without duplicates
-     */
-    private static TypeReference[] mergeArraysAndRemoveDuplicates(TypeReference[] arr1, TypeReference[] arr2) {
-        if (arr1 == null || arr1.length == 0)
-            return arr2;
-        if (arr2 == null || arr2.length == 0)
-            return arr1;
+        List<TypeReference> resultingList = new ArrayList<TypeReference>();
+        // represents a list of full qualified declared interfaces
+        List<String> existingFqInterfacesNames = new ArrayList<String>();
+        // represents a list of simple declared interfaces
+        List<String> existingInterfacesNames = new ArrayList<String>();
 
-        int arr1Length = arr1.length;
-        int arr2Length = arr2.length;
+        if (typeDecl.superInterfaces != null) {
+            for (TypeReference reference : typeDecl.superInterfaces) {
+                resultingList.add(reference);
+                char[][] typeName = reference.getTypeName();
+                if (typeName.length > 1) {
+                    // add to fq list
+                    existingFqInterfacesNames.add(Eclipse.toQualifiedName(typeName));
+                } else {
+                    existingInterfacesNames.add(String.valueOf(reference.getLastToken()));
+                }
+            }
+        }
 
-        TypeReference[] merged = new TypeReference[arr1Length + arr2Length];
-        //copy all arrays content to the merged array
-        System.arraycopy(arr1, 0, merged, 0, arr1Length);
-        System.arraycopy(arr2, 0, merged, arr1Length, arr2Length);
+        String simpleName = type;
+        boolean qualified = simpleName.contains(".");
+        if (qualified) {
+            String[] split = simpleName.split("\\.");
+            simpleName = split[split.length - 1];
+        }
+        // check that current type was not already declared
+        if (!existingFqInterfacesNames.contains(type) && !existingInterfacesNames.contains(simpleName)) {
+            String fromImports = typeNode.getAst().getImportList().getFullyQualifiedNameForSimpleName(simpleName);
+            TypeReference typeReference = EclipseAstUtil.createTypeReference(qualified || fromImports == null ? type : simpleName);
+            resultingList.add(typeReference);
+        }
+        // set new list of interfaces
+        typeDecl.superInterfaces = resultingList.toArray(new TypeReference[]{});
 
-        Set<TypeReference> typeReferences = new HashSet();
-        //by adding array to the Set we simply remove duplicates
-        typeReferences.addAll(Arrays.asList(merged));
-
-        return (TypeReference[]) typeReferences.toArray();
+        return true;
     }
+
 
     /**
      * Transforms Class array to TypeReference array
      */
-    private static TypeReference[] getTypeReferenceArray(Class<?>[] interfaces) {
+    public static TypeReference[] getTypeReferenceArray(Class<?>[] interfaces) {
         TypeReference[] res = new TypeReference[interfaces.length];
         for (int i = 0; i < interfaces.length; i++) {
             res[i] = EclipseAstUtil.createTypeReference(interfaces[i].getName());
@@ -143,4 +199,83 @@ public class EclipseHandlerUtil {
 
         return res;
     }
+
+    /**
+     * used by builders to add modifiers to the type or field declaration
+     */
+    //TODO maybe it is preferable to place this methods in new EclipseBuildersUtil ??
+    public static void addModifiers(TypeDeclaration typeDecl, EclipseModifier... modifiers) {
+        if (modifiers.length == 0)
+            return;
+        int typeModifiers = typeDecl.modifiers;
+        for (EclipseModifier modifier : modifiers) {
+            typeModifiers |= modifier.modifierConstant;
+        }
+        typeDecl.modifiers = typeModifiers;
+    }
+
+    /**
+     * used by builders to add modifiers to the type or field declaration
+     */
+    public static void addModifiers(FieldDeclaration fieldDeclaration, EclipseModifier... modifiers) {
+        if (modifiers.length == 0)
+            return;
+        int fieldModifiers = fieldDeclaration.modifiers;
+        for (EclipseModifier modifier : modifiers) {
+            fieldModifiers |= modifier.modifierConstant;
+        }
+        fieldDeclaration.modifiers = fieldModifiers;
+    }
+
+    /**
+     * used by builders to add modifiers to the type or field declaration
+     */
+    public static void addModifiers(TypeDeclaration typeDecl, int... modifiers) {
+        if (modifiers.length == 0)
+            return;
+        int fieldModifiers = typeDecl.modifiers;
+        for (int modifier : modifiers)
+            fieldModifiers |= modifier;
+        typeDecl.modifiers = fieldModifiers;
+    }
+
+    /**
+     * used by builders to add modifiers to the type or field declaration
+     */
+    public static void addModifiers(FieldDeclaration fieldDeclaration, int... modifiers) {
+        if (modifiers.length == 0)
+            return;
+        int fieldModifiers = fieldDeclaration.modifiers;
+        for (int modifier : modifiers)
+            fieldModifiers |= modifier;
+        fieldDeclaration.modifiers = fieldModifiers;
+    }
+
+    /**
+     * The method checks if inner class with {@param className String} exists in the
+     * enclosing class {@param typeNode EclipseNode}
+     *
+     * @return boolean result
+     */
+    public static boolean classExists(EclipseNode typeNode, String className) {
+        for (EclipseNode node : typeNode.down())
+            if (node.getKind() == AST.Kind.TYPE && className.equals(node.getName()))
+                return true;
+
+        return false;
+    }
+
+    /**
+     * The method copies {@param newAnnotation Annotation array} and {@param annoataion Annotation} to the
+     * new Annotation array
+     *
+     * @return Annotation array
+     */
+    public static Annotation[] appendAnnotation(Annotation newAnnotation, Annotation[] annotations) {
+    	if(annotations == null) return new Annotation[]{newAnnotation};
+        Annotation[] output = Arrays.copyOf(annotations, annotations.length + 1);
+        output[output.length - 1] = newAnnotation;
+        return output;
+    }
+
 }

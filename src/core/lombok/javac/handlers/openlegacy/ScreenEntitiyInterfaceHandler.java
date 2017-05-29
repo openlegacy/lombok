@@ -31,7 +31,6 @@
  *******************************************************************************/
 package lombok.javac.handlers.openlegacy;
 
-import com.sun.tools.javac.util.*;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import com.sun.tools.javac.tree.JCTree.JCExpression;
@@ -44,17 +43,13 @@ import com.sun.tools.javac.tree.JCTree.JCAssign;
 import com.sun.tools.javac.code.Flags;
 
 import com.sun.tools.javac.util.List;
-import lombok.OLData;
 import lombok.core.AST;
-import lombok.eclipse.Eclipse;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
-import lombok.javac.handlers.HandleOLData;
 import lombok.javac.handlers.JavacHandlerUtil;
 import lombok.javac.handlers.JavacOLUtil;
 import lombok.javac.handlers.OLJavacHandlerUtil;
 import openlegacy.utils.StringUtil;
-import org.apache.tools.ant.taskdefs.Java;
 import org.openlegacy.annotations.screen.ScreenDescriptionField;
 import org.openlegacy.annotations.screen.ScreenEntity;
 import org.openlegacy.annotations.screen.ScreenEntitySuperClass;
@@ -103,7 +98,6 @@ public class ScreenEntitiyInterfaceHandler {
             createNonSuperEntityFields(typeNode, newFields, supportTerminalData);
         }
 
-        //TODO implement createFieldBasedFields method
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
         // add new fields into the type declaration
         JavacOLUtil.injectFields(typeNode, newFields);
@@ -117,7 +111,7 @@ public class ScreenEntitiyInterfaceHandler {
             JCVariableDecl terminalDataDecl = jcMaker.VarDef(
                     jcMaker.Modifiers(Flags.PRIVATE),
                     typeNode.toName(StringUtil.getVariableName(terminalSnapshot)),
-                    JavacOLUtil.getJCExpresssionForType(typeNode, terminalSnapshot),
+                    JavacOLUtil.getJCExpressionForType(typeNode, terminalSnapshot),
                     null);
             //to hide setter need to add @Setter(value = AccessLevel.NONE) ??
             newFields.add(terminalDataDecl);
@@ -125,12 +119,12 @@ public class ScreenEntitiyInterfaceHandler {
 
         if(!fieldExist(typeDecl, StringUtil.getVariableName("actions"))) {
             JCExpression listTypeRef = jcMaker.TypeApply(
-                    JavacOLUtil.getJCExpresssionForType(typeNode, java.util.List.class),
-                    List.<JCExpression>nil().append(JavacOLUtil.getJCExpresssionForType(typeNode, TerminalActionDefinition.class)));
+                    JavacOLUtil.getJCExpressionForType(typeNode, java.util.List.class),
+                    List.<JCExpression>nil().append(JavacOLUtil.getJCExpressionForType(typeNode, TerminalActionDefinition.class)));
 
             JCExpression listInit = jcMaker.NewClass(
                     null, List.<JCExpression>nil(),
-                    JavacOLUtil.getJCExpresssionForType(typeNode, ArrayList.class),
+                    JavacOLUtil.getJCExpressionForType(typeNode, ArrayList.class),
                     List.<JCExpression>nil(),
                     null);
 
@@ -147,7 +141,7 @@ public class ScreenEntitiyInterfaceHandler {
             JCVariableDecl focusDecl = jcMaker.VarDef(
                     jcMaker.Modifiers(Flags.PRIVATE),
                     typeNode.toName("focusField"),
-                    JavacOLUtil.getJCExpresssionForJavaLangType(typeNode, "String"),
+                    JavacOLUtil.getJCExpressionForJavaLangType(typeNode, "String"),
                     null);
 
             newFields.add(focusDecl);
@@ -157,7 +151,7 @@ public class ScreenEntitiyInterfaceHandler {
             JCVariableDecl pcCommandDecl = jcMaker.VarDef(
                     jcMaker.Modifiers(Flags.PRIVATE),
                     typeNode.toName("pcCommand"),
-                    JavacOLUtil.getJCExpresssionForJavaLangType(typeNode, "String"),
+                    JavacOLUtil.getJCExpressionForJavaLangType(typeNode, "String"),
                     null);
             newFields.add(pcCommandDecl);
         }
@@ -175,7 +169,7 @@ public class ScreenEntitiyInterfaceHandler {
             String getterName = JavacOLUtil.toGetterName(nameWithFieldSuffix);
             boolean isPrimitive = JavacOLUtil.isPrimitive(fieldNode);
 //            JCExpression varTypeDecl = (JCExpression) ((JCVariableDecl) fieldNode.get()).getType();
-            JCExpression varTypeDecl = JavacOLUtil.getJCExpresssionForType(typeNode, terminalField);
+            JCExpression varTypeDecl = JavacOLUtil.getJCExpressionForType(typeNode, terminalField);
             if(JavacHandlerUtil.MemberExistsResult.NOT_EXISTS.equals(
                     JavacHandlerUtil.methodExists(getterName, fieldNode, isBoolean,0))
                     && supportTerminalData && isPrimitive && !fieldExist(typeDecl, nameWithFieldSuffix)) {
@@ -264,8 +258,8 @@ public class ScreenEntitiyInterfaceHandler {
         return fields;
     }
 
-    /*
-     * get supportTerminalData attribute value
+    /**
+     * @deprecated method created only for use in the prototype
      */
     private boolean supportTerminalData(JavacNode typeNode, List<JCAnnotation> annotations) {
         JCAnnotation ann = null;
@@ -312,7 +306,6 @@ public class ScreenEntitiyInterfaceHandler {
             String name = ((JCIdent) ((JCAssign) ann.args.get(0)).getVariable()).getName().toString();
 //            String expressionClassName = ((JCLiteral) ((JCAssign) ann.args.get(0)).getExpression()).getValue();
             boolean supportTerminalData = false;
-            // TODO need to consult with Tom about casting to requiered class instead of instanceof
             /*
              * The following casting sequence was performed for attribute value:
              * JCExpression -> JCAssign -> JCLiteral -> Boolean (boolean attribute value);

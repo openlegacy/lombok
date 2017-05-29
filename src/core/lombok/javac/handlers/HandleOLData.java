@@ -25,6 +25,8 @@ import org.openlegacy.terminal.ScreenEntity;
 
 import java.io.Serializable;
 
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
+
 /**
  * <h1>Prototype Handler</h1>
  *
@@ -51,38 +53,29 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
 
         if (entityType.getName().equals(ScreenEntity.class.getName())) {
             String interfaceName = entityType.getName();
-            generateImplemets(typeNode, interfaceName);
+            addImplements(typeNode, interfaceName);
             new ScreenEntitiyInterfaceHandler().handle(typeNode, annotationNode);
         }
 
         if(isRpcEntity = entityType.getName().equals(RpcEntity.class.getName())){
             String interfaceName = entityType.getName();
-            generateImplemets(typeNode, interfaceName);
+            addImplements(typeNode, interfaceName);
 
-            RpcEntityInterfaceHandler.handle(typeNode, annotationNode);
+            RpcEntityInterfaceHandler.handle(typeNode);
         }
 
         if (entityType.getName().equals(DbEntity.class.getName())) {
             String interfaceName = entityType.getName();
-            generateImplemets(typeNode, interfaceName);
-            generateImplemets(typeNode, Serializable.class.getName());
-            DbEntityInterfaceHandler.handle(typeNode, annotationNode);
+            addImplements(typeNode, interfaceName);
+            addImplements(typeNode, Serializable.class.getName());
+            DbEntityInterfaceHandler.handle(typeNode);
         }
 
         new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
         new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
         if(isRpcEntity)
-            RpcEntityInterfaceHandler.createJacksonAnnotations(typeNode);
+            createJacksonAnnotations(typeNode);
     }
 
-    //TODO need to extend the method logic. take care of the edge cases.
-    private void generateImplemets(JavacNode typeNode, String interfaceName) {
-        final JCClassDecl classDecl = (JCClassDecl) typeNode.get();
-        List<JCExpression> implementing = classDecl.implementing;
-        JCExpression ifExpression = chainDotsString(typeNode, interfaceName);
-        if(implementing!= null && !implementing.isEmpty() && implementing.contains(ifExpression))
-            return;
-        implementing = implementing.append(ifExpression);
-        classDecl.implementing = implementing;
-    }
+
 }

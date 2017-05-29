@@ -58,4 +58,17 @@ public final class StringUtil {
 		chars[0] = Character.toUpperCase(chars[0]);
 		return new String(chars);
 	}
+
+	public static char[] prepend(String input, String prefix) {
+		return prepend(input.toCharArray(), prefix);
+	}
+
+
+	public static char[] prepend(char [] input, String prefix){
+		if (prefix == null || prefix.isEmpty())
+			return input;
+		String previousName = StringUtil.firstCharToUpperCase(input);
+		String fieldNameWithPrefix = prefix + previousName;
+		return fieldNameWithPrefix.toCharArray();
+	}
 }

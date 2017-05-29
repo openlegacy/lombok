@@ -33,11 +33,12 @@ package lombok.eclipse.handlers.openlegacy;
 
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.EclipseHandlerUtil;
-import lombok.eclipse.handlers.builders.FieldDeclBuilderImpl;
+import lombok.eclipse.handlers.builders.FieldDeclarationBuilder;
 import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.openlegacy.definitions.RpcActionDefinition;
+import org.openlegacy.rpc.RpcEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class RpcEntityInterfaceHandler {
 
     public static void handle(EclipseNode typeNode) {
 
+        addImplements(typeNode, RpcEntity.class);
         createNonSuperEntityFields(typeNode);
     }
 
@@ -60,25 +62,13 @@ public class RpcEntityInterfaceHandler {
         TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
 
         if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("actions"))) {
-            FieldDeclaration decl = new FieldDeclBuilderImpl("actions")
+            FieldDeclaration decl = new FieldDeclarationBuilder("actions")
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(List.class)
                     .withDiamondsType(RpcActionDefinition.class)
                     .withInitialization(ArrayList.class)
+                    .withDiamondsInitialization(RpcActionDefinition.class)
                     .build();
-//            FieldDeclaration decl = new FieldDeclaration("actions".toCharArray(), 0, 0);
-//            decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-//            TypeReference typeArg = EclipseAstUtil.createTypeReference(rpcActionDefinition);
-//            //return type
-//            String list = EclipseImportsUtil.getTypeName(typeNode.getAst(), List.class);
-//            decl.type = EclipseAstUtil.createParametrizedTypeReference(list, typeArg, 1);
-//            //initializer
-//            AllocationExpression allocationExpression = new AllocationExpression();
-//            allocationExpression.type = EclipseAstUtil.createParametrizedTypeReference(
-//                    EclipseImportsUtil.getTypeName(typeNode.getAst(), ArrayList.class), typeArg, 1);
-//            decl.initialization = allocationExpression;
-            //to hide setter need to add @Setter(value = AccessLevel.NONE)
-//			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
             EclipseHandlerUtil.injectField(typeNode, decl);
         }
     }

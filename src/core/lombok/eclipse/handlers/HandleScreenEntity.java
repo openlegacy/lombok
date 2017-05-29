@@ -1,5 +1,6 @@
 package lombok.eclipse.handlers;
 
+import lombok.AccessLevel;
 import lombok.core.AnnotationValues;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
@@ -9,7 +10,7 @@ import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.annotations.screen.ScreenEntity;
 
-import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.checkAnnotation;
+import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky
@@ -30,5 +31,7 @@ public class HandleScreenEntity extends EclipseAnnotationHandler<ScreenEntity> {
         ScreenEntity annotationInstance = annotation.getInstance();
         boolean supportTerminalData = annotationInstance.supportTerminalData();
         ScreenEntityInterfaceHandler.handle(typeNode, supportTerminalData);
+
+        getenerateLombokGetAndSet(typeNode, annotationNode);
     }
 }

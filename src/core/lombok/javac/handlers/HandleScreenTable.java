@@ -78,7 +78,7 @@ public class HandleScreenTable extends JavacAnnotationHandler<ScreenTable> {
             JCVariableDecl focusDecl = treeMaker.VarDef(
                     treeMaker.Modifiers(Flags.PRIVATE),
                     typeNode.toName("focusField"),
-                    JavacOLUtil.getJCExpresssionForJavaLangType(typeNode, "String"),
+                    JavacOLUtil.getJCExpressionForJavaLangType(typeNode, "String"),
                     null);
 
             JavacHandlerUtil.injectField(typeNode, focusDecl);

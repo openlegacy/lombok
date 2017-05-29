@@ -1,38 +1,33 @@
 package lombok.javac.handlers.openlegacy;
 
-import static lombok.javac.handlers.OLJavacHandlerUtil.*;
-
-import java.util.ArrayList;
-
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Transient;
-
-import com.sun.tools.javac.code.Type;
-import lombok.AccessLevel;
-import lombok.javac.handlers.HandleGetter;
-import lombok.javac.handlers.HandleSetter;
-import org.openlegacy.db.definitions.DbActionDefinition;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.tools.javac.code.Flags;
+import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import com.sun.tools.javac.tree.JCTree.JCClassDecl;
 import com.sun.tools.javac.tree.JCTree.JCExpression;
-import com.sun.tools.javac.tree.JCTree.JCFieldAccess;
-import com.sun.tools.javac.tree.JCTree.JCIdent;
-import com.sun.tools.javac.tree.JCTree.JCTypeParameter;
+import com.sun.tools.javac.tree.JCTree.JCModifiers;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import com.sun.tools.javac.util.List;
-
 import lombok.core.AST;
-import lombok.javac.Javac;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
 import lombok.javac.handlers.JavacHandlerUtil;
 import lombok.javac.handlers.JavacOLUtil;
+import lombok.javac.handlers.builders.AnnotationBuilder;
+import lombok.javac.handlers.builders.ClassDeclarationBuilder;
+import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
+import org.openlegacy.db.DbEntity;
+import org.openlegacy.db.definitions.DbActionDefinition;
+
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Transient;
+import java.io.Serializable;
+
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky
@@ -40,15 +35,10 @@ import openlegacy.utils.StringUtil;
  */
 public class DbEntityInterfaceHandler {
 
-    private static java.util.List<JavacNode> idNodes = null;
+    public static void handle(JavacNode typeNode) {
 
-    public static void handle(JavacNode typeNode, JavacNode annotationNode) {
-        JCClassDecl typeDecl = checkAnnotation(typeNode, annotationNode);
-        if (typeDecl == null) {
-            return;
-        }
-
-        createNonSuperEntityFields(typeNode);
+        addImplements(typeNode, DbEntity.class, Serializable.class);
+        createDbEntityEntityFields(typeNode);
 
         //TODO add if exists condition
         if (hasMultipleId(typeNode)) {
@@ -56,139 +46,146 @@ public class DbEntityInterfaceHandler {
         }
     }
 
+    /**
+     * generates actions and serialVersionUID for typeNode
+     */
+    private static void createDbEntityEntityFields(JavacNode typeNode) {
+        JavacTreeMaker jcMaker = typeNode.getTreeMaker();
+
+        if (!fieldExist(typeNode, StringUtil.getVariableName("actions"))) {
+
+            JCVariableDecl actionsDeclaration = new FieldDeclBuilder(typeNode, "actions")
+                    .withModifiers(Flags.PRIVATE)
+                    .withDiamondsType(java.util.List.class, DbActionDefinition.class)
+                    .withDiamondsInitialization(
+                            java.util.ArrayList.class, DbActionDefinition.class
+                    )
+                    .setAnnotations(Transient.class)
+                    .build();
+
+            JavacHandlerUtil.injectField(typeNode, actionsDeclaration);
+        }
+
+        if (!fieldExist(typeNode, StringUtil.getVariableName("serialVersionUID")))
+            JavacHandlerUtil.injectField(typeNode, createSerialVersionUID(typeNode));
+    }
+
+    /**
+     * The method creates composite Key nested class for typeNode
+     */
     private static void createCompositeKey(JavacNode typeNode) {
         JavacTreeMaker treeMaker = typeNode.getTreeMaker();
 
         String className = ((JCClassDecl) typeNode.get()).name.toString();
         String idClassNameWithSuffix = className + "CompositeKey";
-
-        //List of definitions inside the new nested class (serialVersionUID is added)
-        List<JCTree> classDefs = List.<JCTree>nil().append(createSerialVersionUID(typeNode));
-
-        /*
-         * Remove @Id annotation in the loop
-         */
-        for (JavacNode idNode : idNodes) {
-            for (JavacNode idChild : idNode.down()) {
-                if (idChild.getKind() == AST.Kind.ANNOTATION) {
-                    Type annType = ((JCAnnotation) idChild.get()).type;
-                    String annNameFromType = annType.tsym.toString();
-
-                    if (annNameFromType.trim().isEmpty())
-                        continue;
-
-                    if (annNameFromType.equals("javax.persistence.Id")) {
-                        JCVariableDecl idNodeDecl = ((JCVariableDecl) idNode.get());
-                        JCAnnotation annotationToBeRemoved = (JCAnnotation) idChild.get();
-                        java.util.List<JCAnnotation> annUtilList = new ArrayList(idNodeDecl.mods.annotations);
-                        annUtilList.remove(annotationToBeRemoved);
-
-                        // Create copy of Variable declaration to avoid influence on the enclosing entity class fields
-                        JCVariableDecl idNodeCopy = treeMaker.VarDef(
-                                treeMaker.Modifiers(Flags.PRIVATE),
-                                idNodeDecl.name,
-                                idNodeDecl.vartype,
-                                idNodeDecl.init
-                        );
-                        idNodeCopy.mods.annotations = getJavacListFromJavaUtilList(annUtilList);
-                        classDefs = classDefs.append(idNodeCopy);
-                    }
-                }
-            }
-        }
-
-        //Declaration of the new nested class
-        JCClassDecl idClassDecl = treeMaker.ClassDef(
-                treeMaker.Modifiers(Flags.PUBLIC | Flags.STATIC),
-                typeNode.toName(idClassNameWithSuffix),
-                List.<JCTypeParameter>nil(),
-                null,
-                List.<JCExpression>nil(),
-                classDefs);
-        List<JCAnnotation> idClassAnn = idClassDecl.mods.annotations;
-
-
-        // inject new Type inside enclosing entity
-        JavacNode idClassTypeNode = JavacHandlerUtil.injectType(typeNode, idClassDecl);
-
-        //generate getters and setters for nested class
-        new HandleGetter().generateGetterForType(idClassTypeNode, idClassTypeNode.up(), AccessLevel.PUBLIC, true);
-        new HandleSetter().generateSetterForType(idClassTypeNode, idClassTypeNode.up(), AccessLevel.PUBLIC, true);
         String qualifiedName = className + "." + idClassNameWithSuffix;
 
-        JCExpression argument = treeMaker.Assign(
-                treeMaker.Ident(typeNode.toName("value")),
-                treeMaker.Select(JavacOLUtil.getJCExpresssionForType(typeNode, qualifiedName), typeNode.toName("class")));
+        if(!classExists(typeNode, idClassNameWithSuffix)) {
 
-        List<JCAnnotation> annotations = ((JCClassDecl) typeNode.get()).getModifiers().annotations;
-        annotations = annotations.append(
-                treeMaker.Annotation(JavacOLUtil.getJCExpresssionForType(typeNode, IdClass.class),
-                        List.<JCExpression>nil().append(argument)
-                )
+            //List of definitions inside the new nested class (serialVersionUID is added)
+            List<JCTree> classDefs = List.<JCTree>nil().append(createSerialVersionUID(typeNode));
+
+        /* Remove @Id annotation in the loop */
+            classDefs = classDefs.appendList(removeAnnotationsForIdFields(typeNode));
+
+            //Declaration of the new nested class
+            JCClassDecl idClassDecl = new ClassDeclarationBuilder(typeNode, idClassNameWithSuffix)
+                    .withModifiers(Flags.PUBLIC, Flags.STATIC)
+                    .appendImplements(Serializable.class)
+                    .setVariableDecl(classDefs)
+                    .build();
+
+            // inject new Type inside enclosing entity
+            JavacNode idClassTypeNode = JavacHandlerUtil.injectType(typeNode, idClassDecl);
+
+            //generate getters and setters for nested class
+            generateLombokData(idClassTypeNode, idClassTypeNode.up());
+        }
+
+        createIdClassAnnotation(typeNode, qualifiedName);
+
+    }
+
+    /**
+     * The method creates IdClass Annotation over typeNode
+     */
+    private static void createIdClassAnnotation(JavacNode typeNode, String idClassName) {
+        if (JavacHandlerUtil.hasAnnotation(IdClass.class, typeNode))
+            return;
+        
+        JCModifiers modifiers = ((JCClassDecl) typeNode.get()).getModifiers();
+
+        List<JCAnnotation> annotations = modifiers.annotations;
+        
+        modifiers.annotations = annotations.append(
+                new AnnotationBuilder(typeNode, IdClass.class)
+                .appendClassLiteralArgument("value", idClassName)
+                .build()
         );
-        ((JCClassDecl) typeNode.get()).getModifiers().annotations = annotations;
     }
 
     //checks for more then one Id in the entity class
     private static boolean hasMultipleId(JavacNode typeNode) {
-        idNodes = findIdFields(typeNode);
-        if (idNodes.size() > 1) return true;
-        return false;
+        java.util.List<JavacNode> idNodes = findIdFields(typeNode);
+        return idNodes.size() > 1;
     }
 
     //return List of JavacNodes which have @Id annotation
     private static java.util.List<JavacNode> findIdFields(JavacNode typeNode) {
         java.util.List<JavacNode> fields = new java.util.ArrayList<JavacNode>();
         for (JavacNode child : typeNode.down()) {
-            if (child.getKind() != AST.Kind.FIELD || !JavacHandlerUtil.hasAnnotation(Id.class, child)) {
-                continue;
-            }
-
-            // TODO add filterField
-            // if (filterField(fieldDecl)) {
-            // continue;
-            // }
-
-            fields.add(child);
+            if (child.getKind() == AST.Kind.FIELD && JavacHandlerUtil.hasAnnotation(Id.class, child))
+                fields.add(child);
         }
         return fields;
     }
 
-    private static void createNonSuperEntityFields(JavacNode typeNode) {
-        JavacTreeMaker jcMaker = typeNode.getTreeMaker();
+    /**
+     * creates serialVersionUID field with literal initialization
+     */
+    private static JCVariableDecl createSerialVersionUID(JavacNode typeNode) {
 
-        if (!fieldExist(typeNode, StringUtil.getVariableName("actions"))) {
-            JCExpression listTypeRef = jcMaker.TypeApply(JavacOLUtil.getJCExpresssionForType(typeNode, java.util.List.class), List.<JCExpression>nil().append(JavacOLUtil.getJCExpresssionForType(typeNode, DbActionDefinition.class)));
-
-            JCExpression listInit = jcMaker.NewClass(null, List.<JCExpression>nil(), JavacOLUtil.getJCExpresssionForType(typeNode, ArrayList.class), List.<JCExpression>nil(), null);
-
-            JCVariableDecl actionsDecl = jcMaker.VarDef(jcMaker.Modifiers(Flags.PRIVATE), typeNode.toName("actions"), listTypeRef, listInit);
-
-            actionsDecl.getModifiers().annotations = List.<JCAnnotation>nil().append(jcMaker.Annotation(JavacOLUtil.getJCExpresssionForType(typeNode, Transient.class), List.<JCExpression>nil())).append(jcMaker.Annotation(JavacOLUtil.getJCExpresssionForType(typeNode, JsonIgnore.class), List.<JCExpression>nil()));
-
-            JavacHandlerUtil.injectField(typeNode, actionsDecl);
-        }
-
-        if (!fieldExist(typeNode, StringUtil.getVariableName("serialVersionUID"))) {
-
-            JCVariableDecl serialVersion = createSerialVersionUID(typeNode);
-
-            JavacHandlerUtil.injectField(typeNode, serialVersion);
-
-        }
-
+        return new FieldDeclBuilder(typeNode, "serialVersionUID")
+                .withModifiers(Flags.PRIVATE, Flags.FINAL, Flags.STATIC)
+                .withPrimitiveType(JavacPrimitives.LONG)
+                .withLiteralInit(JavacPrimitives.LONG, 1L)
+                .build();
     }
 
-    private static JCVariableDecl createSerialVersionUID(JavacNode typeNode){
+    /**
+     * the method removes annotations and returns List with field declarations to be set to the composite class
+     */
+    private static List<JCTree> removeAnnotationsForIdFields(JavacNode typeNode) {
         JavacTreeMaker treeMaker = typeNode.getTreeMaker();
+        List<JCTree> fieldDeclarations = List.<JCTree>nil();
 
-        JCExpression serialInit = treeMaker.Literal(1L);
+        java.util.List<JavacNode> idNodes = findIdFields(typeNode);
+        for (JavacNode idNode : idNodes) {
+            for (JavacNode idChild : idNode.down()) {
+                if (idChild.getKind() == AST.Kind.ANNOTATION) {
+                    Type annotationType = ((JCAnnotation) idChild.get()).type;
+                    String annotationName = annotationType.tsym.toString();
 
-        JCExpression serialDecl = treeMaker.TypeIdent(Javac.CTC_LONG);
+                    if (!annotationName.trim().isEmpty() && annotationName.equals(Id.class.getName())) {
+                        JCVariableDecl idNodeDecl = ((JCVariableDecl) idNode.get());
+                        // Create copy of Variable declaration to avoid influence on the enclosing entity class fields
+                        JCVariableDecl idNodeCopy = copyVariableDeclaration(treeMaker, idNodeDecl);
+                        fieldDeclarations = fieldDeclarations.append(idNodeCopy);
+                    }
+                }
+            }
+        }
 
-        JCVariableDecl serialDef = treeMaker.VarDef(treeMaker.Modifiers(Flags.PRIVATE | Flags.FINAL | Flags.STATIC), typeNode.toName("serialVersionUID"), serialDecl, serialInit);
+        return fieldDeclarations;
+    }
 
-        return serialDef;
+    private static JCVariableDecl copyVariableDeclaration(JavacTreeMaker treeMaker, JCVariableDecl input) {
+        return treeMaker.VarDef(
+                treeMaker.Modifiers(Flags.PRIVATE),
+                input.name,
+                input.vartype,
+                input.init
+        );
     }
 
 }
