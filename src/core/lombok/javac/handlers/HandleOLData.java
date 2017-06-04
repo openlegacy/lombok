@@ -1,15 +1,7 @@
 package lombok.javac.handlers;
 
-import static lombok.javac.handlers.JavacHandlerUtil.chainDotsString;
-
-import org.mangosdk.spi.ProviderFor;
-
-import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import com.sun.tools.javac.tree.JCTree.JCClassDecl;
-import com.sun.tools.javac.tree.JCTree.JCExpression;
-import com.sun.tools.javac.util.List;
-
 import lombok.AccessLevel;
 import lombok.OLData;
 import lombok.core.AnnotationValues;
@@ -17,8 +9,8 @@ import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.openlegacy.DbEntityInterfaceHandler;
 import lombok.javac.handlers.openlegacy.RpcEntityInterfaceHandler;
-import lombok.javac.handlers.openlegacy.ScreenEntitiyInterfaceHandler;
-
+import lombok.javac.handlers.openlegacy.ScreenEntityInterfaceHandler;
+import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.db.DbEntity;
 import org.openlegacy.rpc.RpcEntity;
 import org.openlegacy.terminal.ScreenEntity;
@@ -29,7 +21,7 @@ import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 /**
  * <h1>Prototype Handler</h1>
- *
+ * <p>
  * Handles the {@code lombok.Implements} annotation for java compiler.
  *
  * @author Matvey Mitnitsky, Tom Fingerman
@@ -54,14 +46,20 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
         if (entityType.getName().equals(ScreenEntity.class.getName())) {
             String interfaceName = entityType.getName();
             addImplements(typeNode, interfaceName);
-            new ScreenEntitiyInterfaceHandler().handle(typeNode, annotationNode);
+
+            /**
+             * prototype implementation of OLData was retrieving supportTerminalData value in the Handler method.
+             * Now we can simply retrieve it from annotation in general handler as far as we are handling
+             * ScreenEntity annotation instead of OLData.
+             */
+            ScreenEntityInterfaceHandler.handle(typeNode, false);
         }
 
-        if(isRpcEntity = entityType.getName().equals(RpcEntity.class.getName())){
+        if (isRpcEntity = entityType.getName().equals(RpcEntity.class.getName())) {
             String interfaceName = entityType.getName();
             addImplements(typeNode, interfaceName);
 
-            RpcEntityInterfaceHandler.handle(typeNode);
+            RpcEntityInterfaceHandler.handle(typeNode, false);
         }
 
         if (entityType.getName().equals(DbEntity.class.getName())) {
@@ -73,7 +71,7 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
 
         new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
         new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
-        if(isRpcEntity)
+        if (isRpcEntity)
             createJacksonAnnotations(typeNode);
     }
 

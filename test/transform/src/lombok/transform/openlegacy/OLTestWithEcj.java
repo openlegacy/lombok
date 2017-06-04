@@ -4,6 +4,9 @@ import lombok.transform.openlegacy.ecj.OLTestDbEntity;
 import lombok.transform.openlegacy.ecj.OLTestDbEntityOverrides;
 import lombok.transform.openlegacy.ecj.OLTestRpcEntity;
 import lombok.transform.openlegacy.ecj.OLTestRpcEntityOverrides;
+import lombok.transform.openlegacy.ecj.OLTestRpcPart;
+import lombok.transform.openlegacy.ecj.OLTestScreenEntity;
+import lombok.transform.openlegacy.ecj.OLTestScreenTable;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -19,7 +22,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        OLTestRpcEntity.class, OLTestRpcEntityOverrides.class, OLTestDbEntity.class, OLTestDbEntityOverrides.class
+        OLTestRpcEntity.class, OLTestRpcEntityOverrides.class, OLTestDbEntity.class,
+        OLTestDbEntityOverrides.class, OLTestScreenEntity.class, OLTestRpcPart.class,
+        OLTestScreenTable.class
 })
 public class OLTestWithEcj {
 }

@@ -19,13 +19,10 @@ public class HandleRpcEntity extends JavacAnnotationHandler<RpcEntity> {
     @Override
     public void handle(AnnotationValues<RpcEntity> annotation, JCTree.JCAnnotation ast, JavacNode annotationNode) {
         JavacNode typeNode = annotationNode.up();
-        JCTree.JCClassDecl typeDecl = checkAnnotation(typeNode, annotationNode);
-        if (typeDecl != null) {
 
-            RpcEntityInterfaceHandler.handle(typeNode);
-
+        if (validateAnnotation(typeNode, annotationNode)) {
+            RpcEntityInterfaceHandler.handle(typeNode, false);
             generateGettersAndSetters(typeNode, annotationNode);
-
         }
     }
 }

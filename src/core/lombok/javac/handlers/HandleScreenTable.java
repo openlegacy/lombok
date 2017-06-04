@@ -31,21 +31,15 @@
  *******************************************************************************/
 package lombok.javac.handlers;
 
-import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
-import com.sun.tools.javac.tree.JCTree.JCClassDecl;
-import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
-import lombok.AccessLevel;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
-import lombok.javac.JavacTreeMaker;
-import openlegacy.utils.StringUtil;
-
-import static lombok.javac.handlers.OLJavacHandlerUtil.*;
-
+import lombok.javac.handlers.openlegacy.ScreenTableAnnotationHandler;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.annotations.screen.ScreenTable;
+
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky
@@ -58,32 +52,13 @@ public class HandleScreenTable extends JavacAnnotationHandler<ScreenTable> {
     @Override
     public void handle(AnnotationValues<ScreenTable> annotationValues, JCAnnotation ast, JavacNode annotationNode) {
         JavacNode typeNode = annotationNode.up();
-        JCClassDecl typeDecl = checkAnnotation(typeNode, annotationNode);
-        if (typeDecl == null) {
-            return;
+
+        if (validateAnnotation(typeNode, annotationNode)) {
+            ScreenTable screenTableAnnotation = annotationValues.getInstance();
+            boolean supportTerminalData = screenTableAnnotation.supportTerminalData();
+            ScreenTableAnnotationHandler.handle(typeNode, supportTerminalData);
+            generateLombokData(typeNode, annotationNode);
         }
-
-        ScreenTable instance = annotationValues.getInstance();
-
-        handleScreenTable(typeNode);
-
-        new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
-        new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
-    }
-
-    private void handleScreenTable(JavacNode typeNode) {
-        JCClassDecl typeDecl = (JCClassDecl) typeNode.get();
-        JavacTreeMaker treeMaker = typeNode.getTreeMaker();
-        if (!fieldExist(typeNode, StringUtil.getVariableName("focusField"))) {
-            JCVariableDecl focusDecl = treeMaker.VarDef(
-                    treeMaker.Modifiers(Flags.PRIVATE),
-                    typeNode.toName("focusField"),
-                    JavacOLUtil.getJCExpressionForJavaLangType(typeNode, "String"),
-                    null);
-
-            JavacHandlerUtil.injectField(typeNode, focusDecl);
-        }
-
     }
 
 }

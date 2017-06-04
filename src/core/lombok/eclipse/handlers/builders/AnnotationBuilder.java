@@ -18,25 +18,40 @@ public class AnnotationBuilder implements EclipseTreeBuilder<NormalAnnotation> {
 
     private MemberValuePair[] arguments;
 
-    private Set<String> argumentKeys = new HashSet();
+    private Set<String> argumentKeys = new HashSet<String>();
 
     public AnnotationBuilder(Class<?> annotationClass) {
         annotation = new NormalAnnotation(EclipseAstUtil.createTypeReference(annotationClass.getName()), 0);
     }
 
+    /**
+     * Builds an object of NormalAnnotation type
+     *
+     * @return {@link NormalAnnotation}
+     */
     @Override
     public NormalAnnotation build() {
-    	annotation.memberValuePairs = arguments;
+        annotation.memberValuePairs = arguments;
         return this.annotation;
     }
 
+    /**
+     * appends an argument to the annotation
+     *
+     * @return instance of the AnnotationBuilder class
+     */
     public AnnotationBuilder appendArgumentWithClassLiteralValue(String argumentName, Class<?> value) {
         return appendArgumentWithClassLiteralValue(argumentName, value.getName());
     }
 
+    /**
+     * appends an argument to the annotation
+     *
+     * @return instance of the AnnotationBuilder class
+     */
     public AnnotationBuilder appendArgumentWithClassLiteralValue(String argumentName, String classFQName) {
         // do not add argument if it exists
-        if(argumentKeys.contains(argumentName))
+        if (argumentKeys.contains(argumentName))
             return this;
 
         if (arguments == null || arguments.length == 0) {
@@ -51,13 +66,23 @@ public class AnnotationBuilder implements EclipseTreeBuilder<NormalAnnotation> {
         return this;
     }
 
+    /**
+     * set an argument to the annotation
+     *
+     * @return
+     */
     public AnnotationBuilder setArgumentWithClassLiteralValue(String argumentName, Class<?> value) {
         return setArgumentWithClassLiteralValue(argumentName, value.getName());
     }
 
+    /**
+     * set an argument to the annotation
+     *
+     * @return
+     */
     public AnnotationBuilder setArgumentWithClassLiteralValue(String argumentName, String classFQName) {
         // do not add argument if it exists
-        if(argumentKeys.contains(argumentName))
+        if (argumentKeys.contains(argumentName))
             return this;
 
         MemberValuePair argumentPair = createClassLiteralMemberValuePair(argumentName, classFQName);

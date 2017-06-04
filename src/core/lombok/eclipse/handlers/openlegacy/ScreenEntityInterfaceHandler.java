@@ -32,26 +32,18 @@
 
 package lombok.eclipse.handlers.openlegacy;
 
-import lombok.AccessLevel;
-import lombok.core.AST.Kind;
 import lombok.core.AnnotationValues;
 import lombok.core.handlers.HandlerUtil;
-import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.EclipseHandlerUtil;
 import lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import lombok.eclipse.handlers.builders.FieldDeclarationBuilder;
 import lombok.experimental.Accessors;
-import openlegacy.utils.EclipseAstUtil;
-import openlegacy.utils.EclipseImportsUtil;
 import openlegacy.utils.StringUtil;
-import org.eclipse.jdt.internal.compiler.ast.AllocationExpression;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
-import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.openlegacy.annotations.screen.ScreenDescriptionField;
-import org.openlegacy.annotations.screen.ScreenField;
 import org.openlegacy.terminal.TerminalField;
 import org.openlegacy.terminal.TerminalSnapshot;
 import org.openlegacy.terminal.definitions.TerminalActionDefinition;
@@ -68,24 +60,18 @@ import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
  */
 public class ScreenEntityInterfaceHandler {
 
-    private static String terminalField;
-    private static String terminalSnapshot;
-    private static String terminalActionDefinition;
+    private static final String TERMINAL_SNAPSHOT = "terminalSnapshot";
+    private static final String DESCRIPTION_SUFFIX = "Description";
+    private static final String FIELD_SUFFIX = "Field";
+    private static final String ACTIONS_SUFFIX = "Actions";
 
     /**
-     * Main entry point, which will generate all required fields
+     * Main entry point, which will generate all required code
      */
-
     public static void handle(EclipseNode typeNode, boolean supportTerminalData) {
-
-        if (supportTerminalData) {
-            // get names to be used in the CU
-            terminalField = EclipseImportsUtil.getTypeName(typeNode.getAst(), TerminalField.class);
-            terminalSnapshot = EclipseImportsUtil.getTypeName(typeNode.getAst(), TerminalSnapshot.class);
-        }
         List<FieldDeclaration> newFields = new ArrayList<FieldDeclaration>();
         addImplements(typeNode, org.openlegacy.terminal.ScreenEntity.class);
-        createNonSuperEntityFields(typeNode, newFields, supportTerminalData);
+        createScreenEntityFields(typeNode, newFields, supportTerminalData);
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
         // add new fields into the type declaration
         injectFields(typeNode, newFields);
@@ -94,19 +80,14 @@ public class ScreenEntityInterfaceHandler {
     /**
      * Creates predefined fields for not super entity class
      */
-    private static void createNonSuperEntityFields(EclipseNode typeNode, List<FieldDeclaration> newFields, boolean supportTerminalData) {
+    private static void createScreenEntityFields(EclipseNode typeNode, List<FieldDeclaration> newFields, boolean supportTerminalData) {
         TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
-        //create terminalSnapshot field
-        if (supportTerminalData && !fieldExist(typeDecl.fields, StringUtil.getVariableName(terminalSnapshot))) {
-            FieldDeclaration decl = new FieldDeclarationBuilder(terminalSnapshot)
+        //create TERMINAL_SNAPSHOT field
+        if (supportTerminalData && !fieldExist(typeDecl.fields, TERMINAL_SNAPSHOT)) {
+            FieldDeclaration decl = new FieldDeclarationBuilder(TERMINAL_SNAPSHOT)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(TerminalSnapshot.class)
                     .build();
-//            FieldDeclaration decl = new FieldDeclaration(StringUtil.getVariableName(terminalSnapshot).toCharArray(), 0, 0);
-//            decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-//            decl.type = EclipseAstUtil.createTypeReference(terminalSnapshot);
-            //to hide setter need to add @Setter(value = AccessLevel.NONE)
-//			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
             newFields.add(decl);
         }
         //create focusField field
@@ -115,9 +96,6 @@ public class ScreenEntityInterfaceHandler {
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
                     .build();
-//            FieldDeclaration decl = new FieldDeclaration("focusField".toCharArray(), 0, 0);
-//            decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-//            decl.type = EclipseAstUtil.createTypeReference(String.class.getSimpleName());
             newFields.add(decl);
         }
         // create pcCommand field
@@ -126,9 +104,6 @@ public class ScreenEntityInterfaceHandler {
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
                     .build();
-//            FieldDeclaration decl = new FieldDeclaration("pcCommand".toCharArray(), 0, 0);
-//            decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-//            decl.type = EclipseAstUtil.createTypeReference(String.class.getSimpleName());
             newFields.add(decl);
         }
         //create actions field
@@ -138,20 +113,8 @@ public class ScreenEntityInterfaceHandler {
                     .withType(List.class)
                     .withDiamondsType(TerminalActionDefinition.class)
                     .withInitialization(ArrayList.class)
+                    .withDiamondsInitialization(TerminalActionDefinition.class)
                     .build();
-//            FieldDeclaration decl = new FieldDeclaration("actions".toCharArray(), 0, 0);
-//            decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-//            TypeReference typeArg = EclipseAstUtil.createTypeReference(terminalActionDefinition);
-//            //return type
-//            String list = EclipseImportsUtil.getTypeName(typeNode.getAst(), List.class);
-//            decl.type = EclipseAstUtil.createParametrizedTypeReference(list, typeArg, 1);
-//            //initializer
-//            AllocationExpression allocationExpression = new AllocationExpression();
-//            allocationExpression.type = EclipseAstUtil.createParametrizedTypeReference(
-//                    EclipseImportsUtil.getTypeName(typeNode.getAst(), ArrayList.class), typeArg, 1);
-//            decl.initialization = allocationExpression;
-            //to hide setter need to add @Setter(value = AccessLevel.NONE)
-//			EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
             newFields.add(decl);
         }
     }
@@ -161,12 +124,13 @@ public class ScreenEntityInterfaceHandler {
      */
     private static void createFieldBasedFields(EclipseNode typeNode, List<FieldDeclaration> newFields, boolean supportTerminalData) {
         TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
+
         // walk through all fields annotated with @ScreenField
         for (EclipseNode fieldNode : findAllScreenFields(typeNode)) {
             FieldDeclaration field = (FieldDeclaration) fieldNode.get();
             //******
             //try to create "private TerminalField *Field" if getter for it doesn't exist & satisfy other conditions
-            String nameWithFieldSuffix = fieldNode.getName() + "Field";
+            String nameWithFieldSuffix = fieldNode.getName() + FIELD_SUFFIX;
             TypeReference fieldType = copyType(field.type, field);
             boolean isBoolean = isBoolean(fieldType);
             String getterName = HandlerUtil.toGetterName(fieldNode.getAst(), AnnotationValues.of(Accessors.class, fieldNode),
@@ -174,115 +138,58 @@ public class ScreenEntityInterfaceHandler {
             boolean primitive = isPrimitive(fieldType);
             if (MemberExistsResult.NOT_EXISTS.equals(EclipseHandlerUtil.methodExists(getterName, typeNode, -1))
                     && supportTerminalData && primitive && !fieldExist(typeDecl.fields, nameWithFieldSuffix)) {
-                FieldDeclaration decl = new FieldDeclaration(nameWithFieldSuffix.toCharArray(), 0, 0);
-                decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-                decl.type = EclipseAstUtil.createTypeReference(terminalField);
-                //to hide setter need to add @Setter(value = AccessLevel.NONE)
-//				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
+                FieldDeclaration decl = new FieldDeclarationBuilder(nameWithFieldSuffix)
+                        .withModifiers(EclipseModifier.PRIVATE)
+                        .withType(TerminalField.class)
+                        .build();
+
                 newFields.add(decl);
             }
 
             //*****
             //try to create "private String *Description"
-            if (EclipseHandlerUtil.hasAnnotation(ScreenDescriptionField.class, fieldNode)) {
-                String nameWithDescriptionSuffix = fieldNode.getName() + "Description";
-                FieldDeclaration decl = new FieldDeclaration(nameWithDescriptionSuffix.toCharArray(), 0, 0);
-                decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-                decl.type = EclipseAstUtil.createTypeReference(String.class.getSimpleName());
-                //to hide setter need to add @Setter(value = AccessLevel.NONE)
-                EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
+            if (EclipseHandlerUtil.hasAnnotation(ScreenDescriptionField.class, fieldNode) && !fieldExist(typeDecl.fields, fieldNode.getName() + DESCRIPTION_SUFFIX)) {
+
+                FieldDeclaration decl = new FieldDeclarationBuilder(fieldNode.getName())
+                        .withNameSuffix(DESCRIPTION_SUFFIX)
+                        .withModifiers(EclipseModifier.PRIVATE)
+                        .withType(String.class)
+                        .build();
+
                 newFields.add(decl);
             }
+
             //*****
             //try to create "private List<TerminalActionDefinition> *Actions = new ArrayList<TerminalActionDefinition>()"
             //if field type is List
             char[][] typeChar = fieldType.getTypeName();
             String typeName = new String(typeChar[typeChar.length - 1]);
+
             if (typeName.equals("List")) {
-                String nameWithActionsSuffix = fieldNode.getName() + "Actions";
-                FieldDeclaration decl = new FieldDeclaration(nameWithActionsSuffix.toCharArray(), 0, 0);
-                decl.modifiers = decl.modifiers | ClassFileConstants.AccPrivate;
-                TypeReference typeArg = EclipseAstUtil.createTypeReference(terminalActionDefinition);
-                //return type
-                String list = EclipseImportsUtil.getTypeName(typeNode.getAst(), List.class);
-                decl.type = EclipseAstUtil.createParametrizedTypeReference(list, typeArg, 1);
-                //initializer
-                AllocationExpression allocationExpression = new AllocationExpression();
-                allocationExpression.type = EclipseAstUtil.createParametrizedTypeReference(
-                        EclipseImportsUtil.getTypeName(typeNode.getAst(), ArrayList.class), typeArg, 1);
-                decl.initialization = allocationExpression;
-                //to hide setter need to add @Setter(value = AccessLevel.NONE)
-//				EclipseAstUtil.addLombokSetterOnField(decl, AccessLevel.NONE);
+                if (typeName.contains("actions") || fieldExist(typeDecl.fields, fieldNode.getName() + ACTIONS_SUFFIX))
+                    continue;
+
+                FieldDeclaration decl = new FieldDeclarationBuilder(fieldNode.getName())
+                        .withNameSuffix(ACTIONS_SUFFIX)
+                        .withModifiers(EclipseModifier.PRIVATE)
+                        .withType(List.class)
+                        .withDiamondsType(TerminalActionDefinition.class)
+                        .withInitialization(ArrayList.class)
+                        .withDiamondsInitialization(TerminalActionDefinition.class)
+                        .build();
+
                 newFields.add(decl);
             }
         }
     }
 
-    private static List<EclipseNode> findAllScreenFields(EclipseNode typeNode) {
-        List<EclipseNode> fields = new ArrayList<EclipseNode>();
-        for (EclipseNode child : typeNode.down()) {
-            if (child.getKind() != Kind.FIELD) {
-                continue;
-            }
-            FieldDeclaration fieldDecl = (FieldDeclaration) child.get();
-            if (!EclipseHandlerUtil.hasAnnotation(ScreenField.class, child)) {
-                continue;
-            }
-            if (!filterField(fieldDecl)) {
-                continue;
-            }
 
-            fields.add(child);
-        }
-        return fields;
-    }
-
+    /**
+     * returns true in the case passed typeReference is a representation of OL primitive types that are not inner or external class types
+     */
     private static void injectFields(EclipseNode typeNode, List<FieldDeclaration> fields) {
-        for (FieldDeclaration field : fields) {
+        for (FieldDeclaration field : fields)
             EclipseHandlerUtil.injectField(typeNode, field);
-        }
     }
 
-
-    private static boolean fieldExist(FieldDeclaration[] fields, String fieldName) {
-        if (fields == null || fields.length == 0 || fieldName == null || fieldName.trim().isEmpty()) {
-            return false;
-        }
-        for (FieldDeclaration declaration : fields) {
-            if (fieldName.equals(new String(declaration.name))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isPrimitive(TypeReference typeReference) {
-        if (typeReference.dimensions() != 0) {
-            return false;
-        }
-
-        if (Eclipse.nameEquals(typeReference.getTypeName(), "int")) {
-            return true;
-        }
-        if (Eclipse.nameEquals(typeReference.getTypeName(), "String")) {
-            return true;
-        }
-        if (Eclipse.nameEquals(typeReference.getTypeName(), "BigInteger")) {
-            return true;
-        }
-        if (Eclipse.nameEquals(typeReference.getTypeName(), "Integer")) {
-            return true;
-        }
-        if (Eclipse.nameEquals(typeReference.getTypeName(), "Boolean")
-                || Eclipse.nameEquals(typeReference.getTypeName(), "boolean")) {
-            return true;
-        }
-        if (Eclipse.nameEquals(typeReference.getTypeName(), "Date")) {
-            return true;
-        }
-        if (Eclipse.nameEquals(typeReference.getTypeName(), "Double")) {
-            return true;
-        }
-        return false;
-    }
 }

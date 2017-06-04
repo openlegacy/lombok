@@ -61,7 +61,7 @@ public class HandleOLData extends EclipseAnnotationHandler<OLData> {
 
         if (entityType.getName().equals(RpcEntity.class.getName())) {
 
-            RpcEntityInterfaceHandler.handle(typeNode);
+            RpcEntityInterfaceHandler.handle(typeNode, false);
         }
 
         if (entityType.getName().equals(DbEntity.class.getName())) {

@@ -20,15 +20,15 @@ import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.openlegacy.annotations.screen.ScreenEntity;
-import org.openlegacy.annotations.screen.ScreenEntitySuperClass;
+import org.openlegacy.annotations.screen.ScreenField;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Matvey Mitnitsky
@@ -81,6 +81,25 @@ public class EclipseHandlerUtil {
             return null;
         }
         return typeDecl;
+    }
+
+    /**
+     * The method checks if the annotation is set over class and not over interface, annotation or enum
+     */
+    public static boolean validateAnnotation(EclipseNode typeNode, EclipseNode annotationNode) {
+        TypeDeclaration typeDecl = null;
+        if (typeNode.get() instanceof TypeDeclaration) {
+            typeDecl = (TypeDeclaration) typeNode.get();
+        }
+        int modifiers = typeDecl == null ? 0 : typeDecl.modifiers;
+        boolean notAClass = (modifiers
+                & (ClassFileConstants.AccInterface | ClassFileConstants.AccAnnotation | ClassFileConstants.AccEnum)) != 0;
+
+        if (typeDecl == null || notAClass) {
+            annotationNode.addError("This annotation is only supported on a class.");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -272,10 +291,73 @@ public class EclipseHandlerUtil {
      * @return Annotation array
      */
     public static Annotation[] appendAnnotation(Annotation newAnnotation, Annotation[] annotations) {
-    	if(annotations == null) return new Annotation[]{newAnnotation};
+        if (annotations == null) return new Annotation[]{newAnnotation};
         Annotation[] output = Arrays.copyOf(annotations, annotations.length + 1);
         output[output.length - 1] = newAnnotation;
         return output;
+    }
+
+    /**
+     * returns true in the case passed typeReference is a representation of OL primitive types that are not inner or external class types
+     */
+    public static boolean isPrimitive(TypeReference typeReference) {
+        if (typeReference.dimensions() != 0) {
+            return false;
+        }
+
+        if (Eclipse.nameEquals(typeReference.getTypeName(), "int")) {
+            return true;
+        }
+        if (Eclipse.nameEquals(typeReference.getTypeName(), String.class.getSimpleName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), String.class.getName())) {
+            return true;
+        }
+        if (Eclipse.nameEquals(typeReference.getTypeName(), BigInteger.class.getSimpleName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), BigInteger.class.getName())) {
+            return true;
+        }
+        if (Eclipse.nameEquals(typeReference.getTypeName(), Integer.class.getSimpleName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), Integer.class.getName())) {
+            return true;
+        }
+        if (Eclipse.nameEquals(typeReference.getTypeName(), Boolean.class.getSimpleName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), Boolean.class.getName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), "boolean")) {
+            return true;
+        }
+        if (Eclipse.nameEquals(typeReference.getTypeName(), Date.class.getSimpleName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), Date.class.getName())) {
+            return true;
+        }
+        if (Eclipse.nameEquals(typeReference.getTypeName(), Double.class.getSimpleName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), Double.class.getName())) {
+            return true;
+        }
+        if (Eclipse.nameEquals(typeReference.getTypeName(), BigDecimal.class.getSimpleName())
+                || Eclipse.nameEquals(typeReference.getTypeName(), BigDecimal.class.getName())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * method returns List of all fields annotated with {@link ScreenField} annotation
+     */
+    public static List<EclipseNode> findAllScreenFields(EclipseNode typeNode) {
+        List<EclipseNode> fields = new ArrayList<EclipseNode>();
+        for (EclipseNode child : typeNode.down()) {
+            if (child.getKind() != AST.Kind.FIELD) {
+                continue;
+            }
+            FieldDeclaration fieldDecl = (FieldDeclaration) child.get();
+            if (!lombok.eclipse.handlers.EclipseHandlerUtil.hasAnnotation(ScreenField.class, child)) {
+                continue;
+            }
+
+            fields.add(child);
+        }
+        return fields;
     }
 
 }

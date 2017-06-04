@@ -42,8 +42,12 @@ import lombok.AccessLevel;
 import lombok.core.AST;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
+import org.openlegacy.annotations.screen.ScreenField;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static lombok.javac.handlers.JavacHandlerUtil.*;
 
@@ -73,6 +77,8 @@ public class OLJavacHandlerUtil {
     }
 
     /**
+     * @deprecated in favor of {@link #validateAnnotation(JavacNode, JavacNode)}
+     * <p>
      * Method checks if annotation is set to appropriate element
      * adds an error if it set to Annotation, Enum or Interface
      */
@@ -91,6 +97,27 @@ public class OLJavacHandlerUtil {
         }
 
         return typeDecl;
+    }
+
+    /**
+     * Method checks if annotation is set to appropriate element
+     * adds an error if it set to Annotation, Enum or Interface
+     */
+    public static boolean validateAnnotation(JavacNode typeNode, JavacNode annotationNode) {
+        JCClassDecl typeDecl = null;
+        if (typeNode.get() instanceof JCClassDecl) {
+            typeDecl = (JCClassDecl) typeNode.get();
+        }
+
+        long modifiers = typeDecl == null ? 0 : typeDecl.mods.flags;
+        boolean notAClass = (modifiers & (Flags.INTERFACE | Flags.ANNOTATION | Flags.ENUM)) != 0;
+
+        if (typeDecl == null | notAClass) {
+            annotationNode.addError("@Implements is only supported on a class.");
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -162,15 +189,19 @@ public class OLJavacHandlerUtil {
      * Checks if field exists within fields of given typeNode
      */
     public static boolean fieldExist(JavacNode typeNode, String fieldName) {
-        JCClassDecl typeDecl = (JCClassDecl) typeNode.get();
+        return fieldExist((JCClassDecl) typeNode.get(), fieldName);
+    }
+
+    public static boolean fieldExist(JCClassDecl typeDecl, String fieldName) {
         if (typeDecl == null || fieldName == null || fieldName.trim().isEmpty())
             return false;
+
         List<JCTree> defs = typeDecl.getMembers();
         for (JCTree def : defs)
-            if (JCVariableDecl.class.isInstance(def)
-                    && (((JCVariableDecl) def).getName().toString()).equals(fieldName)) {
+            if (JCVariableDecl.class.isInstance(def) && (((JCVariableDecl) def).getName().toString()).equals(fieldName)) {
                 return true;
             }
+
         return false;
     }
 
@@ -298,5 +329,52 @@ public class OLJavacHandlerUtil {
         }
 
         return null;
+    }
+
+    /**
+     * method returns List of all fields annotated with {@link ScreenField} annotation
+     */
+    public static java.util.List<JavacNode> findAllScreenFields(JavacNode typeNode) {
+        java.util.List<JavacNode> fields = new java.util.ArrayList<JavacNode>();
+        for (JavacNode child : typeNode.down()) {
+            if (child.getKind() == AST.Kind.FIELD && JavacHandlerUtil.hasAnnotation(ScreenField.class, child))
+                fields.add(child);
+        }
+        return fields;
+    }
+
+    /**
+     * returns true in the case passed typeReference is a representation of OL primitive types that are not inner or external class types
+     */
+    public static boolean isPrimitive(JavacNode fieldNode) {
+        JCVariableDecl variableDecl = (JCVariableDecl) fieldNode.get();
+        String variableType = variableDecl.getType().toString();
+
+        if (variableType.equals("int"))
+            return true;
+
+        if (variableType.equals(String.class.getSimpleName()) || variableType.equals(String.class.getName()))
+            return true;
+
+        if (variableType.equals(BigInteger.class.getSimpleName()) || variableType.equals(BigInteger.class.getName()))
+            return true;
+
+        if (variableType.equals(Integer.class.getSimpleName()) || variableType.equals(Integer.class.getName()))
+            return true;
+
+        if (variableType.equals(Boolean.class.getSimpleName()) || variableType.equals(Boolean.class.getName())
+                || variableType.equals("boolean"))
+            return true;
+
+        if (variableType.equals(Date.class.getSimpleName()) || variableType.equals(Date.class.getName()))
+            return true;
+
+        if (variableType.equals(Double.class.getSimpleName()) || variableType.equals(Double.class.getName()))
+            return true;
+
+        if (variableType.equals(BigDecimal.class.getSimpleName()) || variableType.equals(BigDecimal.class.getName()))
+            return true;
+
+        return false;
     }
 }

@@ -32,61 +32,34 @@
 package lombok.eclipse.handlers;
 
 
-import lombok.AccessLevel;
 import lombok.core.AnnotationValues;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
-import openlegacy.utils.EclipseAstUtil;
+import lombok.eclipse.handlers.openlegacy.ScreenTableAnnotationHandler;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
-import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
-import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
-import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.annotations.screen.ScreenTable;
+
+import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky
  * @since 3.6.0-SNAPSHOT
  */
 @ProviderFor(EclipseAnnotationHandler.class)
-public class HandleScreenTable extends EclipseAnnotationHandler<ScreenTable>{
-
-    private static final String FOCUS_FIELD_NAME = "focusField";
+public class HandleScreenTable extends EclipseAnnotationHandler<ScreenTable> {
 
     @Override
     public void handle(AnnotationValues<ScreenTable> annotation, Annotation ast, EclipseNode annotationNode) {
         EclipseNode typeNode = annotationNode.up();
-        TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
-        if(typeDecl == null)
-            return;
 
-        handleScreenTable(typeNode);
+        if (validateAnnotation(typeNode, annotationNode)) {
+            ScreenTable screenTableAnnotation = annotation.getInstance();
+            boolean supportTerminalData = screenTableAnnotation.supportTerminalData();
+            ScreenTableAnnotationHandler.handle(typeNode, supportTerminalData);
+            generateLombokData(typeNode, annotationNode);
+        }
 
-        new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
-        new HandleSetter().generateSetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);
     }
 
-    private void handleScreenTable(EclipseNode typeNode) {
-        TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
-        if(!fieldExist(typeDecl.fields, FOCUS_FIELD_NAME)){
-            FieldDeclaration focusFieldDecl = new FieldDeclaration();
-            focusFieldDecl.modifiers = focusFieldDecl.modifiers | ClassFileConstants.AccPrivate;
-            focusFieldDecl.name = FOCUS_FIELD_NAME.toCharArray();
-            focusFieldDecl.type = EclipseAstUtil.createTypeReference("java.lang.String");
-
-            EclipseHandlerUtil.injectField(typeNode, focusFieldDecl);
-        }
-    }
-
-    private static boolean fieldExist(FieldDeclaration[] fields, String fieldName) {
-        if (fields == null || fields.length == 0 || fieldName == null || fieldName.trim().isEmpty()) {
-            return false;
-        }
-        for (FieldDeclaration declaration : fields) {
-            if (fieldName.equals(declaration.name)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

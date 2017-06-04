@@ -31,18 +31,21 @@
  *******************************************************************************/
 package lombok.eclipse.handlers.openlegacy;
 
+import lombok.core.AST;
 import lombok.eclipse.EclipseNode;
-import lombok.eclipse.handlers.EclipseHandlerUtil;
 import lombok.eclipse.handlers.builders.FieldDeclarationBuilder;
 import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
+import org.eclipse.jdt.internal.compiler.ast.TypeReference;
+import org.openlegacy.annotations.rpc.RpcField;
 import org.openlegacy.definitions.RpcActionDefinition;
 import org.openlegacy.rpc.RpcEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 
 /**
@@ -52,10 +55,11 @@ import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 public class RpcEntityInterfaceHandler {
 
 
-    public static void handle(EclipseNode typeNode) {
+    public static void handle(EclipseNode typeNode, boolean rpcPart) {
 
-        addImplements(typeNode, RpcEntity.class);
+        if (!rpcPart) addImplements(typeNode, RpcEntity.class);
         createNonSuperEntityFields(typeNode);
+        createFieldActions(typeNode);
     }
 
     private static void createNonSuperEntityFields(EclipseNode typeNode) {
@@ -69,7 +73,46 @@ public class RpcEntityInterfaceHandler {
                     .withInitialization(ArrayList.class)
                     .withDiamondsInitialization(RpcActionDefinition.class)
                     .build();
-            EclipseHandlerUtil.injectField(typeNode, decl);
+
+            injectField(typeNode, decl);
         }
+    }
+
+    private static void createFieldActions(EclipseNode typeNode) {
+        TypeDeclaration typeDeclaration = (TypeDeclaration) typeNode.get();
+
+        for (EclipseNode fieldNode : findAllRpcFields(typeNode)) {
+            String fieldNameWithActionsSuffix = fieldNode.getName() + "Actions";
+            FieldDeclaration field = (FieldDeclaration) fieldNode.get();
+
+            TypeReference fieldType = copyType(field.type, field);
+            char[][] typeChar = fieldType.getTypeName();
+            String typeName = new String(typeChar[typeChar.length - 1]);
+
+            if (typeName.contains("List")) {
+                if (fieldNode.getName().contains("actions") || fieldExist(typeDeclaration.fields, fieldNameWithActionsSuffix))
+                    continue;
+
+                FieldDeclaration fieldDeclaration = new FieldDeclarationBuilder(fieldNameWithActionsSuffix)
+                        .withModifiers(EclipseModifier.PRIVATE)
+                        .withType(List.class)
+                        .withDiamondsType(RpcActionDefinition.class)
+                        .withInitialization(ArrayList.class)
+                        .withDiamondsInitialization(RpcActionDefinition.class)
+                        .build();
+
+                injectField(typeNode, fieldDeclaration);
+            }
+        }
+    }
+
+    private static List<EclipseNode> findAllRpcFields(EclipseNode typeNode) {
+        List<EclipseNode> fields = new ArrayList<EclipseNode>();
+        for (EclipseNode child : typeNode.down()) {
+            if (child.getKind() == AST.Kind.FIELD && hasAnnotation(RpcField.class, child))
+                fields.add(child);
+        }
+
+        return fields;
     }
 }

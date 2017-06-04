@@ -32,10 +32,8 @@
 package lombok.javac.handlers;
 
 import com.sun.source.tree.Tree;
-import com.sun.tools.javac.tree.JCTree;
-import com.sun.tools.javac.tree.JCTree.JCExpression ;
+import com.sun.tools.javac.tree.JCTree.JCExpression;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
-import com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree;
 import lombok.javac.JavacNode;
 
 /**
@@ -65,33 +63,33 @@ public class JavacOLUtil {
 
     public static final String JAVA_UTIL_PACKAGE = "java.util";
 
-    public static JCExpression getJCExpressionForType(JavacNode typeNode, Class<?> clazz){
-        if(typeNode == null)
+    public static JCExpression getJCExpressionForType(JavacNode typeNode, Class<?> clazz) {
+        if (typeNode == null)
             return null;
         return clazz != null ? JavacHandlerUtil.chainDotsString(typeNode, clazz.getName()) : null;
     }
 
-    public static JCExpression getJCExpressionForType(JavacNode typeNode, String fullyQualifiedName){
-        if(typeNode == null)
+    public static JCExpression getJCExpressionForType(JavacNode typeNode, String fullyQualifiedName) {
+        if (typeNode == null)
             return null;
         return (fullyQualifiedName != null && !fullyQualifiedName.isEmpty()) ? JavacHandlerUtil.chainDotsString(typeNode, fullyQualifiedName) : null;
     }
 
-    public static JCExpression getJCExpressionForJavaLangType(JavacNode typeNode, String simpleName){
-        if(typeNode == null)
+    public static JCExpression getJCExpressionForJavaLangType(JavacNode typeNode, String simpleName) {
+        if (typeNode == null)
             return null;
         return (simpleName != null && !simpleName.trim().isEmpty()) ?
                 JavacHandlerUtil.genJavaLangTypeRef(typeNode, simpleName) : null;
     }
 
-    public static JCExpression getJCExpressionForJavaUtilType(JavacNode typeNode, String simpleName){
-        if(simpleName == null || simpleName.trim().isEmpty())
+    public static JCExpression getJCExpressionForJavaUtilType(JavacNode typeNode, String simpleName) {
+        if (simpleName == null || simpleName.trim().isEmpty())
             return null;
         String fqName = JAVA_UTIL_PACKAGE + simpleName;
         return JavacHandlerUtil.genTypeRef(typeNode, fqName);
     }
 
-    public static String getFullyQualifiedName(Class<?> clazz){
+    public static String getFullyQualifiedName(Class<?> clazz) {
         return clazz != null ? clazz.getName() : null;
     }
 
@@ -107,9 +105,9 @@ public class JavacOLUtil {
     }
 
     public static String toGetterName(String nameWithFieldSuffix) {
-        char [] charFieldName = nameWithFieldSuffix.toCharArray();
+        char[] charFieldName = nameWithFieldSuffix.toCharArray();
         charFieldName[0] = Character.toUpperCase(charFieldName[0]);
         String fieldGetterSufix = charFieldName.toString();
-        return "get"+fieldGetterSufix;
+        return "get" + fieldGetterSufix;
     }
 }

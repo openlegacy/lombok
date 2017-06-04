@@ -33,14 +33,18 @@ package lombok.javac.handlers.openlegacy;
 
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
+import lombok.core.AST;
 import lombok.javac.JavacNode;
-import lombok.javac.JavacTreeMaker;
-import lombok.javac.handlers.JavacHandlerUtil;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
+import org.openlegacy.annotations.rpc.RpcField;
 import org.openlegacy.definitions.RpcActionDefinition;
 import org.openlegacy.rpc.RpcEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static lombok.javac.handlers.JavacHandlerUtil.*;
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 /**
@@ -49,13 +53,13 @@ import static lombok.javac.handlers.OLJavacHandlerUtil.*;
  */
 public class RpcEntityInterfaceHandler {
 
-    public static void handle(JavacNode typeNode) {
-        addImplements(typeNode, RpcEntity.class);
+    public static void handle(JavacNode typeNode, boolean rpcPart) {
+        if (!rpcPart) addImplements(typeNode, RpcEntity.class);
         createNonSuperEntityFields(typeNode);
+        createFieldActions(typeNode);
     }
 
     private static void createNonSuperEntityFields(JavacNode typeNode) {
-        JavacTreeMaker jcMaker = typeNode.getTreeMaker();
 
         if (!fieldExist(typeNode, StringUtil.getVariableName("actions"))) {
             JCVariableDecl actionsDeclaration = new FieldDeclBuilder(typeNode, "actions")
@@ -66,9 +70,36 @@ public class RpcEntityInterfaceHandler {
                     )
                     .build();
 
-            JavacHandlerUtil.injectField(typeNode, actionsDeclaration);
+            injectField(typeNode, actionsDeclaration);
 
         }
     }
 
+    private static void createFieldActions(JavacNode typeNode) {
+        for (JavacNode fieldNode : findAllRpcFields(typeNode)) {
+            String fieldNameWithActionsSuffix = fieldNode.getName() + "Actions";
+            String varType = ((JCVariableDecl) fieldNode.get()).getType().toString();
+            if (varType.contains("List<")) {
+                if (fieldNode.getName().contains("actions") || fieldExist(typeNode, fieldNameWithActionsSuffix))
+                    continue;
+                JCVariableDecl fieldDeclaration = new FieldDeclBuilder(typeNode, fieldNameWithActionsSuffix)
+                        .withModifiers(Flags.PRIVATE)
+                        .withDiamondsType(java.util.List.class, RpcActionDefinition.class)
+                        .withDiamondsInitialization(ArrayList.class, RpcActionDefinition.class)
+                        .build();
+
+                injectField(typeNode, fieldDeclaration);
+            }
+        }
+
+    }
+
+    private static List<JavacNode> findAllRpcFields(JavacNode typeNode) {
+        java.util.List<JavacNode> fields = new java.util.ArrayList<JavacNode>();
+        for (JavacNode child : typeNode.down()) {
+            if (child.getKind() == AST.Kind.FIELD && hasAnnotation(RpcField.class, child))
+                fields.add(child);
+        }
+        return fields;
+    }
 }

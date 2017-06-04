@@ -1,6 +1,5 @@
 package lombok.javac.handlers;
 
-import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
@@ -20,11 +19,9 @@ public class HandleDbEntity extends JavacAnnotationHandler<DbEntity> {
     @Override
     public void handle(AnnotationValues<DbEntity> annotation, JCAnnotation ast, JavacNode annotationNode) {
         JavacNode typeNode = annotationNode.up();
-        JCTree.JCClassDecl typeDecl = checkAnnotation(typeNode, annotationNode);
-        if(typeDecl != null){
 
+        if (validateAnnotation(typeNode, annotationNode)) {
             DbEntityInterfaceHandler.handle(typeNode);
-            
             generateGettersAndSetters(typeNode, annotationNode);
         }
     }

@@ -5,7 +5,6 @@ import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.openlegacy.RpcEntityInterfaceHandler;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
-import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.annotations.rpc.RpcEntity;
 
@@ -21,14 +20,10 @@ public class HandleRpcEntity extends EclipseAnnotationHandler<RpcEntity> {
     @Override
     public void handle(AnnotationValues<RpcEntity> annotation, Annotation ast, EclipseNode annotationNode) {
         EclipseNode typeNode = annotationNode.up();
-        TypeDeclaration typeDecl = checkAnnotation(typeNode, annotationNode);
 
-        if (typeDecl == null) {
-            return;
+        if (validateAnnotation(typeNode, annotationNode)) {
+            RpcEntityInterfaceHandler.handle(typeNode, false);
+            getenerateLombokGetAndSet(typeNode, annotationNode);
         }
-
-        RpcEntityInterfaceHandler.handle(typeNode);
-
-        getenerateLombokGetAndSet(typeNode, annotationNode);
     }
 }

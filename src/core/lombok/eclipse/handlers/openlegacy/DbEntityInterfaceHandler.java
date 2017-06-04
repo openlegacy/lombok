@@ -106,7 +106,7 @@ public class DbEntityInterfaceHandler {
     }
 
     private static boolean hasMultipleId(EclipseNode typeNode) {
-        List<EclipseNode> idFields= findIdFields(typeNode);
+        List<EclipseNode> idFields = findIdFields(typeNode);
         return idFields.size() > 1;
     }
 
@@ -120,7 +120,7 @@ public class DbEntityInterfaceHandler {
 
     private static List<FieldDeclaration> removeAnnotationsForIdFields(EclipseNode typeNode) {
         List<EclipseNode> idFields = findIdFields(typeNode);
-        List<FieldDeclaration> result = new ArrayList();
+        List<FieldDeclaration> result = new ArrayList<FieldDeclaration>();
         for (EclipseNode idField : idFields) {
             for (EclipseNode idChild : idField.down()) {
                 if (idChild.getKind() == AST.Kind.ANNOTATION) {
