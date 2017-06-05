@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.openlegacy</groupId>
-        <artifactId>openlegacy-dependencies-manager</artifactId>
-        <version>3.6.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>org.openlegacy</groupId>
+		<artifactId>openlegacy-dependencies-manager</artifactId>
+		<version>3.6.0-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>openlegacy-lombok</artifactId>
-    <packaging>pom</packaging>
+	<artifactId>openlegacy-lombok</artifactId>
+	<packaging>pom</packaging>
 
-    <name>OpenLegacyLombok</name>
-    <description>OpenLegacyLombok is a fork of the Lombok project by Reinier Zwitserloot</description>
+	<name>OpenLegacyLombok</name>
+	<description>OpenLegacyLombok is a fork of the Lombok project by Reinier Zwitserloot</description>
 
-    <licenses>
-        <license>
-            <name>Eclipse Public License - v 1.0</name>
-            <url>http://www.eclipse.org/legal/epl-v10.html</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>Eclipse Public License - v 1.0</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-    
-    <build>
-    <plugins>
-		<plugin>
-			  <groupId>org.codehaus.mojo</groupId>
-			  <artifactId>build-helper-maven-plugin</artifactId>
-			  <version>1.3</version>
-			  <executions>
-			    <execution>
-			      <id>add-jar</id>
-			      <phase>package</phase>
-			      <goals>
-			        <goal>attach-artifact</goal>
-			      </goals>
-			      <configuration>
-			        <artifacts>
-			          <artifact>
-			            <file>dist/openlegacy-lombok-1.16.15.jar</file>
-			            <type>jar</type>
-			          </artifact>
-			        </artifacts>
-			      </configuration>
-			    </execution>
-			  </executions>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+					<execution>
+						<id>add-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>dist/openlegacy-lombok-1.16.15.jar</file>
+									<type>jar</type>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-   </build>
- </project>
+	</build>
+</project>
