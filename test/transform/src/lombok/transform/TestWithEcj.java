@@ -34,10 +34,6 @@ import org.junit.runner.RunWith;
 @RunWith(DirectoryRunner.class)
 public class TestWithEcj extends DirectoryRunner.TestParams {
 
-	public static final String OL_BEFORE_DIRECTORY = "test/transform/resource/openlegacy/before";
-	public static final String OL_AFTER_DIRECTORY = "test/transform/resource/openlegacy/after-ecj";
-
-	//set this directories to the getBeforeDirectory( ) and getAfterDirectory() to run tests on lombok annotations
 	public static final String LOMBOK_BEFORE_DIRECTORY = "test/transform/resource/before";
 	public static final String LOMBOK_AFTER_DIRECTORY = "test/transform/resource/after-ecj";
 
@@ -53,12 +49,12 @@ public class TestWithEcj extends DirectoryRunner.TestParams {
 	
 	@Override
 	public File getBeforeDirectory() {
-		return new File(OL_BEFORE_DIRECTORY);
+		return new File(LOMBOK_BEFORE_DIRECTORY);
 	}
 	
 	@Override
 	public File getAfterDirectory() {
-		return new File(OL_AFTER_DIRECTORY);
+		return new File(LOMBOK_AFTER_DIRECTORY);
 	}
 	
 	@Override

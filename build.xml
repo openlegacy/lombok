@@ -651,7 +651,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 			<classpath path="build/tests" />
 			<batchtest>
 				<fileset dir="test/transform/src">
-					<include name="lombok/transform/openlegacy/TestOLLombok.java" />
+					<include name="lombok/transform/openlegacy/OLTestWithDelombok.java" />
 				</fileset>
 			</batchtest>
 		</junit>
