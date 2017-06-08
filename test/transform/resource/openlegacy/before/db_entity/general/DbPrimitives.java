@@ -1,6 +1,6 @@
 package lombok.test;
 
-@org.openlegacy.annotations.db.DbEntity class DbPrimitives{
+@org.openlegacy.core.annotations.db.DbEntity class DbPrimitives{
 
     private boolean booleanVar;
     private char charVar;

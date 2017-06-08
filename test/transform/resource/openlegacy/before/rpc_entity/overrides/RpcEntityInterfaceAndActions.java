@@ -1,5 +1,5 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcEntity class RpcEntityInterfaceAndActions implements org.openlegacy.rpc.RpcEntity {
-    private java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
+@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityInterfaceAndActions implements org.openlegacy.core.rpc.RpcEntity {
+    private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 }

@@ -33,6 +33,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.openlegacy</groupId>
+			<artifactId>openlegacy-api</artifactId>
+			<version>${openlegacy.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

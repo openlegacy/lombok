@@ -1,10 +1,10 @@
 package lombok.test;
 
-@org.openlegacy.annotations.db.DbEntity
-class DbWithInnerClass implements org.openlegacy.db.DbEntity, java.io.Serializable {
+@org.openlegacy.core.annotations.db.DbEntity
+class DbWithInnerClass implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	@javax.persistence.Transient
-	private java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.db.definitions.DbActionDefinition>();
+	private java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.db.definitions.DbActionDefinition>();
 
 
 	public static class InnerPart {
@@ -21,7 +21,7 @@ class DbWithInnerClass implements org.openlegacy.db.DbEntity, java.io.Serializab
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.db.definitions.DbActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> getActions() {
 		return this.actions;
 	}
 
@@ -33,7 +33,7 @@ class DbWithInnerClass implements org.openlegacy.db.DbEntity, java.io.Serializab
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions) {
 		this.actions = actions;
 	}
 }

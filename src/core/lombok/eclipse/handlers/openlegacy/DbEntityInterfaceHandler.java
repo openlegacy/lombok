@@ -11,8 +11,8 @@ import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.NormalAnnotation;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
-import org.openlegacy.db.DbEntity;
-import org.openlegacy.db.definitions.DbActionDefinition;
+import org.openlegacy.core.db.DbEntity;
+import org.openlegacy.core.db.definitions.DbActionDefinition;
 
 import javax.persistence.Id;
 import javax.persistence.IdClass;

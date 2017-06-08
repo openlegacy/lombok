@@ -1,6 +1,6 @@
 package lombok.test;
-public @org.openlegacy.annotations.rpc.RpcPart class RpcExternalPart {
-  private java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
+public @org.openlegacy.core.annotations.rpc.RpcPart class RpcExternalPart {
+  private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
   private boolean booleanVar;
   private char charVar;
   private byte byteVar;
@@ -44,7 +44,7 @@ public @org.openlegacy.annotations.rpc.RpcPart class RpcExternalPart {
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") Object getObjectVar() {
     return this.objectVar;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.definitions.RpcActionDefinition> getActions() {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getActions() {
     return this.actions;
   }
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setBooleanVar(final boolean booleanVar) {
@@ -77,7 +77,7 @@ public @org.openlegacy.annotations.rpc.RpcPart class RpcExternalPart {
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setObjectVar(final Object objectVar) {
     this.objectVar = objectVar;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions) {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
     this.actions = actions;
   }
 }

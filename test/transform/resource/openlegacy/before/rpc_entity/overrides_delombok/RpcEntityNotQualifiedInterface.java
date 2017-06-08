@@ -1,6 +1,6 @@
 package lombok.test;
-import org.openlegacy.rpc.RpcEntity;
+import org.openlegacy.core.rpc.RpcEntity;
 
-@org.openlegacy.annotations.rpc.RpcEntity class RpcEntityNotQualifiedInterface implements RpcEntity {
+@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityNotQualifiedInterface implements RpcEntity {
 
 }

@@ -19,8 +19,8 @@ import lombok.javac.handlers.builders.AnnotationBuilder;
 import lombok.javac.handlers.builders.ClassDeclarationBuilder;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
-import org.openlegacy.db.DbEntity;
-import org.openlegacy.db.definitions.DbActionDefinition;
+import org.openlegacy.core.db.DbEntity;
+import org.openlegacy.core.db.definitions.DbActionDefinition;
 
 import javax.persistence.Id;
 import javax.persistence.IdClass;

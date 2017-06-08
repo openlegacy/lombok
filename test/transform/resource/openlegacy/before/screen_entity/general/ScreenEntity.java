@@ -1,4 +1,4 @@
 package lombok.test;
 
-@org.openlegacy.annotations.screen.ScreenEntity public class ScreenEntity {
+@org.openlegacy.core.annotations.screen.ScreenEntity public class ScreenEntity {
 }

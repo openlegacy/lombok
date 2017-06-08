@@ -1,22 +1,22 @@
 package lombok.test;
 
-@org.openlegacy.annotations.screen.ScreenEntity(supportTerminalData = true)
-public class ScreenEntityOverrides implements org.openlegacy.terminal.ScreenEntity {
+@org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = true)
+public class ScreenEntityOverrides implements org.openlegacy.core.terminal.ScreenEntity {
 
 	private static class ScreenTable {
 	}
 
-	private org.openlegacy.terminal.TerminalField itemNameField;
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> tableInstancesActions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+	private org.openlegacy.core.terminal.TerminalField itemNameField;
+	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
+	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> tableInstancesActions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
 	private java.lang.String pcCommand;
 	private java.lang.String focusField;
 	private java.lang.String itemNameDescription;
-	private org.openlegacy.terminal.TerminalSnapshot terminalSnapshot;
-	@org.openlegacy.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Name", sampleValue = "A")
-	@org.openlegacy.annotations.screen.ScreenDescriptionField(column = 1, row = 1)
+	private org.openlegacy.core.terminal.TerminalSnapshot terminalSnapshot;
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Name", sampleValue = "A")
+	@org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1, row = 1)
 	private String itemName;
-	@org.openlegacy.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
 	private java.util.List<ScreenEntityOverrides.ScreenTable> tableInstances;
 
 	@java.lang.SuppressWarnings("all")
@@ -39,13 +39,13 @@ public class ScreenEntityOverrides implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getActions() {
 		return this.actions;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalField getItemNameField() {
+	public org.openlegacy.core.terminal.TerminalField getItemNameField() {
 		return this.itemNameField;
 	}
 
@@ -57,7 +57,7 @@ public class ScreenEntityOverrides implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setTerminalSnapshot(final org.openlegacy.terminal.TerminalSnapshot terminalSnapshot) {
+	public void setTerminalSnapshot(final org.openlegacy.core.terminal.TerminalSnapshot terminalSnapshot) {
 		this.terminalSnapshot = terminalSnapshot;
 	}
 
@@ -75,19 +75,19 @@ public class ScreenEntityOverrides implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
 		this.actions = actions;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setItemNameField(final org.openlegacy.terminal.TerminalField itemNameField) {
+	public void setItemNameField(final org.openlegacy.core.terminal.TerminalField itemNameField) {
 		this.itemNameField = itemNameField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getTableInstancesActions() {
+	public java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getTableInstancesActions() {
 		return this.tableInstancesActions;
 	}
 
@@ -99,7 +99,7 @@ public class ScreenEntityOverrides implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalSnapshot getTerminalSnapshot() {
+	public org.openlegacy.core.terminal.TerminalSnapshot getTerminalSnapshot() {
 		return this.terminalSnapshot;
 	}
 
@@ -111,7 +111,7 @@ public class ScreenEntityOverrides implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setTableInstancesActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> tableInstancesActions) {
+	public void setTableInstancesActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> tableInstancesActions) {
 		this.tableInstancesActions = tableInstancesActions;
 	}
 

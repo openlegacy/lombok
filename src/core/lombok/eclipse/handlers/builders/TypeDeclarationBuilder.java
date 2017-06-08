@@ -1,7 +1,6 @@
 package lombok.eclipse.handlers.builders;
 
 import lombok.eclipse.handlers.openlegacy.EclipseModifier;
-import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;

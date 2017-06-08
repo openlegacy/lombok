@@ -1,27 +1,27 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcPart
+@org.openlegacy.core.annotations.rpc.RpcPart
 public class RpcExternalPartOverrides {
-	private java.util.List<org.openlegacy.definitions.RpcActionDefinition> partActions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
-	private java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
-	@org.openlegacy.annotations.rpc.RpcField(length = 10)
+	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+	@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 	private short shortVar;
-	@org.openlegacy.annotations.rpc.RpcField(length = 10)
+	@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 	private int integerVar;
-	@org.openlegacy.annotations.rpc.RpcField(length = 10)
+	@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 	private String stringVar = "string";
-	@org.openlegacy.annotations.rpc.RpcField(length = 10)
+	@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 	private Object objectVar = new Object();
-	@org.openlegacy.annotations.rpc.RpcField(length = 10)
+	@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 	private java.util.List<RpcExternalPartOverrides.Part> part;
 
 
-	@org.openlegacy.annotations.rpc.RpcPart
+	@org.openlegacy.core.annotations.rpc.RpcPart
 	private static class Part {
-		private java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
-		@org.openlegacy.annotations.rpc.RpcField(length = 10)
+		private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+		@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 		private String field1;
-		@org.openlegacy.annotations.rpc.RpcField(length = 10)
+		@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 		private Integer field2;
 
 		@java.lang.SuppressWarnings("all")
@@ -38,7 +38,7 @@ public class RpcExternalPartOverrides {
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public java.util.List<org.openlegacy.definitions.RpcActionDefinition> getActions() {
+		public java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getActions() {
 			return this.actions;
 		}
 
@@ -56,7 +56,7 @@ public class RpcExternalPartOverrides {
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public void setActions(final java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions) {
+		public void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
 			this.actions = actions;
 		}
 	}
@@ -93,13 +93,13 @@ public class RpcExternalPartOverrides {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.definitions.RpcActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getActions() {
 		return this.actions;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.definitions.RpcActionDefinition> getPartActions() {
+	public java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getPartActions() {
 		return this.partActions;
 	}
 
@@ -135,13 +135,13 @@ public class RpcExternalPartOverrides {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
 		this.actions = actions;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setPartActions(final java.util.List<org.openlegacy.definitions.RpcActionDefinition> partActions) {
+	public void setPartActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions) {
 		this.partActions = partActions;
 	}
 }

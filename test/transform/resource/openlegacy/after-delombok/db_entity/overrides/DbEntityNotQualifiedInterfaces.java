@@ -1,24 +1,24 @@
 package lombok.test;
 
-import org.openlegacy.db.DbEntity;
+import org.openlegacy.core.db.DbEntity;
 import java.io.Serializable;
 
-@org.openlegacy.annotations.db.DbEntity
+@org.openlegacy.core.annotations.db.DbEntity
 class DbEntityNotQualifiedInterfaces implements DbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 	@javax.persistence.Transient
-	private java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.db.definitions.DbActionDefinition>();
+	private java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.db.definitions.DbActionDefinition>();
 
 	
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.db.definitions.DbActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> getActions() {
 		return this.actions;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions) {
 		this.actions = actions;
 	}
 }

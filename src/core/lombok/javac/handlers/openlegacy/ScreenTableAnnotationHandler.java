@@ -8,7 +8,7 @@ import lombok.javac.handlers.JavacHandlerUtil;
 import lombok.javac.handlers.JavacOLUtil;
 import lombok.javac.handlers.OLJavacHandlerUtil;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
-import org.openlegacy.terminal.TerminalField;
+import org.openlegacy.core.terminal.TerminalField;
 
 import java.util.ArrayList;
 

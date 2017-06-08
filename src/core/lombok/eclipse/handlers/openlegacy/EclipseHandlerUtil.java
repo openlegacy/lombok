@@ -19,8 +19,8 @@ import org.eclipse.jdt.internal.compiler.ast.SingleTypeReference;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
-import org.openlegacy.annotations.screen.ScreenEntity;
-import org.openlegacy.annotations.screen.ScreenField;
+import org.openlegacy.core.annotations.screen.ScreenEntity;
+import org.openlegacy.core.annotations.screen.ScreenField;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -1,22 +1,22 @@
 package lombok.test;
 
-@org.openlegacy.annotations.screen.ScreenEntity(supportTerminalData = true)
-public class ScreenEntitySupportTD implements org.openlegacy.terminal.ScreenEntity {
+@org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = true)
+public class ScreenEntitySupportTD implements org.openlegacy.core.terminal.ScreenEntity {
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private org.openlegacy.terminal.TerminalField outerQuantityField;
+	private org.openlegacy.core.terminal.TerminalField outerQuantityField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private org.openlegacy.terminal.TerminalField outerUnitOfMeasureField;
+	private org.openlegacy.core.terminal.TerminalField outerUnitOfMeasureField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private org.openlegacy.terminal.TerminalField packingMultiplierField;
+	private org.openlegacy.core.terminal.TerminalField packingMultiplierField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private org.openlegacy.terminal.TerminalField itemNumberField;
+	private org.openlegacy.core.terminal.TerminalField itemNumberField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private org.openlegacy.terminal.TerminalField itemNameField;
+	private org.openlegacy.core.terminal.TerminalField itemNameField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String pcCommand;
@@ -25,19 +25,19 @@ public class ScreenEntitySupportTD implements org.openlegacy.terminal.ScreenEnti
 	private java.lang.String focusField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private org.openlegacy.terminal.TerminalSnapshot terminalSnapshot;
-	@org.openlegacy.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Name", sampleValue = "A")
+	private org.openlegacy.core.terminal.TerminalSnapshot terminalSnapshot;
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Name", sampleValue = "A")
 	private String itemName;
-	@org.openlegacy.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
 	private Integer itemNumber;
-	@org.openlegacy.annotations.screen.ScreenField(key = true, row = 17, column = 33, endColumn = 37, labelColumn = 2, displayName = "Packing Multiplier", sampleValue = "0")
+	@org.openlegacy.core.annotations.screen.ScreenField(key = true, row = 17, column = 33, endColumn = 37, labelColumn = 2, displayName = "Packing Multiplier", sampleValue = "0")
 	private Double packingMultiplier;
-	@org.openlegacy.annotations.screen.ScreenField(row = 18, column = 33, endColumn = 37, labelColumn = 2, displayName = "Outer Unit of Measure")
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 18, column = 33, endColumn = 37, labelColumn = 2, displayName = "Outer Unit of Measure")
 	private java.math.BigInteger outerUnitOfMeasure;
-	@org.openlegacy.annotations.screen.ScreenField(row = 19, column = 33, endColumn = 41, labelColumn = 2, displayName = "Outer Quantity", sampleValue = "0")
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 19, column = 33, endColumn = 41, labelColumn = 2, displayName = "Outer Quantity", sampleValue = "0")
 	private java.math.BigDecimal outerQuantity;
 
 	@java.lang.SuppressWarnings("all")
@@ -72,13 +72,13 @@ public class ScreenEntitySupportTD implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalSnapshot getTerminalSnapshot() {
+	public org.openlegacy.core.terminal.TerminalSnapshot getTerminalSnapshot() {
 		return this.terminalSnapshot;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getActions() {
 		return this.actions;
 	}
 
@@ -96,31 +96,31 @@ public class ScreenEntitySupportTD implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalField getItemNameField() {
+	public org.openlegacy.core.terminal.TerminalField getItemNameField() {
 		return this.itemNameField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalField getItemNumberField() {
+	public org.openlegacy.core.terminal.TerminalField getItemNumberField() {
 		return this.itemNumberField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalField getPackingMultiplierField() {
+	public org.openlegacy.core.terminal.TerminalField getPackingMultiplierField() {
 		return this.packingMultiplierField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalField getOuterUnitOfMeasureField() {
+	public org.openlegacy.core.terminal.TerminalField getOuterUnitOfMeasureField() {
 		return this.outerUnitOfMeasureField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public org.openlegacy.terminal.TerminalField getOuterQuantityField() {
+	public org.openlegacy.core.terminal.TerminalField getOuterQuantityField() {
 		return this.outerQuantityField;
 	}
 
@@ -156,13 +156,13 @@ public class ScreenEntitySupportTD implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setTerminalSnapshot(final org.openlegacy.terminal.TerminalSnapshot terminalSnapshot) {
+	public void setTerminalSnapshot(final org.openlegacy.core.terminal.TerminalSnapshot terminalSnapshot) {
 		this.terminalSnapshot = terminalSnapshot;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
 		this.actions = actions;
 	}
 
@@ -180,31 +180,31 @@ public class ScreenEntitySupportTD implements org.openlegacy.terminal.ScreenEnti
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setItemNameField(final org.openlegacy.terminal.TerminalField itemNameField) {
+	public void setItemNameField(final org.openlegacy.core.terminal.TerminalField itemNameField) {
 		this.itemNameField = itemNameField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setItemNumberField(final org.openlegacy.terminal.TerminalField itemNumberField) {
+	public void setItemNumberField(final org.openlegacy.core.terminal.TerminalField itemNumberField) {
 		this.itemNumberField = itemNumberField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setPackingMultiplierField(final org.openlegacy.terminal.TerminalField packingMultiplierField) {
+	public void setPackingMultiplierField(final org.openlegacy.core.terminal.TerminalField packingMultiplierField) {
 		this.packingMultiplierField = packingMultiplierField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setOuterUnitOfMeasureField(final org.openlegacy.terminal.TerminalField outerUnitOfMeasureField) {
+	public void setOuterUnitOfMeasureField(final org.openlegacy.core.terminal.TerminalField outerUnitOfMeasureField) {
 		this.outerUnitOfMeasureField = outerUnitOfMeasureField;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setOuterQuantityField(final org.openlegacy.terminal.TerminalField outerQuantityField) {
+	public void setOuterQuantityField(final org.openlegacy.core.terminal.TerminalField outerQuantityField) {
 		this.outerQuantityField = outerQuantityField;
 	}
 }

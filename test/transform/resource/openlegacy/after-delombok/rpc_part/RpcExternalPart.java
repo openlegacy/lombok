@@ -1,8 +1,8 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcPart
+@org.openlegacy.core.annotations.rpc.RpcPart
 public class RpcExternalPart {
-	private java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
+	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 	private boolean booleanVar;
 	private char charVar;
 	private byte byteVar;
@@ -76,7 +76,7 @@ public class RpcExternalPart {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.definitions.RpcActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getActions() {
 		return this.actions;
 	}
 
@@ -142,7 +142,7 @@ public class RpcExternalPart {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
 		this.actions = actions;
 	}
 }

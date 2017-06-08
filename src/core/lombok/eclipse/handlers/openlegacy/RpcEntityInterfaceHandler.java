@@ -38,9 +38,9 @@ import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
-import org.openlegacy.annotations.rpc.RpcField;
-import org.openlegacy.definitions.RpcActionDefinition;
-import org.openlegacy.rpc.RpcEntity;
+import org.openlegacy.core.annotations.rpc.RpcField;
+import org.openlegacy.core.definitions.RpcActionDefinition;
+import org.openlegacy.core.rpc.RpcEntity;
 
 import java.util.ArrayList;
 import java.util.List;

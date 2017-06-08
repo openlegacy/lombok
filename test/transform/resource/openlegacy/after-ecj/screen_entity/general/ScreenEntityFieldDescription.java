@@ -1,18 +1,18 @@
 package lombok.test;
-public @org.openlegacy.annotations.screen.ScreenEntity(supportTerminalData = false) class ScreenEntityFieldDescription implements org.openlegacy.terminal.ScreenEntity {
+public @org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = false) class ScreenEntityFieldDescription implements org.openlegacy.core.terminal.ScreenEntity {
   private java.lang.String outerQuantityDescription;
   private java.lang.String outerUnitOfMeasureDescription;
   private java.lang.String packingMultiplierDescription;
   private java.lang.String itemNumberDescription;
   private java.lang.String itemNameDescription;
-  private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+  private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
   private java.lang.String pcCommand;
   private java.lang.String focusField;
-  private @org.openlegacy.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Number",sampleValue = "A") @org.openlegacy.annotations.screen.ScreenDescriptionField(column = 1,row = 1) String itemName;
-  private @org.openlegacy.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Number",sampleValue = "A") @org.openlegacy.annotations.screen.ScreenDescriptionField(column = 1,row = 3) Integer itemNumber;
-  private @org.openlegacy.annotations.screen.ScreenField(key = true,row = 17,column = 33,endColumn = 37,labelColumn = 2,displayName = "Packing Multiplier",sampleValue = "0") @org.openlegacy.annotations.screen.ScreenDescriptionField(column = 1,row = 5) Double packingMultiplier;
-  private @org.openlegacy.annotations.screen.ScreenField(row = 18,column = 33,endColumn = 37,labelColumn = 2,displayName = "Outer Unit of Measure") @org.openlegacy.annotations.screen.ScreenDescriptionField(column = 1,row = 5) java.math.BigInteger outerUnitOfMeasure;
-  private @org.openlegacy.annotations.screen.ScreenField(row = 19,column = 33,endColumn = 41,labelColumn = 2,displayName = "Outer Quantity",sampleValue = "0") @org.openlegacy.annotations.screen.ScreenDescriptionField(column = 1,row = 7) java.math.BigDecimal outerQuantity;
+  private @org.openlegacy.core.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Number",sampleValue = "A") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 1) String itemName;
+  private @org.openlegacy.core.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Number",sampleValue = "A") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 3) Integer itemNumber;
+  private @org.openlegacy.core.annotations.screen.ScreenField(key = true,row = 17,column = 33,endColumn = 37,labelColumn = 2,displayName = "Packing Multiplier",sampleValue = "0") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 5) Double packingMultiplier;
+  private @org.openlegacy.core.annotations.screen.ScreenField(row = 18,column = 33,endColumn = 37,labelColumn = 2,displayName = "Outer Unit of Measure") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 5) java.math.BigInteger outerUnitOfMeasure;
+  private @org.openlegacy.core.annotations.screen.ScreenField(row = 19,column = 33,endColumn = 41,labelColumn = 2,displayName = "Outer Quantity",sampleValue = "0") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 7) java.math.BigDecimal outerQuantity;
   public ScreenEntityFieldDescription() {
     super();
   }
@@ -37,7 +37,7 @@ public @org.openlegacy.annotations.screen.ScreenEntity(supportTerminalData = fal
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.lang.String getPcCommand() {
     return this.pcCommand;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getActions() {
     return this.actions;
   }
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.lang.String getItemNameDescription() {
@@ -76,7 +76,7 @@ public @org.openlegacy.annotations.screen.ScreenEntity(supportTerminalData = fal
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setPcCommand(final java.lang.String pcCommand) {
     this.pcCommand = pcCommand;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
     this.actions = actions;
   }
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setItemNameDescription(final java.lang.String itemNameDescription) {

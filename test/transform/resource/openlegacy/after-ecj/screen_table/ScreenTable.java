@@ -1,8 +1,8 @@
 package lombok.test;
-public @org.openlegacy.annotations.screen.ScreenEntity class ScreenTable implements org.openlegacy.terminal.ScreenEntity {
-  private static @org.openlegacy.annotations.screen.ScreenTable(startRow = 1,endRow = 1) class ScreenTbl {
+public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenTable implements org.openlegacy.core.terminal.ScreenEntity {
+  private static @org.openlegacy.core.annotations.screen.ScreenTable(startRow = 1,endRow = 1) class ScreenTbl {
     private java.lang.String focusField;
-    private @org.openlegacy.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String tableField;
+    private @org.openlegacy.core.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String tableField;
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") String getTableField() {
       return this.tableField;
     }
@@ -52,7 +52,7 @@ public @org.openlegacy.annotations.screen.ScreenEntity class ScreenTable impleme
       super();
     }
   }
-  private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+  private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
   private java.lang.String pcCommand;
   private java.lang.String focusField;
   private ScreenTable.ScreenTbl table;
@@ -68,7 +68,7 @@ public @org.openlegacy.annotations.screen.ScreenEntity class ScreenTable impleme
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.lang.String getPcCommand() {
     return this.pcCommand;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getActions() {
     return this.actions;
   }
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setTable(final ScreenTable.ScreenTbl table) {
@@ -80,7 +80,7 @@ public @org.openlegacy.annotations.screen.ScreenEntity class ScreenTable impleme
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setPcCommand(final java.lang.String pcCommand) {
     this.pcCommand = pcCommand;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
     this.actions = actions;
   }
 }

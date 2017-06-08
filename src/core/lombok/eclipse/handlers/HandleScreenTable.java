@@ -38,7 +38,7 @@ import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.openlegacy.ScreenTableAnnotationHandler;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.annotations.screen.ScreenTable;
+import org.openlegacy.core.annotations.screen.ScreenTable;
 
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 

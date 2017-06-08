@@ -1,10 +1,10 @@
 package lombok.test;
 
-@org.openlegacy.annotations.screen.ScreenEntity(supportTerminalData = false)
-public class ScreenEntityTableActions implements org.openlegacy.terminal.ScreenEntity {
+@org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = false)
+public class ScreenEntityTableActions implements org.openlegacy.core.terminal.ScreenEntity {
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> tableInstancesActions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> tableInstancesActions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String pcCommand;
@@ -13,15 +13,15 @@ public class ScreenEntityTableActions implements org.openlegacy.terminal.ScreenE
 	private java.lang.String focusField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
 
 
 	private static class ScreenTable {
 	}
 
-	@org.openlegacy.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
 	private String itemName;
-	@org.openlegacy.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
+	@org.openlegacy.core.annotations.screen.ScreenField(row = 6, column = 33, endColumn = 52, labelColumn = 2, displayName = "Item Number", sampleValue = "A")
 	private java.util.List<ScreenEntityTableActions.ScreenTable> tableInstances;
 
 	@java.lang.SuppressWarnings("all")
@@ -38,7 +38,7 @@ public class ScreenEntityTableActions implements org.openlegacy.terminal.ScreenE
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getActions() {
 		return this.actions;
 	}
 
@@ -56,7 +56,7 @@ public class ScreenEntityTableActions implements org.openlegacy.terminal.ScreenE
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getTableInstancesActions() {
+	public java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getTableInstancesActions() {
 		return this.tableInstancesActions;
 	}
 
@@ -74,7 +74,7 @@ public class ScreenEntityTableActions implements org.openlegacy.terminal.ScreenE
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
 		this.actions = actions;
 	}
 
@@ -92,7 +92,7 @@ public class ScreenEntityTableActions implements org.openlegacy.terminal.ScreenE
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setTableInstancesActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> tableInstancesActions) {
+	public void setTableInstancesActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> tableInstancesActions) {
 		this.tableInstancesActions = tableInstancesActions;
 	}
 }

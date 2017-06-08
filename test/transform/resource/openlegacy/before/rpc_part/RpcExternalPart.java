@@ -1,6 +1,6 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcPart public class RpcExternalPart {
+@org.openlegacy.core.annotations.rpc.RpcPart public class RpcExternalPart {
 	
 	private boolean booleanVar;
     private char charVar;

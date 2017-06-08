@@ -40,10 +40,10 @@ import lombok.javac.handlers.JavacOLUtil;
 import lombok.javac.handlers.OLJavacHandlerUtil;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
-import org.openlegacy.annotations.screen.ScreenDescriptionField;
-import org.openlegacy.terminal.TerminalField;
-import org.openlegacy.terminal.TerminalSnapshot;
-import org.openlegacy.terminal.definitions.TerminalActionDefinition;
+import org.openlegacy.core.annotations.screen.ScreenDescriptionField;
+import org.openlegacy.core.terminal.TerminalField;
+import org.openlegacy.core.terminal.TerminalSnapshot;
+import org.openlegacy.core.terminal.definitions.TerminalActionDefinition;
 
 import java.util.ArrayList;
 
@@ -68,7 +68,7 @@ public class ScreenEntityInterfaceHandler {
         JCClassDecl typeDecl = (JCClassDecl) typeNode.get();
         java.util.List<JCVariableDecl> newFields = new ArrayList<JCVariableDecl>();
 
-        addImplements(typeNode, org.openlegacy.terminal.ScreenEntity.class);
+        addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
         createNonSuperEntityFields(typeNode, newFields, supportTerminalData);
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
 

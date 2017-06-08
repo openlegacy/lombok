@@ -11,9 +11,9 @@ import lombok.javac.handlers.openlegacy.DbEntityInterfaceHandler;
 import lombok.javac.handlers.openlegacy.RpcEntityInterfaceHandler;
 import lombok.javac.handlers.openlegacy.ScreenEntityInterfaceHandler;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.db.DbEntity;
-import org.openlegacy.rpc.RpcEntity;
-import org.openlegacy.terminal.ScreenEntity;
+import org.openlegacy.core.db.DbEntity;
+import org.openlegacy.core.rpc.RpcEntity;
+import org.openlegacy.core.terminal.ScreenEntity;
 
 import java.io.Serializable;
 

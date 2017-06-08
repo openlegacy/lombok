@@ -1,9 +1,9 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcEntity class RpcEntityInnerClass implements org.openlegacy.rpc.RpcEntity {
-	private java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
+@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityInnerClass implements org.openlegacy.core.rpc.RpcEntity {
+	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 
-    public static @org.openlegacy.annotations.rpc.RpcPart(name = "Dfhcommarea",originalName = "DFHCOMMAREA",displayName = "Dfhcommarea") class Dfhcommarea {
+    public static @org.openlegacy.core.annotations.rpc.RpcPart(name = "Dfhcommarea",originalName = "DFHCOMMAREA",displayName = "Dfhcommarea") class Dfhcommarea {
 	        public Dfhcommarea() {
 	            super();
 	        }
@@ -20,13 +20,13 @@ package lombok.test;
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.definitions.RpcActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getActions() {
 		return this.actions;
 	}
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
 		this.actions = actions;
 	}
 }

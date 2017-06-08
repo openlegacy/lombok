@@ -4,7 +4,6 @@ import lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil;
 import lombok.eclipse.handlers.openlegacy.EclipseModifier;
 import lombok.eclipse.handlers.openlegacy.EclipsePrimitives;
 import openlegacy.utils.EclipseAstUtil;
-import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.AllocationExpression;
 import org.eclipse.jdt.internal.compiler.ast.CharLiteral;
 import org.eclipse.jdt.internal.compiler.ast.DoubleLiteral;

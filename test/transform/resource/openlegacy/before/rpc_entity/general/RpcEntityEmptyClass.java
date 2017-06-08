@@ -1,4 +1,4 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcEntity class RpcEntityEmptyClass{
+@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityEmptyClass{
 }

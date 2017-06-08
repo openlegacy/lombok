@@ -1,5 +1,5 @@
 package lombok.test;
 
-@org.openlegacy.annotations.db.DbEntity class DbEntityGeneral{
+@org.openlegacy.core.annotations.db.DbEntity class DbEntityGeneral{
 
 }

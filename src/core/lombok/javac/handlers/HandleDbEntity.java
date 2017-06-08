@@ -6,7 +6,7 @@ import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.openlegacy.DbEntityInterfaceHandler;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.annotations.db.DbEntity;
+import org.openlegacy.core.annotations.db.DbEntity;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 

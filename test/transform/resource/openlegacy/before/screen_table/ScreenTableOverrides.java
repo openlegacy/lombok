@@ -1,22 +1,22 @@
 package lombok.test;
-public @org.openlegacy.annotations.screen.ScreenEntity class ScreenTableOverrides implements org.openlegacy.terminal.ScreenEntity {
-  private static @org.openlegacy.annotations.screen.ScreenTable(supportTerminalData = true,startRow = 1,endRow = 2) class ScreenTable {
-    private org.openlegacy.terminal.TerminalField nameField;
+public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenTableOverrides implements org.openlegacy.core.terminal.ScreenEntity {
+  private static @org.openlegacy.core.annotations.screen.ScreenTable(supportTerminalData = true,startRow = 1,endRow = 2) class ScreenTable {
+    private org.openlegacy.core.terminal.TerminalField nameField;
     private java.lang.String focusField;
-    private @org.openlegacy.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String name;
+    private @org.openlegacy.core.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String name;
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") String getName() {
       return this.name;
     }
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") ScreenTable() {
       super();
     }
-    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") org.openlegacy.terminal.TerminalField getNameField() {
+    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") org.openlegacy.core.terminal.TerminalField getNameField() {
       return this.nameField;
     }
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.lang.String getFocusField() {
       return this.focusField;
     }
-    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setNameField(final org.openlegacy.terminal.TerminalField nameField) {
+    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setNameField(final org.openlegacy.core.terminal.TerminalField nameField) {
       this.nameField = nameField;
     }
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setFocusField(final java.lang.String focusField) {
@@ -65,7 +65,7 @@ public @org.openlegacy.annotations.screen.ScreenEntity class ScreenTableOverride
       return (((((("ScreenTableOverrides.ScreenTable(nameField=" + this.getNameField()) + ", focusField=") + this.getFocusField()) + ", name=") + this.getName()) + ")");
     }
   }
-  private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+  private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
   private java.lang.String pcCommand;
   private java.lang.String focusField;
   private ScreenTableOverrides.ScreenTable table;
@@ -81,7 +81,7 @@ public @org.openlegacy.annotations.screen.ScreenEntity class ScreenTableOverride
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setPcCommand(final java.lang.String pcCommand) {
     this.pcCommand = pcCommand;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
     this.actions = actions;
   }
 }

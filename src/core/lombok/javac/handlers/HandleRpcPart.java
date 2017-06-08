@@ -6,7 +6,7 @@ import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.openlegacy.RpcEntityInterfaceHandler;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.annotations.rpc.RpcPart;
+import org.openlegacy.core.annotations.rpc.RpcPart;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 

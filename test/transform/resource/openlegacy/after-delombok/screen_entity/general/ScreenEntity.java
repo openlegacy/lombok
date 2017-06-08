@@ -1,7 +1,7 @@
 package lombok.test;
 
-@org.openlegacy.annotations.screen.ScreenEntity
-public class ScreenEntity implements org.openlegacy.terminal.ScreenEntity {
+@org.openlegacy.core.annotations.screen.ScreenEntity
+public class ScreenEntity implements org.openlegacy.core.terminal.ScreenEntity {
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String pcCommand;
@@ -10,11 +10,11 @@ public class ScreenEntity implements org.openlegacy.terminal.ScreenEntity {
 	private java.lang.String focusField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getActions() {
 		return this.actions;
 	}
 
@@ -32,7 +32,7 @@ public class ScreenEntity implements org.openlegacy.terminal.ScreenEntity {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
 		this.actions = actions;
 	}
 

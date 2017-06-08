@@ -43,10 +43,10 @@ import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
-import org.openlegacy.annotations.screen.ScreenDescriptionField;
-import org.openlegacy.terminal.TerminalField;
-import org.openlegacy.terminal.TerminalSnapshot;
-import org.openlegacy.terminal.definitions.TerminalActionDefinition;
+import org.openlegacy.core.annotations.screen.ScreenDescriptionField;
+import org.openlegacy.core.terminal.TerminalField;
+import org.openlegacy.core.terminal.TerminalSnapshot;
+import org.openlegacy.core.terminal.definitions.TerminalActionDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class ScreenEntityInterfaceHandler {
      */
     public static void handle(EclipseNode typeNode, boolean supportTerminalData) {
         List<FieldDeclaration> newFields = new ArrayList<FieldDeclaration>();
-        addImplements(typeNode, org.openlegacy.terminal.ScreenEntity.class);
+        addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
         createScreenEntityFields(typeNode, newFields, supportTerminalData);
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
         // add new fields into the type declaration

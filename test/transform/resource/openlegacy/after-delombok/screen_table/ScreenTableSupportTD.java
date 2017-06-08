@@ -1,7 +1,7 @@
 package lombok.test;
 
-@org.openlegacy.annotations.screen.ScreenEntity
-public class ScreenTableSupportTD implements org.openlegacy.terminal.ScreenEntity {
+@org.openlegacy.core.annotations.screen.ScreenEntity
+public class ScreenTableSupportTD implements org.openlegacy.core.terminal.ScreenEntity {
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String pcCommand;
@@ -10,31 +10,31 @@ public class ScreenTableSupportTD implements org.openlegacy.terminal.ScreenEntit
 	private java.lang.String focusField;
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	private java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.terminal.definitions.TerminalActionDefinition>();
+	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
 
 
-	@org.openlegacy.annotations.screen.ScreenTable(supportTerminalData = true, startRow = 1, endRow = 2)
+	@org.openlegacy.core.annotations.screen.ScreenTable(supportTerminalData = true, startRow = 1, endRow = 2)
 	private static class ScreenTable {
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		private org.openlegacy.terminal.TerminalField nationalIdField;
+		private org.openlegacy.core.terminal.TerminalField nationalIdField;
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		private org.openlegacy.terminal.TerminalField ageField;
+		private org.openlegacy.core.terminal.TerminalField ageField;
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		private org.openlegacy.terminal.TerminalField surnameField;
+		private org.openlegacy.core.terminal.TerminalField surnameField;
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		private org.openlegacy.terminal.TerminalField nameField;
+		private org.openlegacy.core.terminal.TerminalField nameField;
 		private java.lang.String focusField;
-		@org.openlegacy.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
+		@org.openlegacy.core.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
 		private String name;
-		@org.openlegacy.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
+		@org.openlegacy.core.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
 		private String surname;
-		@org.openlegacy.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
+		@org.openlegacy.core.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
 		private Integer age;
-		@org.openlegacy.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
+		@org.openlegacy.core.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
 		private java.math.BigInteger nationalId;
 
 		@java.lang.SuppressWarnings("all")
@@ -74,25 +74,25 @@ public class ScreenTableSupportTD implements org.openlegacy.terminal.ScreenEntit
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public org.openlegacy.terminal.TerminalField getNameField() {
+		public org.openlegacy.core.terminal.TerminalField getNameField() {
 			return this.nameField;
 		}
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public org.openlegacy.terminal.TerminalField getSurnameField() {
+		public org.openlegacy.core.terminal.TerminalField getSurnameField() {
 			return this.surnameField;
 		}
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public org.openlegacy.terminal.TerminalField getAgeField() {
+		public org.openlegacy.core.terminal.TerminalField getAgeField() {
 			return this.ageField;
 		}
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public org.openlegacy.terminal.TerminalField getNationalIdField() {
+		public org.openlegacy.core.terminal.TerminalField getNationalIdField() {
 			return this.nationalIdField;
 		}
 
@@ -128,25 +128,25 @@ public class ScreenTableSupportTD implements org.openlegacy.terminal.ScreenEntit
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public void setNameField(final org.openlegacy.terminal.TerminalField nameField) {
+		public void setNameField(final org.openlegacy.core.terminal.TerminalField nameField) {
 			this.nameField = nameField;
 		}
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public void setSurnameField(final org.openlegacy.terminal.TerminalField surnameField) {
+		public void setSurnameField(final org.openlegacy.core.terminal.TerminalField surnameField) {
 			this.surnameField = surnameField;
 		}
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public void setAgeField(final org.openlegacy.terminal.TerminalField ageField) {
+		public void setAgeField(final org.openlegacy.core.terminal.TerminalField ageField) {
 			this.ageField = ageField;
 		}
 
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
-		public void setNationalIdField(final org.openlegacy.terminal.TerminalField nationalIdField) {
+		public void setNationalIdField(final org.openlegacy.core.terminal.TerminalField nationalIdField) {
 			this.nationalIdField = nationalIdField;
 		}
 
@@ -239,7 +239,7 @@ public class ScreenTableSupportTD implements org.openlegacy.terminal.ScreenEntit
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> getActions() {
+	public java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> getActions() {
 		return this.actions;
 	}
 
@@ -263,7 +263,7 @@ public class ScreenTableSupportTD implements org.openlegacy.terminal.ScreenEntit
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public void setActions(final java.util.List<org.openlegacy.terminal.definitions.TerminalActionDefinition> actions) {
+	public void setActions(final java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions) {
 		this.actions = actions;
 	}
 

@@ -1,7 +1,7 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcEntity class RpcEntityOverridePrimitives1 implements org.openlegacy.rpc.RpcEntity {
-    private java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.definitions.RpcActionDefinition>();
+@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityOverridePrimitives1 implements org.openlegacy.core.rpc.RpcEntity {
+    private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
     private boolean booleanVar;
     private char charVar;
     private byte byteVar;
@@ -46,7 +46,7 @@ package lombok.test;
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") double getIDoubleVar() {
         return this.iDoubleVar;
     }
-    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.definitions.RpcActionDefinition> getActions() {
+    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getActions() {
         return this.actions;
     }
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setBooleanVar(final boolean booleanVar) {
@@ -97,7 +97,7 @@ package lombok.test;
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setIDoubleVar(final double iDoubleVar) {
         this.iDoubleVar = iDoubleVar;
     }
-    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.definitions.RpcActionDefinition> actions) {
+    public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
         this.actions = actions;
     }
 }

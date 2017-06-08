@@ -37,9 +37,9 @@ import lombok.core.AST;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
-import org.openlegacy.annotations.rpc.RpcField;
-import org.openlegacy.definitions.RpcActionDefinition;
-import org.openlegacy.rpc.RpcEntity;
+import org.openlegacy.core.annotations.rpc.RpcField;
+import org.openlegacy.core.definitions.RpcActionDefinition;
+import org.openlegacy.core.rpc.RpcEntity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -21,9 +21,9 @@ import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.db.DbEntity;
-import org.openlegacy.rpc.RpcEntity;
-import org.openlegacy.terminal.ScreenEntity;
+import org.openlegacy.core.db.DbEntity;
+import org.openlegacy.core.rpc.RpcEntity;
+import org.openlegacy.core.terminal.ScreenEntity;
 
 import java.io.Serializable;
 import java.util.ArrayList;

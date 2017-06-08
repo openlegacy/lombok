@@ -1,6 +1,6 @@
 package lombok.test;
-import org.openlegacy.db.DbEntity;
+import org.openlegacy.core.db.DbEntity;
 import java.io.Serializable;
 
-@org.openlegacy.annotations.db.DbEntity class DbEntityNotQualifiedInterfaces implements DbEntity, Serializable {
+@org.openlegacy.core.annotations.db.DbEntity class DbEntityNotQualifiedInterfaces implements DbEntity, Serializable {
 }

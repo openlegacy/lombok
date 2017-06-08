@@ -42,7 +42,7 @@ import lombok.AccessLevel;
 import lombok.core.AST;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
-import org.openlegacy.annotations.screen.ScreenField;
+import org.openlegacy.core.annotations.screen.ScreenField;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

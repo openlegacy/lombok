@@ -6,7 +6,7 @@ import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.openlegacy.ScreenEntityInterfaceHandler;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.annotations.screen.ScreenEntity;
+import org.openlegacy.core.annotations.screen.ScreenEntity;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 

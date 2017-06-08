@@ -1,8 +1,8 @@
 package lombok.test;
 
-@org.openlegacy.annotations.db.DbEntity
+@org.openlegacy.core.annotations.db.DbEntity
 @javax.persistence.IdClass(CKEntity1.CKEntity1CompositeKey.class)
-class CKEntity1 implements org.openlegacy.db.DbEntity, java.io.Serializable {
+class CKEntity1 implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
 
   @java.lang.SuppressWarnings("all")
   @javax.annotation.Generated("lombok")
@@ -42,7 +42,7 @@ class CKEntity1 implements org.openlegacy.db.DbEntity, java.io.Serializable {
   }
 
   private static final long serialVersionUID = 1L;
-  private java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.db.definitions.DbActionDefinition>();
+  private java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.db.definitions.DbActionDefinition>();
   @javax.persistence.Id
   private String name;
   @javax.persistence.Id
@@ -53,13 +53,13 @@ class CKEntity1 implements org.openlegacy.db.DbEntity, java.io.Serializable {
 
   @java.lang.SuppressWarnings("all")
   @javax.annotation.Generated("lombok")
-  public java.util.List<org.openlegacy.db.definitions.DbActionDefinition> getActions() {
+  public java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> getActions() {
     return this.actions;
   }
 
   @java.lang.SuppressWarnings("all")
   @javax.annotation.Generated("lombok")
-  public void setActions(final java.util.List<org.openlegacy.db.definitions.DbActionDefinition> actions) {
+  public void setActions(final java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions) {
     this.actions = actions;
   }
 

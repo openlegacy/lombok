@@ -1,6 +1,6 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcEntity class RpcEntityPimitives {
+@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityPimitives {
 
     private boolean booleanVar;
     private char charVar;

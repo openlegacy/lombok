@@ -6,7 +6,7 @@ import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.openlegacy.RpcEntityInterfaceHandler;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.annotations.rpc.RpcPart;
+import org.openlegacy.core.annotations.rpc.RpcPart;
 
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 

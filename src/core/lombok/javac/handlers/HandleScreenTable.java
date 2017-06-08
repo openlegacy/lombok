@@ -37,7 +37,7 @@ import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.openlegacy.ScreenTableAnnotationHandler;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.annotations.screen.ScreenTable;
+import org.openlegacy.core.annotations.screen.ScreenTable;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 

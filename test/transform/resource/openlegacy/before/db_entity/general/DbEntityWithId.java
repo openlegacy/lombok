@@ -1,6 +1,6 @@
 package lombok.test;
 
-@org.openlegacy.annotations.db.DbEntity class DbEntityWithId {
+@org.openlegacy.core.annotations.db.DbEntity class DbEntityWithId {
 	
 	@javax.persistence.Id private String stringId;
 	private String name;

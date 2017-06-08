@@ -1,6 +1,6 @@
 package lombok.test;
 
-@org.openlegacy.annotations.rpc.RpcEntity class RpcEntityNonPrimitives {
+@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityNonPrimitives {
 
     private String stringVar = "string";
     private Object objectVar = new Object();

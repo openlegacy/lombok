@@ -1,6 +1,6 @@
 package lombok.test;
 
-@org.openlegacy.annotations.db.DbEntity class DbNonPrimitives {
+@org.openlegacy.core.annotations.db.DbEntity class DbNonPrimitives {
 
     private String stringVar = "string";
     private Object objectVar = new Object();
