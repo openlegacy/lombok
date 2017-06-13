@@ -4,9 +4,10 @@
 			<filesystem name="projectLocalRepo">
 				<ivy pattern="${ivy.settings.dir}/ivy-repo/[organization]-[module]-[revision].xml" />
 			</filesystem>
-			<filesystem name="local">
+			<!--Uncomment this filesystem resolver to get openlegacy-api.jar from your local .m2 repository. you should also add appropriate dependency to the ivy.xml-->
+			<!--<filesystem name="local">
 				<artifact pattern="${basedir}\..\..\..\.m2\repository\org\openlegacy\openlegacy-api\3.6.0-SNAPSHOT\[module]-[revision].[ext]" />
-			</filesystem>
+			</filesystem>-->
 			<ibiblio name="maven-repo2" m2compatible="true" root="https://repo1.maven.org/maven2" />
 		</chain>
 	</resolvers>
