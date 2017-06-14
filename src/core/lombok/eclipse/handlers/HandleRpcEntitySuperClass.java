@@ -6,23 +6,23 @@ import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.openlegacy.RpcEntityHandler;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.core.annotations.rpc.RpcEntity;
+import org.openlegacy.core.annotations.rpc.RpcEntitySuperClass;
 
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
 
 /**
- * @author Matvey Mitnitsky on 21-May-17.
+ * @author Matvey Mitnitsky on 14-Jun-17.
  */
 
 @ProviderFor(EclipseAnnotationHandler.class)
-public class HandleRpcEntity extends EclipseAnnotationHandler<RpcEntity> {
+public class HandleRpcEntitySuperClass extends EclipseAnnotationHandler<RpcEntitySuperClass>{
 
     @Override
-    public void handle(AnnotationValues<RpcEntity> annotation, Annotation ast, EclipseNode annotationNode) {
+    public void handle(AnnotationValues<RpcEntitySuperClass> annotation, Annotation ast, EclipseNode annotationNode) {
         EclipseNode typeNode = annotationNode.up();
 
         if (validateAnnotation(typeNode, annotationNode)) {
-            RpcEntityHandler.handle(typeNode, true);
+            RpcEntityHandler.handle(typeNode,  false);
             getenerateLombokGetAndSet(typeNode, annotationNode);
         }
     }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import static lombok.javac.handlers.JavacHandlerUtil.*;
 import static lombok.javac.handlers.JavacOLUtil.*;
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 
 /**
@@ -22,7 +23,6 @@ import static lombok.javac.handlers.OLJavacHandlerUtil.*;
  */
 public class ScreenTableAnnotationHandler {
 
-    private static final String FOCUS_FIELD_NAME = "focusField";
 
     public static void handle(JavacNode typeNode, boolean supportTerminalData) {
         createScreenTableFields(typeNode);
@@ -45,7 +45,7 @@ public class ScreenTableAnnotationHandler {
         java.util.List<JCVariableDecl> terminalFields = new ArrayList<JCTree.JCVariableDecl>();
 
         for (JavacNode fieldNode : findAllScreenFields(typeNode)) {
-            String nameWithFieldSuffix = fieldNode.getName() + "Field";
+            String nameWithFieldSuffix = fieldNode.getName() + FIELD_SUFFIX;
             boolean isBoolean = JavacHandlerUtil.isBoolean(fieldNode);
             String getterName = JavacOLUtil.toGetterName(nameWithFieldSuffix);
 

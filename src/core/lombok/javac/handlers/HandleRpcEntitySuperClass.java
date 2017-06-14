@@ -6,22 +6,23 @@ import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.openlegacy.RpcEntityHandler;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.core.annotations.rpc.RpcEntity;
+import org.openlegacy.core.annotations.rpc.RpcEntitySuperClass;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 /**
- * @author Matvey Mitnitsky on 24-May-17.
+ * @author Matvey Mitnitsky on 14-Jun-17.
  */
+
 @ProviderFor(JavacAnnotationHandler.class)
-public class HandleRpcEntity extends JavacAnnotationHandler<RpcEntity> {
+public class HandleRpcEntitySuperClass extends JavacAnnotationHandler<RpcEntitySuperClass> {
 
     @Override
-    public void handle(AnnotationValues<RpcEntity> annotation, JCTree.JCAnnotation ast, JavacNode annotationNode) {
+    public void handle(AnnotationValues<RpcEntitySuperClass> annotation, JCTree.JCAnnotation ast, JavacNode annotationNode) {
         JavacNode typeNode = annotationNode.up();
 
         if (validateAnnotation(typeNode, annotationNode)) {
-            RpcEntityHandler.handle(typeNode, true);
+            RpcEntityHandler.handle(typeNode, false);
             generateGettersAndSetters(typeNode, annotationNode);
         }
     }

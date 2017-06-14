@@ -11,6 +11,7 @@ import lombok.transform.openlegacy.delombok.OLTestRpcEntityOverrides;
 import lombok.transform.openlegacy.delombok.OLTestRpcPart;
 import lombok.transform.openlegacy.delombok.OLTestScreenEntity;
 import lombok.transform.openlegacy.delombok.OLTestScreenTable;
+import lombok.transform.openlegacy.delombok.OLTestSuperClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -18,7 +19,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         OLTestRpcEntity.class, OLTestRpcEntityOverrides.class, OLTestDbEntity.class,
         OLTestDbEntityOverrides.class, OLTestScreenEntity.class, OLTestRpcPart.class,
-        OLTestScreenTable.class
+        OLTestScreenTable.class, OLTestSuperClass.class
 })
 public class OLTestWithDelombok {
 }

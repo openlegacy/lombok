@@ -4,7 +4,7 @@ import com.sun.tools.javac.tree.JCTree;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
-import lombok.javac.handlers.openlegacy.RpcEntityInterfaceHandler;
+import lombok.javac.handlers.openlegacy.RpcEntityHandler;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.core.annotations.rpc.RpcPart;
 
@@ -21,7 +21,7 @@ public class HandleRpcPart extends JavacAnnotationHandler<RpcPart> {
         JavacNode typeNode = annotationNode.up();
 
         if (validateAnnotation(typeNode, annotationNode)) {
-            RpcEntityInterfaceHandler.handle(typeNode, true);
+            RpcEntityHandler.handle(typeNode, false);
             generateGettersAndSetters(typeNode, annotationNode);
         }
     }

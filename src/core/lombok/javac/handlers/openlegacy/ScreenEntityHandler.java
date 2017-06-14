@@ -48,28 +48,25 @@ import org.openlegacy.core.terminal.definitions.TerminalActionDefinition;
 import java.util.ArrayList;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 /**
  * @author Matvey Mitnitsky
  * @since 3.6.0-SNAPSHOT
  */
-public class ScreenEntityInterfaceHandler {
-
-
-    private static final String FIELD_SUFFIX = "Field";
-    private static final String ACTIONS_SUFFIX = "Actions";
-    private static final String DESCRIPTION_SUFFIX = "Description";
+public class ScreenEntityHandler {
 
     /**
      * Main entry point, which will generate all required code
      */
-    public static void handle(JavacNode typeNode, boolean supportTerminalData) {
+    public static void handle(JavacNode typeNode, boolean supportTerminalData, boolean screenEntity) {
 
-        JCClassDecl typeDecl = (JCClassDecl) typeNode.get();
         java.util.List<JCVariableDecl> newFields = new ArrayList<JCVariableDecl>();
 
-        addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
-        createNonSuperEntityFields(typeNode, newFields, supportTerminalData);
+        if(screenEntity) {
+            addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
+            createScreenEntityFields(typeNode, newFields, supportTerminalData);
+        }
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
 
         // add new fields into the type declaration
@@ -79,21 +76,21 @@ public class ScreenEntityInterfaceHandler {
     /**
      * Creates predefined fields for not super entity class
      */
-    private static void createNonSuperEntityFields(JavacNode typeNode, java.util.List<JCVariableDecl> newFields, boolean supportTerminalData) {
+    private static void createScreenEntityFields(JavacNode typeNode, java.util.List<JCVariableDecl> newFields, boolean supportTerminalData) {
         JCClassDecl typeDecl = (JCClassDecl) typeNode.get();
 
         //create terminalSnapshot field
-        if (supportTerminalData && !fieldExist(typeDecl, "terminalSnapshot")) {
-            JCVariableDecl terminalDataDecl = new FieldDeclBuilder(typeNode, "terminalSnapshot")
+        if (supportTerminalData && !fieldExist(typeDecl, TERMINAL_SNAPSHOT)) {
+            JCVariableDecl terminalDataDecl = new FieldDeclBuilder(typeNode, TERMINAL_SNAPSHOT)
                     .withModifiers(Flags.PRIVATE)
                     .withType(TerminalSnapshot.class)
                     .build();
             newFields.add(terminalDataDecl);
         }
 
-        if (!fieldExist(typeDecl, StringUtil.getVariableName("actions"))) {
+        if (!fieldExist(typeDecl, StringUtil.getVariableName(ACTIONS_FIELD_NAME))) {
 
-            JCVariableDecl actionsDecl = new FieldDeclBuilder(typeNode, "actions")
+            JCVariableDecl actionsDecl = new FieldDeclBuilder(typeNode, ACTIONS_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withDiamondsType(java.util.List.class, TerminalActionDefinition.class)
                     .withDiamondsInitialization(ArrayList.class, TerminalActionDefinition.class)
@@ -102,8 +99,8 @@ public class ScreenEntityInterfaceHandler {
             newFields.add(actionsDecl);
         }
 
-        if (!fieldExist(typeDecl, StringUtil.getVariableName("focusField"))) {
-            JCVariableDecl focusDecl = new FieldDeclBuilder(typeNode, "focusField")
+        if (!fieldExist(typeDecl, StringUtil.getVariableName(FOCUS_FIELD_NAME))) {
+            JCVariableDecl focusDecl = new FieldDeclBuilder(typeNode, FOCUS_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withType(String.class)
                     .build();
@@ -111,8 +108,8 @@ public class ScreenEntityInterfaceHandler {
             newFields.add(focusDecl);
         }
 
-        if (!fieldExist(typeDecl, StringUtil.getVariableName("pcCommand"))) {
-            JCVariableDecl pcCommandDecl = new FieldDeclBuilder(typeNode, "pcCommand")
+        if (!fieldExist(typeDecl, StringUtil.getVariableName(PC_COMMAND_FIELD_NAME))) {
+            JCVariableDecl pcCommandDecl = new FieldDeclBuilder(typeNode, PC_COMMAND_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withType(String.class)
                     .build();
@@ -147,7 +144,7 @@ public class ScreenEntityInterfaceHandler {
 
             String varType = ((JCVariableDecl) fieldNode.get()).getType().toString();
             if (varType.contains("List")) {
-                if (OLJavacHandlerUtil.fieldExist(typeNode, fieldNode.getName() + ACTIONS_SUFFIX) || fieldNode.getName().equals("actions"))
+                if (OLJavacHandlerUtil.fieldExist(typeNode, fieldNode.getName() + ACTIONS_SUFFIX) || fieldNode.getName().equals(ACTIONS_FIELD_NAME))
                     continue;
 
                 JCVariableDecl actionsField = new FieldDeclBuilder(typeNode, fieldNode.getName())
@@ -161,7 +158,6 @@ public class ScreenEntityInterfaceHandler {
             }
 
             if (JavacHandlerUtil.hasAnnotation(ScreenDescriptionField.class, fieldNode)) {
-//                String nameWithDescriptionSuffix = fieldNode.getName() + "Description";
                 if (fieldExist(typeDecl, fieldNode.getName() + DESCRIPTION_SUFFIX))
                     continue;
 

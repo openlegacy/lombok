@@ -47,26 +47,29 @@ import java.util.List;
 
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 /**
  * @author Matvey Mitnitsky
  * @since 3.6.0-SNAPSHOT
  */
-public class RpcEntityInterfaceHandler {
+public class RpcEntityHandler {
 
 
-    public static void handle(EclipseNode typeNode, boolean rpcPart) {
+    public static void handle(EclipseNode typeNode, boolean rpcEntity) {
 
-        if (!rpcPart) addImplements(typeNode, RpcEntity.class);
-        createNonSuperEntityFields(typeNode);
+        if (rpcEntity) {
+            addImplements(typeNode, RpcEntity.class);
+        }
+        createRpcEntityFields(typeNode);
         createFieldActions(typeNode);
     }
 
-    private static void createNonSuperEntityFields(EclipseNode typeNode) {
+    private static void createRpcEntityFields(EclipseNode typeNode) {
         TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
 
-        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("actions"))) {
-            FieldDeclaration decl = new FieldDeclarationBuilder("actions")
+        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName(ACTIONS_FIELD_NAME))) {
+            FieldDeclaration decl = new FieldDeclarationBuilder(ACTIONS_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(List.class)
                     .withDiamondsType(RpcActionDefinition.class)
@@ -82,7 +85,7 @@ public class RpcEntityInterfaceHandler {
         TypeDeclaration typeDeclaration = (TypeDeclaration) typeNode.get();
 
         for (EclipseNode fieldNode : findAllRpcFields(typeNode)) {
-            String fieldNameWithActionsSuffix = fieldNode.getName() + "Actions";
+            String fieldNameWithActionsSuffix = fieldNode.getName() + ACTIONS_SUFFIX;
             FieldDeclaration field = (FieldDeclaration) fieldNode.get();
 
             TypeReference fieldType = copyType(field.type, field);
@@ -90,7 +93,7 @@ public class RpcEntityInterfaceHandler {
             String typeName = new String(typeChar[typeChar.length - 1]);
 
             if (typeName.contains("List")) {
-                if (fieldNode.getName().contains("actions") || fieldExist(typeDeclaration.fields, fieldNameWithActionsSuffix))
+                if (fieldNode.getName().contains(ACTIONS_FIELD_NAME) || fieldExist(typeDeclaration.fields, fieldNameWithActionsSuffix))
                     continue;
 
                 FieldDeclaration fieldDeclaration = new FieldDeclarationBuilder(fieldNameWithActionsSuffix)

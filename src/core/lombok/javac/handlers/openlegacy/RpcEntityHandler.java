@@ -46,23 +46,26 @@ import java.util.List;
 
 import static lombok.javac.handlers.JavacHandlerUtil.*;
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 /**
  * @author Matvey Mitnitsky
  * @since 3.6.0-SNAPSHOT
  */
-public class RpcEntityInterfaceHandler {
+public class RpcEntityHandler {
 
-    public static void handle(JavacNode typeNode, boolean rpcPart) {
-        if (!rpcPart) addImplements(typeNode, RpcEntity.class);
+    public static void handle(JavacNode typeNode, boolean rpcEntity) {
+        if (rpcEntity) {
+            addImplements(typeNode, RpcEntity.class);
+        }
         createNonSuperEntityFields(typeNode);
         createFieldActions(typeNode);
     }
 
     private static void createNonSuperEntityFields(JavacNode typeNode) {
 
-        if (!fieldExist(typeNode, StringUtil.getVariableName("actions"))) {
-            JCVariableDecl actionsDeclaration = new FieldDeclBuilder(typeNode, "actions")
+        if (!fieldExist(typeNode, StringUtil.getVariableName(ACTIONS_FIELD_NAME))) {
+            JCVariableDecl actionsDeclaration = new FieldDeclBuilder(typeNode, ACTIONS_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withDiamondsType(java.util.List.class, RpcActionDefinition.class)
                     .withDiamondsInitialization(
@@ -77,10 +80,10 @@ public class RpcEntityInterfaceHandler {
 
     private static void createFieldActions(JavacNode typeNode) {
         for (JavacNode fieldNode : findAllRpcFields(typeNode)) {
-            String fieldNameWithActionsSuffix = fieldNode.getName() + "Actions";
+            String fieldNameWithActionsSuffix = fieldNode.getName() + ACTIONS_SUFFIX;
             String varType = ((JCVariableDecl) fieldNode.get()).getType().toString();
             if (varType.contains("List<")) {
-                if (fieldNode.getName().contains("actions") || fieldExist(typeNode, fieldNameWithActionsSuffix))
+                if (fieldNode.getName().contains(ACTIONS_FIELD_NAME) || fieldExist(typeNode, fieldNameWithActionsSuffix))
                     continue;
                 JCVariableDecl fieldDeclaration = new FieldDeclBuilder(typeNode, fieldNameWithActionsSuffix)
                         .withModifiers(Flags.PRIVATE)

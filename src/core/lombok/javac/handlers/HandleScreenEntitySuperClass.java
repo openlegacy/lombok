@@ -6,25 +6,24 @@ import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.openlegacy.ScreenEntityHandler;
 import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.core.annotations.screen.ScreenEntity;
+import org.openlegacy.core.annotations.screen.ScreenEntitySuperClass;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 /**
- * @author Matvey Mitnitsky
- * @since 3.6.0-SNAPSHOT
+ * @author Matvey Mitnitsky on 14-Jun-17.
  */
 @ProviderFor(JavacAnnotationHandler.class)
-public class HandleScreenEntity extends JavacAnnotationHandler<ScreenEntity> {
+public class HandleScreenEntitySuperClass extends JavacAnnotationHandler<ScreenEntitySuperClass>{
 
     @Override
-    public void handle(AnnotationValues<ScreenEntity> annotation, JCTree.JCAnnotation ast, JavacNode annotationNode) {
+    public void handle(AnnotationValues<ScreenEntitySuperClass> annotation, JCTree.JCAnnotation ast, JavacNode annotationNode) {
         JavacNode typeNode = annotationNode.up();
 
         if (validateAnnotation(typeNode, annotationNode)) {
-            ScreenEntity instance = annotation.getInstance();
+            ScreenEntitySuperClass instance = annotation.getInstance();
             boolean supportTerminalData = instance.supportTerminalData();
-            ScreenEntityHandler.handle(typeNode, supportTerminalData, true);
+            ScreenEntityHandler.handle(typeNode, supportTerminalData, false);
             generateGettersAndSetters(typeNode, annotationNode);
         }
     }

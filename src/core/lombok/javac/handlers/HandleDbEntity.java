@@ -4,7 +4,7 @@ import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
-import lombok.javac.handlers.openlegacy.DbEntityInterfaceHandler;
+import lombok.javac.handlers.openlegacy.DbEntityHandler;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.core.annotations.db.DbEntity;
 
@@ -21,7 +21,7 @@ public class HandleDbEntity extends JavacAnnotationHandler<DbEntity> {
         JavacNode typeNode = annotationNode.up();
 
         if (validateAnnotation(typeNode, annotationNode)) {
-            DbEntityInterfaceHandler.handle(typeNode);
+            DbEntityHandler.handle(typeNode);
             generateGettersAndSetters(typeNode, annotationNode);
         }
     }

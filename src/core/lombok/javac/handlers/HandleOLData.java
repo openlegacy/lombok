@@ -7,9 +7,9 @@ import lombok.OLData;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
-import lombok.javac.handlers.openlegacy.DbEntityInterfaceHandler;
-import lombok.javac.handlers.openlegacy.RpcEntityInterfaceHandler;
-import lombok.javac.handlers.openlegacy.ScreenEntityInterfaceHandler;
+import lombok.javac.handlers.openlegacy.DbEntityHandler;
+import lombok.javac.handlers.openlegacy.RpcEntityHandler;
+import lombok.javac.handlers.openlegacy.ScreenEntityHandler;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.core.db.DbEntity;
 import org.openlegacy.core.rpc.RpcEntity;
@@ -52,21 +52,21 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
              * Now we can simply retrieve it from annotation in general handler as far as we are handling
              * ScreenEntity annotation instead of OLData.
              */
-            ScreenEntityInterfaceHandler.handle(typeNode, false);
+            ScreenEntityHandler.handle(typeNode, false, true);
         }
 
         if (isRpcEntity = entityType.getName().equals(RpcEntity.class.getName())) {
             String interfaceName = entityType.getName();
             addImplements(typeNode, interfaceName);
 
-            RpcEntityInterfaceHandler.handle(typeNode, false);
+            RpcEntityHandler.handle(typeNode, true);
         }
 
         if (entityType.getName().equals(DbEntity.class.getName())) {
             String interfaceName = entityType.getName();
             addImplements(typeNode, interfaceName);
             addImplements(typeNode, Serializable.class.getName());
-            DbEntityInterfaceHandler.handle(typeNode);
+            DbEntityHandler.handle(typeNode);
         }
 
         new HandleGetter().generateGetterForType(typeNode, annotationNode, AccessLevel.PUBLIC, true);

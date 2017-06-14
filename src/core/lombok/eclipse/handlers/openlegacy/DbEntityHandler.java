@@ -23,12 +23,13 @@ import java.util.List;
 
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 /**
  * @author Matvey Mitnitsky
  * @since 3.6.0-SNAPSHOT
  */
-public class DbEntityInterfaceHandler {
+public class DbEntityHandler {
 
     public static void handle(EclipseNode typeNode) {
 
@@ -43,9 +44,9 @@ public class DbEntityInterfaceHandler {
     private static void createDbEntityFields(EclipseNode typeNode) {
         TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
 
-        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("actions"))) {
+        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName(ACTIONS_FIELD_NAME))) {
             //TODO add Transient and JsonIgnore annotation
-            FieldDeclaration decl = new FieldDeclarationBuilder("actions")
+            FieldDeclaration decl = new FieldDeclarationBuilder(ACTIONS_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(List.class)
                     .withDiamondsType(DbActionDefinition.class)
@@ -56,7 +57,7 @@ public class DbEntityInterfaceHandler {
             EclipseHandlerUtil.injectField(typeNode, decl);
         }
 
-        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("serialVersionUID"))) {
+        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName(SERIAL_VERSION_FIELD_NAME))) {
             FieldDeclaration serialVersion = createSerialVersionUID();
             EclipseHandlerUtil.injectField(typeNode, serialVersion);
         }
@@ -65,7 +66,7 @@ public class DbEntityInterfaceHandler {
     private static void createCompositeKey(EclipseNode typeNode) {
         TypeDeclaration typeDeclaration = (TypeDeclaration) typeNode.get();
         String className = String.valueOf(typeDeclaration.name);
-        String idClassNameWithSuffix = className + "CompositeKey";
+        String idClassNameWithSuffix = className + COMPOSITE_KEY_SUFFIX;
         String qualifiedName = className + "." + idClassNameWithSuffix;
 
         if (!classExists(typeNode, idClassNameWithSuffix)) {
@@ -157,7 +158,7 @@ public class DbEntityInterfaceHandler {
     }
 
     private static FieldDeclaration createSerialVersionUID() {
-        return new FieldDeclarationBuilder("serialVersionUID")
+        return new FieldDeclarationBuilder(SERIAL_VERSION_FIELD_NAME)
                 .withModifiers(EclipseModifier.PRIVATE, EclipseModifier.FINAL, EclipseModifier.STATIC)
                 .withPrimitiveType(EclipsePrimitives.LONG)
                 .withNumberLiteralInitialization(EclipsePrimitives.LONG, "1L")

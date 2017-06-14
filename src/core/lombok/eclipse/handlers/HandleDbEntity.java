@@ -3,7 +3,7 @@ package lombok.eclipse.handlers;
 import lombok.core.AnnotationValues;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
-import lombok.eclipse.handlers.openlegacy.DbEntityInterfaceHandler;
+import lombok.eclipse.handlers.openlegacy.DbEntityHandler;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.core.annotations.db.DbEntity;
@@ -22,7 +22,7 @@ public class HandleDbEntity extends EclipseAnnotationHandler<DbEntity> {
         EclipseNode typeNode = annotationNode.up();
 
         if (validateAnnotation(typeNode, annotationNode)) {
-            DbEntityInterfaceHandler.handle(typeNode);
+            DbEntityHandler.handle(typeNode);
             getenerateLombokGetAndSet(typeNode, annotationNode);
         }
     }

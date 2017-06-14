@@ -3,7 +3,7 @@ package lombok.eclipse.handlers;
 import lombok.core.AnnotationValues;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
-import lombok.eclipse.handlers.openlegacy.RpcEntityInterfaceHandler;
+import lombok.eclipse.handlers.openlegacy.RpcEntityHandler;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.mangosdk.spi.ProviderFor;
 import org.openlegacy.core.annotations.rpc.RpcPart;
@@ -21,7 +21,7 @@ public class HandleRpcPart extends EclipseAnnotationHandler<RpcPart> {
         EclipseNode typeNode = annotationNode.up();
 
         if (validateAnnotation(typeNode, annotationNode)) {
-            RpcEntityInterfaceHandler.handle(typeNode, true);
+            RpcEntityHandler.handle(typeNode,  false);
             getenerateLombokGetAndSet(typeNode, annotationNode);
         }
     }

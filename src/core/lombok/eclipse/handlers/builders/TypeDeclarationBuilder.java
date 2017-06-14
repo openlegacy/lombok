@@ -71,7 +71,7 @@ public class TypeDeclarationBuilder implements EclipseTreeBuilder<TypeDeclaratio
 
     public TypeDeclarationBuilder appendFieldDeclarations(FieldDeclaration... fieldDeclarations) {
         FieldDeclaration[] currentFields = typeDecl.fields;
-        List<FieldDeclaration> fieldDeclarationsList = new ArrayList();
+        List<FieldDeclaration> fieldDeclarationsList = new ArrayList<FieldDeclaration>();
         for (int i = 0; i < fieldDeclarations.length; i++) {
             if (fieldExist(fieldDeclarations[i], currentFields))
                 continue;

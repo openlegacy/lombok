@@ -6,10 +6,10 @@ import lombok.core.AnnotationValues;
 import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
-import lombok.eclipse.handlers.openlegacy.DbEntityInterfaceHandler;
+import lombok.eclipse.handlers.openlegacy.DbEntityHandler;
 import lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil;
-import lombok.eclipse.handlers.openlegacy.RpcEntityInterfaceHandler;
-import lombok.eclipse.handlers.openlegacy.ScreenEntityInterfaceHandler;
+import lombok.eclipse.handlers.openlegacy.RpcEntityHandler;
+import lombok.eclipse.handlers.openlegacy.ScreenEntityHandler;
 import openlegacy.utils.EclipseAstUtil;
 import openlegacy.utils.EclipseImportsUtil;
 import openlegacy.utils.StringUtil;
@@ -56,17 +56,17 @@ public class HandleOLData extends EclipseAnnotationHandler<OLData> {
 
         if (entityType.getName().equals(ScreenEntity.class.getName())) {
             boolean supportTerminalData = EclipseHandlerUtil.supportTerminalData(typeDecl.annotations);
-            ScreenEntityInterfaceHandler.handle(typeNode, supportTerminalData);
+            ScreenEntityHandler.handle(typeNode, supportTerminalData, true);
         }
 
         if (entityType.getName().equals(RpcEntity.class.getName())) {
 
-            RpcEntityInterfaceHandler.handle(typeNode, false);
+            RpcEntityHandler.handle(typeNode, true);
         }
 
         if (entityType.getName().equals(DbEntity.class.getName())) {
             addImplements(typeNode, entityType, Serializable.class);
-            DbEntityInterfaceHandler.handle(typeNode);
+            DbEntityHandler.handle(typeNode);
         }
 
         if (instance.getters()) {

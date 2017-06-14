@@ -12,13 +12,13 @@ import org.openlegacy.core.terminal.TerminalField;
 
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 /**
  * @author Matvey Mitnitsky on 01-Jun-17.
  */
 public class ScreenTableAnnotationHandler {
 
-    private static final String FOCUS_FIELD_NAME = "focusField";
 
     public static void handle(EclipseNode typeNode, boolean supportTerminalData) {
         createScreenTableFields(typeNode);
@@ -45,7 +45,7 @@ public class ScreenTableAnnotationHandler {
             FieldDeclaration field = (FieldDeclaration) fieldNode.get();
             //******
             //try to create "private TerminalField *Field" if getter for it doesn't exist & satisfy other conditions
-            String nameWithFieldSuffix = fieldNode.getName() + "Field";
+            String nameWithFieldSuffix = fieldNode.getName() + FIELD_SUFFIX;
             TypeReference fieldType = copyType(field.type, field);
             boolean isBoolean = isBoolean(fieldType);
             String getterName = HandlerUtil.toGetterName(fieldNode.getAst(), AnnotationValues.of(Accessors.class, fieldNode),

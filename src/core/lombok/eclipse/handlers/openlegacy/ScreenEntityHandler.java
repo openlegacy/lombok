@@ -53,25 +53,23 @@ import java.util.List;
 
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 /**
  * @author Ivan Bort
  * @since 3.6.0-SNAPSHOT
  */
-public class ScreenEntityInterfaceHandler {
-
-    private static final String TERMINAL_SNAPSHOT = "terminalSnapshot";
-    private static final String DESCRIPTION_SUFFIX = "Description";
-    private static final String FIELD_SUFFIX = "Field";
-    private static final String ACTIONS_SUFFIX = "Actions";
+public class ScreenEntityHandler {
 
     /**
      * Main entry point, which will generate all required code
      */
-    public static void handle(EclipseNode typeNode, boolean supportTerminalData) {
+    public static void handle(EclipseNode typeNode, boolean supportTerminalData, boolean screenEntity) {
         List<FieldDeclaration> newFields = new ArrayList<FieldDeclaration>();
-        addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
-        createScreenEntityFields(typeNode, newFields, supportTerminalData);
+        if(screenEntity) {
+            addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
+            createScreenEntityFields(typeNode, newFields, supportTerminalData);
+        }
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
         // add new fields into the type declaration
         injectFields(typeNode, newFields);
@@ -91,24 +89,24 @@ public class ScreenEntityInterfaceHandler {
             newFields.add(decl);
         }
         //create focusField field
-        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("focusField"))) {
-            FieldDeclaration decl = new FieldDeclarationBuilder("focusField")
+        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName(FOCUS_FIELD_NAME))) {
+            FieldDeclaration decl = new FieldDeclarationBuilder(FOCUS_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
                     .build();
             newFields.add(decl);
         }
         // create pcCommand field
-        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("pcCommand"))) {
-            FieldDeclaration decl = new FieldDeclarationBuilder("pcCommand")
+        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName(PC_COMMAND_FIELD_NAME))) {
+            FieldDeclaration decl = new FieldDeclarationBuilder(PC_COMMAND_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
                     .build();
             newFields.add(decl);
         }
         //create actions field
-        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName("actions"))) {
-            FieldDeclaration decl = new FieldDeclarationBuilder("actions")
+        if (!fieldExist(typeDecl.fields, StringUtil.getVariableName(ACTIONS_FIELD_NAME))) {
+            FieldDeclaration decl = new FieldDeclarationBuilder(ACTIONS_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(List.class)
                     .withDiamondsType(TerminalActionDefinition.class)

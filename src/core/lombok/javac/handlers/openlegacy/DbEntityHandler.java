@@ -28,12 +28,13 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
+import static openlegacy.LombokOLConstants.*;
 
 /**
  * @author Matvey Mitnitsky
  * @since 3.6.0-SNAPSHOT
  */
-public class DbEntityInterfaceHandler {
+public class DbEntityHandler {
 
     public static void handle(JavacNode typeNode) {
 
@@ -52,9 +53,9 @@ public class DbEntityInterfaceHandler {
     private static void createDbEntityEntityFields(JavacNode typeNode) {
         JavacTreeMaker jcMaker = typeNode.getTreeMaker();
 
-        if (!fieldExist(typeNode, StringUtil.getVariableName("actions"))) {
+        if (!fieldExist(typeNode, StringUtil.getVariableName(ACTIONS_FIELD_NAME))) {
 
-            JCVariableDecl actionsDeclaration = new FieldDeclBuilder(typeNode, "actions")
+            JCVariableDecl actionsDeclaration = new FieldDeclBuilder(typeNode, ACTIONS_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withDiamondsType(java.util.List.class, DbActionDefinition.class)
                     .withDiamondsInitialization(
@@ -66,7 +67,7 @@ public class DbEntityInterfaceHandler {
             JavacHandlerUtil.injectField(typeNode, actionsDeclaration);
         }
 
-        if (!fieldExist(typeNode, StringUtil.getVariableName("serialVersionUID")))
+        if (!fieldExist(typeNode, StringUtil.getVariableName(SERIAL_VERSION_FIELD_NAME)))
             JavacHandlerUtil.injectField(typeNode, createSerialVersionUID(typeNode));
     }
 
@@ -77,7 +78,7 @@ public class DbEntityInterfaceHandler {
         JavacTreeMaker treeMaker = typeNode.getTreeMaker();
 
         String className = ((JCClassDecl) typeNode.get()).name.toString();
-        String idClassNameWithSuffix = className + "CompositeKey";
+        String idClassNameWithSuffix = className + COMPOSITE_KEY_SUFFIX;
         String qualifiedName = className + "." + idClassNameWithSuffix;
 
         if(!classExists(typeNode, idClassNameWithSuffix)) {
@@ -145,7 +146,7 @@ public class DbEntityInterfaceHandler {
      */
     private static JCVariableDecl createSerialVersionUID(JavacNode typeNode) {
 
-        return new FieldDeclBuilder(typeNode, "serialVersionUID")
+        return new FieldDeclBuilder(typeNode, SERIAL_VERSION_FIELD_NAME)
                 .withModifiers(Flags.PRIVATE, Flags.FINAL, Flags.STATIC)
                 .withPrimitiveType(JavacPrimitives.LONG)
                 .withLiteralInit(JavacPrimitives.LONG, 1L)
