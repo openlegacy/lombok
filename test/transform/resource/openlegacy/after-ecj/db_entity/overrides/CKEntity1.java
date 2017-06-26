@@ -1,5 +1,5 @@
 package lombok.test;
-@org.openlegacy.core.annotations.db.DbEntity @javax.persistence.IdClass(value = CKEntity1.CKEntity1CompositeKey.class) class CKEntity1 implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
+@org.openlegacy.core.annotations.db.DbEntity @javax.persistence.IdClass(value = CKEntity1.CKEntity1CompositeKey.class) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class CKEntity1 implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
   public static @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") class CKEntity1CompositeKey implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
     private String name;

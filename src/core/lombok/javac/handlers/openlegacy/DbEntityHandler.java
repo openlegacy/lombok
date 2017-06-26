@@ -25,6 +25,7 @@ import org.openlegacy.core.db.definitions.DbActionDefinition;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
@@ -40,8 +41,10 @@ public class DbEntityHandler {
 
         addImplements(typeNode, DbEntity.class, Serializable.class);
         createDbEntityEntityFields(typeNode);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
 
-        //TODO add if exists condition
         if (hasMultipleId(typeNode)) {
             createCompositeKey(typeNode);
         }
@@ -61,7 +64,7 @@ public class DbEntityHandler {
                     .withDiamondsInitialization(
                             java.util.ArrayList.class, DbActionDefinition.class
                     )
-                    .setAnnotations(Transient.class)
+                    .setAnnotations(Transient.class, JsonIgnore.class, XmlTransient.class)
                     .build();
 
             JavacHandlerUtil.injectField(typeNode, actionsDeclaration);

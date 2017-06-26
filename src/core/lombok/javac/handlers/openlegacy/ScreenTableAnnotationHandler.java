@@ -1,5 +1,6 @@
 package lombok.javac.handlers.openlegacy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
@@ -10,6 +11,7 @@ import lombok.javac.handlers.OLJavacHandlerUtil;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
 import org.openlegacy.core.terminal.TerminalField;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 
 import static lombok.javac.handlers.JavacHandlerUtil.*;
@@ -27,6 +29,9 @@ public class ScreenTableAnnotationHandler {
     public static void handle(JavacNode typeNode, boolean supportTerminalData) {
         createScreenTableFields(typeNode);
         if (supportTerminalData) createTerminalFields(typeNode);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
     }
 
     private static void createScreenTableFields(JavacNode typeNode) {
@@ -34,6 +39,7 @@ public class ScreenTableAnnotationHandler {
             JCTree.JCVariableDecl focusFieldDecl = new FieldDeclBuilder(typeNode, FOCUS_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withType(String.class)
+                    .setAnnotations(JsonIgnore.class, XmlTransient.class)
                     .build();
 
             injectField(typeNode, focusFieldDecl);
@@ -56,6 +62,7 @@ public class ScreenTableAnnotationHandler {
                 JCTree.JCVariableDecl terminalField = new FieldDeclBuilder(typeNode, nameWithFieldSuffix)
                         .withModifiers(Flags.PRIVATE)
                         .withType(TerminalField.class)
+                        .setAnnotations(JsonIgnore.class, XmlTransient.class)
                         .build();
 
                 terminalFields.add(terminalField);

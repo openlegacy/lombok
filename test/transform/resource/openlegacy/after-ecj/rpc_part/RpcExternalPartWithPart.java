@@ -1,7 +1,7 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.rpc.RpcPart class RpcExternalPartWithPart {
-  private static @org.openlegacy.core.annotations.rpc.RpcPart class Part {
-    private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+public @org.openlegacy.core.annotations.rpc.RpcPart @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class RpcExternalPartWithPart {
+  private static @org.openlegacy.core.annotations.rpc.RpcPart @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class Part {
+    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
     private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) String field1;
     private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) Integer field2;
     private Part() {
@@ -26,7 +26,7 @@ public @org.openlegacy.core.annotations.rpc.RpcPart class RpcExternalPartWithPar
       this.actions = actions;
     }
   }
-  private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
   private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) Integer integerVar;
   private RpcExternalPartWithPart.Part part;
   public RpcExternalPartWithPart() {

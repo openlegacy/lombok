@@ -1,6 +1,6 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenTableOverrides implements org.openlegacy.core.terminal.ScreenEntity {
-  private static @org.openlegacy.core.annotations.screen.ScreenTable(supportTerminalData = true,startRow = 1,endRow = 2) class ScreenTable {
+public @org.openlegacy.core.annotations.screen.ScreenEntity @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenTableOverrides implements org.openlegacy.core.terminal.ScreenEntity {
+  private static @org.openlegacy.core.annotations.screen.ScreenTable(supportTerminalData = true,startRow = 1,endRow = 2) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenTable {
     private org.openlegacy.core.terminal.TerminalField nameField;
     private java.lang.String focusField;
     private @org.openlegacy.core.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String name;

@@ -1,14 +1,14 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenEntityInnerClass implements org.openlegacy.core.terminal.ScreenEntity {
+public @org.openlegacy.core.annotations.screen.ScreenEntity @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenEntityInnerClass implements org.openlegacy.core.terminal.ScreenEntity {
   public static class ScreenTable {
     private String property;
     public ScreenTable() {
       super();
     }
   }
-  private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
-  private java.lang.String pcCommand;
-  private java.lang.String focusField;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String pcCommand;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String focusField;
   private @org.openlegacy.core.annotations.screen.ScreenField(row = 18,endRow = 37,column = 1,endColumn = 80) ScreenEntityInnerClass.ScreenTable screenTable;
   public ScreenEntityInnerClass() {
     super();

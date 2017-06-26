@@ -1,13 +1,13 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = false) class ScreenEntityFieldDescription implements org.openlegacy.core.terminal.ScreenEntity {
-  private java.lang.String outerQuantityDescription;
-  private java.lang.String outerUnitOfMeasureDescription;
-  private java.lang.String packingMultiplierDescription;
-  private java.lang.String itemNumberDescription;
-  private java.lang.String itemNameDescription;
-  private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
-  private java.lang.String pcCommand;
-  private java.lang.String focusField;
+public @org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = false) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenEntityFieldDescription implements org.openlegacy.core.terminal.ScreenEntity {
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String outerQuantityDescription;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String outerUnitOfMeasureDescription;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String packingMultiplierDescription;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String itemNumberDescription;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String itemNameDescription;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String pcCommand;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String focusField;
   private @org.openlegacy.core.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Number",sampleValue = "A") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 1) String itemName;
   private @org.openlegacy.core.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Number",sampleValue = "A") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 3) Integer itemNumber;
   private @org.openlegacy.core.annotations.screen.ScreenField(key = true,row = 17,column = 33,endColumn = 37,labelColumn = 2,displayName = "Packing Multiplier",sampleValue = "0") @org.openlegacy.core.annotations.screen.ScreenDescriptionField(column = 1,row = 5) Double packingMultiplier;

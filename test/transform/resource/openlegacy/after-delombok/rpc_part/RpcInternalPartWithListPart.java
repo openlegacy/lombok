@@ -1,13 +1,18 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.rpc.RpcEntity
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 public class RpcInternalPartWithListPart implements org.openlegacy.core.rpc.RpcEntity {
-	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 
 
 	@org.openlegacy.core.annotations.rpc.RpcPart
+	@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 	private static class Part {
+		@com.fasterxml.jackson.annotation.JsonIgnore
+		@javax.xml.bind.annotation.XmlTransient
 		private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 		@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 		private String field1;
@@ -68,12 +73,6 @@ public class RpcInternalPartWithListPart implements org.openlegacy.core.rpc.RpcE
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getPartActions() {
-		return this.partActions;
-	}
-
-	@java.lang.SuppressWarnings("all")
-	@javax.annotation.Generated("lombok")
 	public void setPart(final java.util.List<RpcInternalPartWithListPart.Part> part) {
 		this.part = part;
 	}
@@ -82,11 +81,5 @@ public class RpcInternalPartWithListPart implements org.openlegacy.core.rpc.RpcE
 	@javax.annotation.Generated("lombok")
 	public void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
 		this.actions = actions;
-	}
-
-	@java.lang.SuppressWarnings("all")
-	@javax.annotation.Generated("lombok")
-	public void setPartActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions) {
-		this.partActions = partActions;
 	}
 }

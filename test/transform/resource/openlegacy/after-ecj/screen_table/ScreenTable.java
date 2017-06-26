@@ -1,7 +1,7 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenTable implements org.openlegacy.core.terminal.ScreenEntity {
-  private static @org.openlegacy.core.annotations.screen.ScreenTable(startRow = 1,endRow = 1) class ScreenTbl {
-    private java.lang.String focusField;
+public @org.openlegacy.core.annotations.screen.ScreenEntity @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenTable implements org.openlegacy.core.terminal.ScreenEntity {
+  private static @org.openlegacy.core.annotations.screen.ScreenTable(startRow = 1,endRow = 1) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenTbl {
+    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String focusField;
     private @org.openlegacy.core.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String tableField;
     public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") String getTableField() {
       return this.tableField;
@@ -52,9 +52,9 @@ public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenTable im
       super();
     }
   }
-  private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
-  private java.lang.String pcCommand;
-  private java.lang.String focusField;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String pcCommand;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String focusField;
   private ScreenTable.ScreenTbl table;
   public ScreenTable() {
     super();

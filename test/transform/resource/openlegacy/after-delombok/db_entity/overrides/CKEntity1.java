@@ -2,6 +2,7 @@ package lombok.test;
 
 @org.openlegacy.core.annotations.db.DbEntity
 @javax.persistence.IdClass(CKEntity1.CKEntity1CompositeKey.class)
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 class CKEntity1 implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
 
   @java.lang.SuppressWarnings("all")

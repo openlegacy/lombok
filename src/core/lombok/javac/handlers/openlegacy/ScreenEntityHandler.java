@@ -31,9 +31,11 @@
  *******************************************************************************/
 package lombok.javac.handlers.openlegacy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree.JCClassDecl;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
+import lombok.core.AST;
 import lombok.javac.JavacNode;
 import lombok.javac.handlers.JavacHandlerUtil;
 import lombok.javac.handlers.JavacOLUtil;
@@ -41,11 +43,14 @@ import lombok.javac.handlers.OLJavacHandlerUtil;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
 import org.openlegacy.core.annotations.screen.ScreenDescriptionField;
+import org.openlegacy.core.annotations.screen.ScreenField;
 import org.openlegacy.core.terminal.TerminalField;
 import org.openlegacy.core.terminal.TerminalSnapshot;
 import org.openlegacy.core.terminal.definitions.TerminalActionDefinition;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
+import java.util.List;
 
 import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 import static openlegacy.LombokOLConstants.*;
@@ -63,11 +68,15 @@ public class ScreenEntityHandler {
 
         java.util.List<JCVariableDecl> newFields = new ArrayList<JCVariableDecl>();
 
-        if(screenEntity) {
+        if (screenEntity) {
             addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
             createScreenEntityFields(typeNode, newFields, supportTerminalData);
         }
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
+        createFieldActions(typeNode, newFields);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
 
         // add new fields into the type declaration
         JavacOLUtil.injectFields(typeNode, newFields);
@@ -84,6 +93,7 @@ public class ScreenEntityHandler {
             JCVariableDecl terminalDataDecl = new FieldDeclBuilder(typeNode, TERMINAL_SNAPSHOT)
                     .withModifiers(Flags.PRIVATE)
                     .withType(TerminalSnapshot.class)
+                    .setAnnotations(JsonIgnore.class, XmlTransient.class)
                     .build();
             newFields.add(terminalDataDecl);
         }
@@ -94,6 +104,7 @@ public class ScreenEntityHandler {
                     .withModifiers(Flags.PRIVATE)
                     .withDiamondsType(java.util.List.class, TerminalActionDefinition.class)
                     .withDiamondsInitialization(ArrayList.class, TerminalActionDefinition.class)
+                    .setAnnotations(JsonIgnore.class, XmlTransient.class)
                     .build();
 
             newFields.add(actionsDecl);
@@ -103,6 +114,7 @@ public class ScreenEntityHandler {
             JCVariableDecl focusDecl = new FieldDeclBuilder(typeNode, FOCUS_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withType(String.class)
+                    .setAnnotations(JsonIgnore.class, XmlTransient.class)
                     .build();
 
             newFields.add(focusDecl);
@@ -112,6 +124,7 @@ public class ScreenEntityHandler {
             JCVariableDecl pcCommandDecl = new FieldDeclBuilder(typeNode, PC_COMMAND_FIELD_NAME)
                     .withModifiers(Flags.PRIVATE)
                     .withType(String.class)
+                    .setAnnotations(JsonIgnore.class, XmlTransient.class)
                     .build();
 
             newFields.add(pcCommandDecl);
@@ -137,24 +150,10 @@ public class ScreenEntityHandler {
                 JCVariableDecl terminalField = new FieldDeclBuilder(typeNode, nameWithFieldSuffix)
                         .withModifiers(Flags.PRIVATE)
                         .withType(TerminalField.class)
+                        .setAnnotations(JsonIgnore.class, XmlTransient.class)
                         .build();
 
                 newFields.add(terminalField);
-            }
-
-            String varType = ((JCVariableDecl) fieldNode.get()).getType().toString();
-            if (varType.contains("List")) {
-                if (OLJavacHandlerUtil.fieldExist(typeNode, fieldNode.getName() + ACTIONS_SUFFIX) || fieldNode.getName().equals(ACTIONS_FIELD_NAME))
-                    continue;
-
-                JCVariableDecl actionsField = new FieldDeclBuilder(typeNode, fieldNode.getName())
-                        .withSuffix(ACTIONS_SUFFIX)
-                        .withModifiers(Flags.PRIVATE)
-                        .withDiamondsType(java.util.List.class, TerminalActionDefinition.class)
-                        .withDiamondsInitialization(ArrayList.class, TerminalActionDefinition.class)
-                        .build();
-
-                newFields.add(actionsField);
             }
 
             if (JavacHandlerUtil.hasAnnotation(ScreenDescriptionField.class, fieldNode)) {
@@ -165,6 +164,7 @@ public class ScreenEntityHandler {
                         .withSuffix(DESCRIPTION_SUFFIX)
                         .withModifiers(Flags.PRIVATE)
                         .withType(String.class)
+                        .setAnnotations(JsonIgnore.class, XmlTransient.class)
                         .build();
 
                 newFields.add(descriptionDecl);
@@ -173,4 +173,54 @@ public class ScreenEntityHandler {
         }
     }
 
+    private static void createFieldActions(JavacNode typeNode, java.util.List<JCVariableDecl> newFields) {
+        for (JavacNode fieldNode : findAllFields(typeNode)) {
+            String varType = ((JCVariableDecl) fieldNode.get()).getType().toString();
+            if (varType.contains("List") && !fieldNode.getName().equals(ACTIONS_FIELD_NAME)
+                    && !OLJavacHandlerUtil.fieldExist(typeNode, fieldNode.getName() + ACTIONS_SUFFIX)
+                    && hasScreenTableClass(typeNode, varType)) {
+
+                JCVariableDecl actionsField = new FieldDeclBuilder(typeNode, fieldNode.getName())
+                        .withSuffix(ACTIONS_SUFFIX)
+                        .withModifiers(Flags.PRIVATE)
+                        .withDiamondsType(java.util.List.class, TerminalActionDefinition.class)
+                        .withDiamondsInitialization(ArrayList.class, TerminalActionDefinition.class)
+                        .setAnnotations(JsonIgnore.class, XmlTransient.class)
+                        .build();
+
+                newFields.add(actionsField);
+            }
+        }
+    }
+
+    private static boolean hasScreenTableClass(JavacNode typeNode, String varType) {
+        java.util.List<JavacNode> innerClasses = findAllInnerClasses(typeNode);
+        for(JavacNode type : innerClasses){
+            String typeName = ((JCClassDecl) type.get()).getSimpleName().toString();
+            if(varType.contains(typeName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static List<JavacNode> findAllInnerClasses(JavacNode typeNode) {
+        java.util.List<JavacNode> fields = new java.util.ArrayList<JavacNode>();
+        for (JavacNode child : typeNode.down()) {
+            if (child.getKind() == AST.Kind.TYPE) {
+                fields.add(child);
+            }
+        }
+        return fields;
+    }
+
+    private static java.util.List<JavacNode> findAllFields(JavacNode typeNode) {
+        java.util.List<JavacNode> fields = new java.util.ArrayList<JavacNode>();
+        for (JavacNode child : typeNode.down()) {
+            if (child.getKind() == AST.Kind.FIELD) {
+                fields.add(child);
+            }
+        }
+        return fields;
+    }
 }

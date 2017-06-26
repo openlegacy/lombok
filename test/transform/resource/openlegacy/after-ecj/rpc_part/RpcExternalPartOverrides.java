@@ -1,7 +1,7 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.rpc.RpcPart class RpcExternalPartOverrides {
-  private static @org.openlegacy.core.annotations.rpc.RpcPart class Part {
-    private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+public @org.openlegacy.core.annotations.rpc.RpcPart @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class RpcExternalPartOverrides {
+  private static @org.openlegacy.core.annotations.rpc.RpcPart @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class Part {
+    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
     private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) String field1;
     private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) Integer field2;
     private Part() {
@@ -26,8 +26,7 @@ public @org.openlegacy.core.annotations.rpc.RpcPart class RpcExternalPartOverrid
       this.actions = actions;
     }
   }
-  private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
-  private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
   private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) short shortVar;
   private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) int integerVar;
   private @org.openlegacy.core.annotations.rpc.RpcField(length = 10) String stringVar = "string";
@@ -54,9 +53,6 @@ public @org.openlegacy.core.annotations.rpc.RpcPart class RpcExternalPartOverrid
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getActions() {
     return this.actions;
   }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getPartActions() {
-    return this.partActions;
-  }
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setShortVar(final short shortVar) {
     this.shortVar = shortVar;
   }
@@ -74,8 +70,5 @@ public @org.openlegacy.core.annotations.rpc.RpcPart class RpcExternalPartOverrid
   }
   public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
     this.actions = actions;
-  }
-  public @java.lang.SuppressWarnings("all") @javax.annotation.Generated("lombok") void setPartActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions) {
-    this.partActions = partActions;
   }
 }

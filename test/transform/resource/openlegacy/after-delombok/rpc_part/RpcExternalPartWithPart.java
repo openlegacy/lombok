@@ -1,12 +1,18 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.rpc.RpcPart
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 public class RpcExternalPartWithPart {
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 
 
 	@org.openlegacy.core.annotations.rpc.RpcPart
+	@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 	private static class Part {
+		@com.fasterxml.jackson.annotation.JsonIgnore
+		@javax.xml.bind.annotation.XmlTransient
 		private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 		@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 		private String field1;

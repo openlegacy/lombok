@@ -1,5 +1,5 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = true) class ScreenEntityOverrides implements org.openlegacy.core.terminal.ScreenEntity {
+public @org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = true) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenEntityOverrides implements org.openlegacy.core.terminal.ScreenEntity {
   private static class ScreenTable {
     private ScreenTable() {
       super();

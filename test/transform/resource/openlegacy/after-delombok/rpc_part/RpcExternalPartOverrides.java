@@ -1,8 +1,10 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.rpc.RpcPart
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 public class RpcExternalPartOverrides {
-	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 	@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 	private short shortVar;
@@ -17,7 +19,10 @@ public class RpcExternalPartOverrides {
 
 
 	@org.openlegacy.core.annotations.rpc.RpcPart
+	@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 	private static class Part {
+		@com.fasterxml.jackson.annotation.JsonIgnore
+		@javax.xml.bind.annotation.XmlTransient
 		private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
 		@org.openlegacy.core.annotations.rpc.RpcField(length = 10)
 		private String field1;
@@ -99,12 +104,6 @@ public class RpcExternalPartOverrides {
 
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
-	public java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> getPartActions() {
-		return this.partActions;
-	}
-
-	@java.lang.SuppressWarnings("all")
-	@javax.annotation.Generated("lombok")
 	public void setShortVar(final short shortVar) {
 		this.shortVar = shortVar;
 	}
@@ -137,11 +136,5 @@ public class RpcExternalPartOverrides {
 	@javax.annotation.Generated("lombok")
 	public void setActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions) {
 		this.actions = actions;
-	}
-
-	@java.lang.SuppressWarnings("all")
-	@javax.annotation.Generated("lombok")
-	public void setPartActions(final java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> partActions) {
-		this.partActions = partActions;
 	}
 }

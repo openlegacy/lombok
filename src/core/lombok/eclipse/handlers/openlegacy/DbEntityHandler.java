@@ -1,5 +1,6 @@
 package lombok.eclipse.handlers.openlegacy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.core.AST;
 import lombok.eclipse.EclipseNode;
 import lombok.eclipse.handlers.EclipseHandlerUtil;
@@ -17,6 +18,7 @@ import org.openlegacy.core.db.definitions.DbActionDefinition;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,9 @@ public class DbEntityHandler {
 
         addImplements(typeNode, DbEntity.class, Serializable.class);
         createDbEntityFields(typeNode);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
 
         if (hasMultipleId(typeNode)) {
             createCompositeKey(typeNode);
@@ -53,6 +58,8 @@ public class DbEntityHandler {
                     .withInitialization(ArrayList.class)
                     .withDiamondsInitialization(DbActionDefinition.class)
                     .appendAnnotation(Transient.class)
+                    .appendAnnotation(JsonIgnore.class)
+                    .appendAnnotation(XmlTransient.class)
                     .build();
             EclipseHandlerUtil.injectField(typeNode, decl);
         }

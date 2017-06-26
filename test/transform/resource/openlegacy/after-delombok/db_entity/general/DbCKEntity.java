@@ -1,10 +1,13 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.db.DbEntity
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 @javax.persistence.IdClass(CKEntity.CKEntityCompositeKey.class)
 class CKEntity implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	@javax.persistence.Transient
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	private java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.db.definitions.DbActionDefinition>();
 	@javax.persistence.Id
 	private String name;

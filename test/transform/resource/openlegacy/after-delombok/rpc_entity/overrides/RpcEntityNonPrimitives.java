@@ -1,6 +1,7 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.rpc.RpcEntity
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 class RpcEntityNonPrimitives implements org.openlegacy.core.rpc.RpcEntity {
     private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
     private String stringVar = "string";

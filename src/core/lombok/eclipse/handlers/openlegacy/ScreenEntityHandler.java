@@ -1,37 +1,7 @@
-/*******************************************************************************
- * Copyright (c) 2017 OpenLegacy Inc.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     OpenLegacy Inc. - initial API and implementation
- *
- * Copyright (C) 2009-2016 The Project Lombok Authors.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
-
- *******************************************************************************/
-
 package lombok.eclipse.handlers.openlegacy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.core.AST;
 import lombok.core.AnnotationValues;
 import lombok.core.handlers.HandlerUtil;
 import lombok.eclipse.EclipseNode;
@@ -48,6 +18,7 @@ import org.openlegacy.core.terminal.TerminalField;
 import org.openlegacy.core.terminal.TerminalSnapshot;
 import org.openlegacy.core.terminal.definitions.TerminalActionDefinition;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,11 +37,15 @@ public class ScreenEntityHandler {
      */
     public static void handle(EclipseNode typeNode, boolean supportTerminalData, boolean screenEntity) {
         List<FieldDeclaration> newFields = new ArrayList<FieldDeclaration>();
-        if(screenEntity) {
+        if (screenEntity) {
             addImplements(typeNode, org.openlegacy.core.terminal.ScreenEntity.class);
             createScreenEntityFields(typeNode, newFields, supportTerminalData);
         }
         createFieldBasedFields(typeNode, newFields, supportTerminalData);
+        createFieldActions(typeNode, newFields);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
         // add new fields into the type declaration
         injectFields(typeNode, newFields);
     }
@@ -85,6 +60,8 @@ public class ScreenEntityHandler {
             FieldDeclaration decl = new FieldDeclarationBuilder(TERMINAL_SNAPSHOT)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(TerminalSnapshot.class)
+                    .appendAnnotation(JsonIgnore.class)
+                    .appendAnnotation(XmlTransient.class)
                     .build();
             newFields.add(decl);
         }
@@ -93,6 +70,8 @@ public class ScreenEntityHandler {
             FieldDeclaration decl = new FieldDeclarationBuilder(FOCUS_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
+                    .appendAnnotation(JsonIgnore.class)
+                    .appendAnnotation(XmlTransient.class)
                     .build();
             newFields.add(decl);
         }
@@ -101,6 +80,8 @@ public class ScreenEntityHandler {
             FieldDeclaration decl = new FieldDeclarationBuilder(PC_COMMAND_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
+                    .appendAnnotation(JsonIgnore.class)
+                    .appendAnnotation(XmlTransient.class)
                     .build();
             newFields.add(decl);
         }
@@ -112,6 +93,8 @@ public class ScreenEntityHandler {
                     .withDiamondsType(TerminalActionDefinition.class)
                     .withInitialization(ArrayList.class)
                     .withDiamondsInitialization(TerminalActionDefinition.class)
+                    .appendAnnotation(JsonIgnore.class)
+                    .appendAnnotation(XmlTransient.class)
                     .build();
             newFields.add(decl);
         }
@@ -139,6 +122,8 @@ public class ScreenEntityHandler {
                 FieldDeclaration decl = new FieldDeclarationBuilder(nameWithFieldSuffix)
                         .withModifiers(EclipseModifier.PRIVATE)
                         .withType(TerminalField.class)
+                        .appendAnnotation(JsonIgnore.class)
+                        .appendAnnotation(XmlTransient.class)
                         .build();
 
                 newFields.add(decl);
@@ -152,6 +137,8 @@ public class ScreenEntityHandler {
                         .withNameSuffix(DESCRIPTION_SUFFIX)
                         .withModifiers(EclipseModifier.PRIVATE)
                         .withType(String.class)
+                        .appendAnnotation(JsonIgnore.class)
+                        .appendAnnotation(XmlTransient.class)
                         .build();
 
                 newFields.add(decl);
@@ -160,12 +147,20 @@ public class ScreenEntityHandler {
             //*****
             //try to create "private List<TerminalActionDefinition> *Actions = new ArrayList<TerminalActionDefinition>()"
             //if field type is List
-            char[][] typeChar = fieldType.getTypeName();
-            String typeName = new String(typeChar[typeChar.length - 1]);
+        }
+    }
 
-            if (typeName.equals("List")) {
-                if (typeName.contains("actions") || fieldExist(typeDecl.fields, fieldNode.getName() + ACTIONS_SUFFIX))
-                    continue;
+    private static void createFieldActions(EclipseNode typeNode, List<FieldDeclaration> newFields) {
+        TypeDeclaration typeDecl = (TypeDeclaration) typeNode.get();
+
+        for (EclipseNode fieldNode : findAllFields(typeNode)) {
+            FieldDeclaration field = (FieldDeclaration) fieldNode.get();
+            TypeReference fieldType = copyType(field.type, field);
+            String fieldTypeName = fieldType.toString();
+
+            if (fieldTypeName.contains("List") && !fieldTypeName.contains("actions")
+                    && !fieldExist(typeDecl.fields, fieldNode.getName() + ACTIONS_SUFFIX)
+                    && hasScreenTableClass(typeNode, fieldTypeName)) {
 
                 FieldDeclaration decl = new FieldDeclarationBuilder(fieldNode.getName())
                         .withNameSuffix(ACTIONS_SUFFIX)
@@ -174,6 +169,8 @@ public class ScreenEntityHandler {
                         .withDiamondsType(TerminalActionDefinition.class)
                         .withInitialization(ArrayList.class)
                         .withDiamondsInitialization(TerminalActionDefinition.class)
+                        .appendAnnotation(JsonIgnore.class)
+                        .appendAnnotation(XmlTransient.class)
                         .build();
 
                 newFields.add(decl);
@@ -181,6 +178,36 @@ public class ScreenEntityHandler {
         }
     }
 
+    private static boolean hasScreenTableClass(EclipseNode typeNode, String varType) {
+        java.util.List<EclipseNode> innerClasses = findAllInnerClasses(typeNode);
+        for(EclipseNode type : innerClasses){
+            String typeName =  type.getName();
+            if(varType.contains(typeName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static List<EclipseNode> findAllInnerClasses(EclipseNode typeNode) {
+        java.util.List<EclipseNode> fields = new java.util.ArrayList<EclipseNode>();
+        for (EclipseNode child : typeNode.down()) {
+            if (child.getKind() == AST.Kind.TYPE) {
+                fields.add(child);
+            }
+        }
+        return fields;
+    }
+
+    private static java.util.List<EclipseNode> findAllFields(EclipseNode typeNode) {
+        java.util.List<EclipseNode> fields = new java.util.ArrayList<EclipseNode>();
+        for (EclipseNode child : typeNode.down()) {
+            if (child.getKind() == AST.Kind.FIELD) {
+                fields.add(child);
+            }
+        }
+        return fields;
+    }
 
     /**
      * returns true in the case passed typeReference is a representation of OL primitive types that are not inner or external class types

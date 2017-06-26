@@ -1,8 +1,7 @@
 package lombok.test;
-
-@org.openlegacy.core.annotations.db.DbEntity class DbNonPrimitives implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
+@org.openlegacy.core.annotations.db.DbEntity @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class DbNonPrimitives implements org.openlegacy.core.db.DbEntity, java.io.Serializable {
   private static final long serialVersionUID = 1L;
-  private @javax.persistence.Transient() java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.db.definitions.DbActionDefinition>();
+  private @javax.persistence.Transient() @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.db.definitions.DbActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.db.definitions.DbActionDefinition>();
   private String stringVar = "string";
   private Object objectVar = new Object();
   private java.util.List<String> stringList = new java.util.ArrayList<>();

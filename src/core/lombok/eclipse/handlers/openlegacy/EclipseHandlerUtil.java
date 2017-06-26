@@ -241,6 +241,21 @@ public class EclipseHandlerUtil {
     }
 
     /**
+     * Converts 2-dimensional char array to String
+     *
+     * @param typeChar
+     * @return
+     */
+    public static String getTypeNameFromCharArray(char[][] typeChar) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < typeChar.length; i++){
+            sb.append(String.valueOf(typeChar[i]));
+        }
+        return sb.toString();
+    }
+
+
+    /**
      * used by builders to add modifiers to the type or field declaration
      */
     //TODO maybe it is preferable to place this methods in new EclipseBuildersUtil ??

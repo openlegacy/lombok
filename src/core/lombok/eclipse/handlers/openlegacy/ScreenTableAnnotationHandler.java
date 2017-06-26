@@ -1,5 +1,6 @@
 package lombok.eclipse.handlers.openlegacy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.core.AnnotationValues;
 import lombok.core.handlers.HandlerUtil;
 import lombok.eclipse.EclipseNode;
@@ -9,6 +10,8 @@ import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.openlegacy.core.terminal.TerminalField;
+
+import javax.xml.bind.annotation.XmlTransient;
 
 import static lombok.eclipse.handlers.EclipseHandlerUtil.*;
 import static lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil.*;
@@ -23,6 +26,9 @@ public class ScreenTableAnnotationHandler {
     public static void handle(EclipseNode typeNode, boolean supportTerminalData) {
         createScreenTableFields(typeNode);
         if (supportTerminalData) createTerminalFields(typeNode);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
     }
 
     private static void createScreenTableFields(EclipseNode typeNode) {
@@ -32,6 +38,8 @@ public class ScreenTableAnnotationHandler {
             FieldDeclaration focusFieldDecl = new FieldDeclarationBuilder(FOCUS_FIELD_NAME)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(String.class)
+                    .appendAnnotation(JsonIgnore.class)
+                    .appendAnnotation(XmlTransient.class)
                     .build();
 
             injectField(typeNode, focusFieldDecl);
@@ -55,6 +63,8 @@ public class ScreenTableAnnotationHandler {
                 FieldDeclaration decl = new FieldDeclarationBuilder(nameWithFieldSuffix)
                         .withModifiers(EclipseModifier.PRIVATE)
                         .withType(TerminalField.class)
+                        .appendAnnotation(JsonIgnore.class)
+                        .appendAnnotation(XmlTransient.class)
                         .build();
 
                 injectField(typeNode, decl);

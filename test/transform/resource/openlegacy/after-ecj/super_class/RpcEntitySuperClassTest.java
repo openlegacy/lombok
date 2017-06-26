@@ -1,7 +1,7 @@
 package lombok.test;
-@org.openlegacy.core.annotations.rpc.RpcEntitySuperClass class RpcEntitySuperClassTest {
-  public static @org.openlegacy.core.annotations.rpc.RpcPart class Part {
-    private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+@org.openlegacy.core.annotations.rpc.RpcEntitySuperClass @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class RpcEntitySuperClassTest {
+  public static @org.openlegacy.core.annotations.rpc.RpcPart @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class Part {
+    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
     private String innerField;
     public Part() {
       super();
@@ -19,7 +19,7 @@ package lombok.test;
       this.actions = actions;
     }
   }
-  private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
   private String superClassField;
   private Part part;
   RpcEntitySuperClassTest() {

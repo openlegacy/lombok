@@ -1,31 +1,50 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = true)
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 public class ScreenEntitySupportTD implements org.openlegacy.core.terminal.ScreenEntity {
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalField outerQuantityField;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalField outerUnitOfMeasureField;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalField packingMultiplierField;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalField itemNumberField;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalField itemNameField;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String pcCommand;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String focusField;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalSnapshot terminalSnapshot;

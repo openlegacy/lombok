@@ -1,8 +1,8 @@
 package lombok.test;
-public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenEntityWithPart implements org.openlegacy.core.terminal.ScreenEntity {
-  public static @org.openlegacy.core.annotations.screen.ScreenPart(supportTerminalData = true) class ScreenPartTest {
-    private java.lang.String partFieldDescription;
-    private org.openlegacy.core.terminal.TerminalField partFieldField;
+public @org.openlegacy.core.annotations.screen.ScreenEntity @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenEntityWithPart implements org.openlegacy.core.terminal.ScreenEntity {
+  public static @org.openlegacy.core.annotations.screen.ScreenPart(supportTerminalData = true) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenPartTest {
+    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String partFieldDescription;
+    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField partFieldField;
     private @org.openlegacy.core.annotations.screen.ScreenField(row = 1,column = 1) @org.openlegacy.core.annotations.screen.ScreenDescriptionField(row = 2,column = 2) String partField;
     public ScreenPartTest() {
       super();
@@ -26,9 +26,9 @@ public @org.openlegacy.core.annotations.screen.ScreenEntity class ScreenEntityWi
       this.partFieldDescription = partFieldDescription;
     }
   }
-  private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
-  private java.lang.String pcCommand;
-  private java.lang.String focusField;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String pcCommand;
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String focusField;
   private ScreenPartTest screenPart;
   public ScreenEntityWithPart() {
     super();

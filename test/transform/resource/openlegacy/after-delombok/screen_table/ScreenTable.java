@@ -1,20 +1,30 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.screen.ScreenEntity
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 public class ScreenTable implements org.openlegacy.core.terminal.ScreenEntity {
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String pcCommand;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String focusField;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
 
 
 	@org.openlegacy.core.annotations.screen.ScreenTable(startRow = 1, endRow = 1)
+	@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 	private static class ScreenTbl {
+		@com.fasterxml.jackson.annotation.JsonIgnore
+		@javax.xml.bind.annotation.XmlTransient
 		private java.lang.String focusField;
 		@org.openlegacy.core.annotations.screen.ScreenField(row = 1, column = 1, endRow = 1, endColumn = 5)
 		private String tableField;

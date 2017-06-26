@@ -1,7 +1,6 @@
 package lombok.test;
-
-@org.openlegacy.core.annotations.rpc.RpcEntity class RpcEntityNonPrimitives implements org.openlegacy.core.rpc.RpcEntity {
-  private java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
+@org.openlegacy.core.annotations.rpc.RpcEntity @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class RpcEntityNonPrimitives implements org.openlegacy.core.rpc.RpcEntity {
+  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.definitions.RpcActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.definitions.RpcActionDefinition>();
   private String stringVar = "string";
   private Object objectVar = new Object();
   private java.util.List<String> stringList = new java.util.ArrayList<>();

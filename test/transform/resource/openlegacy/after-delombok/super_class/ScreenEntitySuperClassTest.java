@@ -1,10 +1,15 @@
 package lombok.test;
 
 @org.openlegacy.core.annotations.screen.ScreenEntitySuperClass(supportTerminalData = true)
+@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 class ScreenEntitySuperClassTest {
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String superClassFieldDescription;
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalField superClassFieldField;
