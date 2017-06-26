@@ -31,16 +31,23 @@
  *******************************************************************************/
 package lombok.javac.handlers.openlegacy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.tools.javac.code.Flags;
+import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import lombok.core.AST;
 import lombok.javac.JavacNode;
+import lombok.javac.handlers.JavacHandlerUtil;
+import lombok.javac.handlers.builders.AnnotationBuilder;
 import lombok.javac.handlers.builders.FieldDeclBuilder;
 import openlegacy.utils.StringUtil;
-import org.openlegacy.core.annotations.rpc.RpcField;
+import org.openlegacy.core.annotations.rpc.RpcList;
 import org.openlegacy.core.definitions.RpcActionDefinition;
 import org.openlegacy.core.rpc.RpcEntity;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +67,9 @@ public class RpcEntityHandler {
         }
         createNonSuperEntityFields(typeNode);
         createFieldActions(typeNode);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
     }
 
     private static void createNonSuperEntityFields(JavacNode typeNode) {
@@ -70,7 +80,7 @@ public class RpcEntityHandler {
                     .withDiamondsType(java.util.List.class, RpcActionDefinition.class)
                     .withDiamondsInitialization(
                             java.util.ArrayList.class, RpcActionDefinition.class
-                    )
+                    ).setAnnotations(JsonIgnore.class, XmlTransient.class)
                     .build();
 
             injectField(typeNode, actionsDeclaration);
@@ -82,13 +92,14 @@ public class RpcEntityHandler {
         for (JavacNode fieldNode : findAllRpcFields(typeNode)) {
             String fieldNameWithActionsSuffix = fieldNode.getName() + ACTIONS_SUFFIX;
             String varType = ((JCVariableDecl) fieldNode.get()).getType().toString();
-            if (varType.contains("List<")) {
+            if (varType.contains("List")) {
                 if (fieldNode.getName().contains(ACTIONS_FIELD_NAME) || fieldExist(typeNode, fieldNameWithActionsSuffix))
                     continue;
                 JCVariableDecl fieldDeclaration = new FieldDeclBuilder(typeNode, fieldNameWithActionsSuffix)
                         .withModifiers(Flags.PRIVATE)
                         .withDiamondsType(java.util.List.class, RpcActionDefinition.class)
                         .withDiamondsInitialization(ArrayList.class, RpcActionDefinition.class)
+                        .setAnnotations(JsonIgnore.class, XmlTransient.class)
                         .build();
 
                 injectField(typeNode, fieldDeclaration);
@@ -100,7 +111,7 @@ public class RpcEntityHandler {
     private static List<JavacNode> findAllRpcFields(JavacNode typeNode) {
         java.util.List<JavacNode> fields = new java.util.ArrayList<JavacNode>();
         for (JavacNode child : typeNode.down()) {
-            if (child.getKind() == AST.Kind.FIELD && hasAnnotation(RpcField.class, child))
+            if (child.getKind() == AST.Kind.FIELD && hasAnnotation(RpcList.class, child))
                 fields.add(child);
         }
         return fields;

@@ -9,12 +9,14 @@ import lombok.eclipse.handlers.HandleEqualsAndHashCode;
 import lombok.eclipse.handlers.HandleGetter;
 import lombok.eclipse.handlers.HandleSetter;
 import lombok.eclipse.handlers.HandleToString;
+import lombok.eclipse.handlers.builders.AnnotationBuilder;
 import openlegacy.utils.EclipseAstUtil;
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.Expression;
 import org.eclipse.jdt.internal.compiler.ast.FalseLiteral;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.MemberValuePair;
+import org.eclipse.jdt.internal.compiler.ast.NormalAnnotation;
 import org.eclipse.jdt.internal.compiler.ast.SingleTypeReference;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
@@ -22,6 +24,8 @@ import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.openlegacy.core.annotations.screen.ScreenEntity;
 import org.openlegacy.core.annotations.screen.ScreenField;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -29,6 +33,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import static lombok.eclipse.handlers.EclipseHandlerUtil.hasAnnotation;
 
 /**
  * @author Matvey Mitnitsky
@@ -217,6 +223,21 @@ public class EclipseHandlerUtil {
         }
 
         return res;
+    }
+
+    /**
+     * Adds {@link XmlAccessorType} annotation to the typeNode
+     *
+     * @param typeNode
+     */
+    public static void addXmlAccessorType(EclipseNode typeNode) {
+        if (!hasAnnotation(XmlAccessorType.class, typeNode)) {
+            TypeDeclaration typeDeclaration = (TypeDeclaration) typeNode.get();
+            NormalAnnotation annotation = new AnnotationBuilder(XmlAccessorType.class)
+                    .appendEnumLiteral("value", XmlAccessType.FIELD)
+                    .build();
+            typeDeclaration.annotations = appendAnnotation(annotation, typeDeclaration.annotations);
+        }
     }
 
     /**

@@ -42,8 +42,11 @@ import lombok.AccessLevel;
 import lombok.core.AST;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
+import lombok.javac.handlers.builders.AnnotationBuilder;
 import org.openlegacy.core.annotations.screen.ScreenField;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -216,6 +219,23 @@ public class OLJavacHandlerUtil {
             if (node.getKind() == AST.Kind.TYPE && className.equals(node.getName()))
                 return true;
         return false;
+    }
+
+    /**
+     * Adds {@link XmlAccessorType} annotation to the typeNode
+     *
+     * @param typeNode
+     */
+    public static void addXmlAccessorType(JavacNode typeNode) {
+        if (!JavacHandlerUtil.hasAnnotation(XmlAccessorType.class, typeNode)) {
+            JCTree.JCModifiers modifiers = ((JCTree.JCClassDecl) typeNode.get()).getModifiers();
+            com.sun.tools.javac.util.List<JCTree.JCAnnotation> annotations = modifiers.annotations;
+            modifiers.annotations = annotations.append(
+                    new AnnotationBuilder(typeNode, XmlAccessorType.class)
+                            .appendEnumLiteral("value", XmlAccessType.FIELD)
+                            .build()
+            );
+        }
     }
 
     /**

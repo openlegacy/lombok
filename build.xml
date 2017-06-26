@@ -257,10 +257,19 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor</echo>
 				<include name="lombok/launch/**" />
 				<include name="lombok/delombok/ant/Tasks*" />
 				<include name="lombok/javac/apt/Processor.class" />
+				<include name ="org/openlegacy/core/annotations/**"/>
+				<include name ="org/openlegacy/core/rpc/**"/>
+				<include name ="org/openlegacy/core/db/**"/>
+				<include name ="org/openlegacy/core/definitions/**"/>
+				<include name ="org/openlegacy/core/terminal/**"/>
+				
 			</fileset>
 			<mappedresources>
 				<fileset dir="build/lombok">
 					<exclude name="com/sun/tools/javac/**" />
+					<exclude name="com/fasterxml/jackson/core/**" />
+					<exclude name="com/fasterxml/jackson/databind/**" />
+					<exclude name="org/openlegacy/core/**" />
 					<exclude name="lombok/*.class" />
 					<exclude name="lombok/javac/apt/Processor.class" />
 					<exclude name="lombok/experimental/**" />

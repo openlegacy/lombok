@@ -36,7 +36,15 @@ public class AnnotationBuilder implements JavacTreeBuilder<JCTree.JCAnnotation> 
         return appendClassLiteralArgument(argument, clazz.getName());
     }
 
-    public AnnotationBuilder appendClassLiteralArgument(String argument, String className){
+    public AnnotationBuilder appendEnumLiteral(String argumentName, Enum<?> enumConstant) {
+        args = args.append(treeMaker.Assign(
+                treeMaker.Ident(typeNode.toName(argumentName)),
+                treeMaker.Select(getJCExpressionForType(typeNode, enumConstant.getClass().getName()), typeNode.toName(enumConstant.toString()))
+        ));
+        return this;
+    }
+
+    public AnnotationBuilder appendClassLiteralArgument(String argument, String className) {
         args = args.append(treeMaker.Assign(
                 treeMaker.Ident(typeNode.toName(argument)),
                 treeMaker.Select(getJCExpressionForType(typeNode, className), typeNode.toName("class")))

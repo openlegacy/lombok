@@ -31,17 +31,24 @@
  *******************************************************************************/
 package lombok.eclipse.handlers.openlegacy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.core.AST;
 import lombok.eclipse.EclipseNode;
+import lombok.eclipse.handlers.builders.AnnotationBuilder;
 import lombok.eclipse.handlers.builders.FieldDeclarationBuilder;
 import openlegacy.utils.StringUtil;
 import org.eclipse.jdt.internal.compiler.ast.FieldDeclaration;
+import org.eclipse.jdt.internal.compiler.ast.NormalAnnotation;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.openlegacy.core.annotations.rpc.RpcField;
+import org.openlegacy.core.annotations.rpc.RpcList;
 import org.openlegacy.core.definitions.RpcActionDefinition;
 import org.openlegacy.core.rpc.RpcEntity;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +70,9 @@ public class RpcEntityHandler {
         }
         createRpcEntityFields(typeNode);
         createFieldActions(typeNode);
+        // add @XmlAccessorType(XmlAccessType.FIELD) to the class in order
+        // to activate JAXB ignoring for metadata fields
+        addXmlAccessorType(typeNode);
     }
 
     private static void createRpcEntityFields(EclipseNode typeNode) {
@@ -75,6 +85,8 @@ public class RpcEntityHandler {
                     .withDiamondsType(RpcActionDefinition.class)
                     .withInitialization(ArrayList.class)
                     .withDiamondsInitialization(RpcActionDefinition.class)
+                    .appendAnnotation(JsonIgnore.class)
+                    .appendAnnotation(XmlTransient.class)
                     .build();
 
             injectField(typeNode, decl);
@@ -90,7 +102,7 @@ public class RpcEntityHandler {
 
             TypeReference fieldType = copyType(field.type, field);
             char[][] typeChar = fieldType.getTypeName();
-            String typeName = new String(typeChar[typeChar.length - 1]);
+            String typeName = getTypeNameFromCharArray(typeChar);
 
             if (typeName.contains("List")) {
                 if (fieldNode.getName().contains(ACTIONS_FIELD_NAME) || fieldExist(typeDeclaration.fields, fieldNameWithActionsSuffix))
@@ -102,6 +114,8 @@ public class RpcEntityHandler {
                         .withDiamondsType(RpcActionDefinition.class)
                         .withInitialization(ArrayList.class)
                         .withDiamondsInitialization(RpcActionDefinition.class)
+                        .appendAnnotation(JsonIgnore.class)
+                        .appendAnnotation(XmlTransient.class)
                         .build();
 
                 injectField(typeNode, fieldDeclaration);
@@ -112,10 +126,19 @@ public class RpcEntityHandler {
     private static List<EclipseNode> findAllRpcFields(EclipseNode typeNode) {
         List<EclipseNode> fields = new ArrayList<EclipseNode>();
         for (EclipseNode child : typeNode.down()) {
-            if (child.getKind() == AST.Kind.FIELD && hasAnnotation(RpcField.class, child))
+            if (child.getKind() == AST.Kind.FIELD && hasAnnotation(RpcList.class, child))
                 fields.add(child);
         }
 
         return fields;
     }
+    
+    private static String getTypeNameFromCharArray(char[][] typeChar) {
+    	StringBuilder sb = new StringBuilder();
+    	for (int i = 0; i < typeChar.length; i++){
+    		sb.append(String.valueOf(typeChar[i]));
+    	}
+		return sb.toString();
+	}
+
 }
