@@ -101,7 +101,7 @@
 					<id>openlegacy-ftp</id>
 					<uniqueVersion>false</uniqueVersion>
 					<name>OpenLegacy Release Repository</name>
-					<url>${deploy.dir}/maven2/release</url>
+					<url>${deploy.dir}/maven2/snapshot</url>
 				</repository>
 			</distributionManagement>
 		</profile>
