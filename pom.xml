@@ -35,7 +35,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openlegacy</groupId>
-			<artifactId>openlegacy-api</artifactId>
+			<artifactId>openlegacy-core</artifactId>
 			<version>${openlegacy.version}</version>
 		</dependency>
 	</dependencies>
@@ -72,38 +72,4 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>develop</id>
-			<properties>
-				<ol.snapshots.repo.url>http://maven.openlegacy.org/maven2-dev/snapshot</ol.snapshots.repo.url>
-				<ol.release.repo.url>http://maven.openlegacy.org/maven2-dev/release</ol.release.repo.url>
-				<ol.providers.repo.url>http://maven.openlegacy.org/maven2-dev/providers</ol.providers.repo.url>
-			</properties>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>openlegacy-ftp</id>
-					<uniqueVersion>false</uniqueVersion>
-					<name>OpenLegacy Snapshot Repository</name>
-					<url>${deploy.dir}/maven2-dev/snapshot</url>
-				</snapshotRepository>
-				<repository>
-					<id>openlegacy-ftp</id>
-					<name>OpenLegacy Release Repository</name>
-					<url>${deploy.dir}/maven2-dev/release</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>public</id>
-			<distributionManagement>
-				<repository>
-					<id>openlegacy-ftp</id>
-					<uniqueVersion>false</uniqueVersion>
-					<name>OpenLegacy Release Repository</name>
-					<url>${deploy.dir}/maven2/snapshot</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-	</profiles>
 </project>
