@@ -65,8 +65,8 @@
 		<dependency org="org.eclipse.custom" name="osgi" rev="3.9.0" conf="eclipseBuild->default; contrib->sources" />
 		<dependency org="org.eclipse.custom" name="core.resources" rev="3.8.100" conf="eclipseBuild->default; contrib->sources" />
 		<dependency org="org.eclipse.custom" name="core.jobs" rev="3.5.300" conf="eclipseBuild->default; contrib->sources" />
-		<dependency org="org.openlegacy" name="openlegacy-api" rev="4.0.0-SNAPSHOT">
-			<artifact name="openlegacy-api" type="jar" conf="buildBase->default; runtime->default"/>
+		<dependency org="org.openlegacy" name="openlegacy-core" rev="4.0.0-SNAPSHOT">
+			<artifact name="openlegacy-core" type="jar" conf="buildBase->default; runtime->default"/>
 		</dependency>
 	</dependencies>
 </ivy-module>
