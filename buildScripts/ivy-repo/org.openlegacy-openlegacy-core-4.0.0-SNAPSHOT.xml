@@ -7,6 +7,6 @@
 		<conf name="default" />
 	</configurations>
 	<publications>
-		<artifact conf="default" url="http://maven.openlegacy.org:8081/artifactory/openlegacy-dev/org/openlegacy/openlegacy-core/4.0.0-SNAPSHOT/openlegacy-core-4.0.0-SNAPSHOT.jar" />
+		<artifact conf="default" url="http://maven.openlegacy.org/maven2/openlegacy-dev/org/openlegacy/openlegacy-core/4.0.0-SNAPSHOT/openlegacy-core-4.0.0-SNAPSHOT.jar" />
 	</publications>
 </ivy-module>
