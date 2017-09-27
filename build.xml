@@ -126,9 +126,21 @@ the common tasks and can be called on to run the main aspects of all the sub-scr
 	<target name="version" depends="ensure-ipp" description="Shows the version number." unless="lombok.version">
 		<mkdir dir="build/lombok" />
 		<javac includeDestClasses="false" srcdir="src/core" debug="on" destdir="build/lombok" source="1.5" target="1.5" includes="lombok/core/Version.java" includeantruntime="false" />
-		<java classname="lombok.core.Version" classpath="build/lombok" failonerror="true" output="build/version.txt" />
+		<java
+			classname="lombok.core.Version"
+			classpath="build/lombok"
+			failonerror="true"
+			output="build/version.txt">
+			<arg value="full" />
+		</java>
+		<ivy:loadversion property="lombok.fullversion" file="build/version.txt" />
+		<java
+			classname="lombok.core.Version"
+			classpath="build/lombok"
+			failonerror="true"
+			output="build/version.txt" />
 		<ivy:loadversion property="lombok.version" file="build/version.txt" />
-		<echo level="info">Lombok version: ${lombok.version}</echo>
+		<echo level="info">Lombok version: ${lombok.version} (${lombok.fullversion})</echo>
 	</target>
 
 	<target name="-unpackLibs" depends="ensureRuntimeDeps">
@@ -235,6 +247,7 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor</echo>
 	<target name="-latestChanges" depends="version">
 		<ant antfile="buildScripts/website.ant.xml" target="latestChanges" inheritAll="false">
 			<property name="lombok.version" value="${lombok.version}" />
+			<property name="lombok.fullversion" value="${lombok.fullversion}" />
 		</ant>
 	</target>
 
@@ -347,6 +360,7 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor</echo>
 			<srcdir dir="src/delombok" />
 			<srcdir dir="src/stubs" />
 			<srcdir dir="src/testAP" />
+			<srcdir dir="src/website" />
 			<srcdir dir="experimental/src" />
 			<srcdir dir="test/transform/src" />
 			<srcdir dir="test/core/src" />
@@ -672,175 +686,212 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 	</javadoc>
 	<!-- bugfix for boneheaded javadoc bug where ?is-external=true is inserted before an anchor ref, breaking the anchor ref.
 		is-external=true doesn't actually do anything, so, we'll just get rid of it. -->
-	<replaceregexp match="\?is-external=true#" replace="#" flags="gi">
-		<fileset dir="build/utils-api" includes="**/*.html" />
-	</replaceregexp>
-</target>
+		<replaceregexp match="\?is-external=true#" replace="#" flags="gi">
+			<fileset dir="build/utils-api" includes="**/*.html" />
+		</replaceregexp>
+	</target>
+	
+	<target name="utils-maven" depends="version, dist-utils, test, utils-javadoc" description="Build a maven artifact bundle for lombok-utils.">
+		<jar destfile="dist/lombok-utils-${lombok.version}-javadoc.jar">
+			<fileset dir="build/utils-api" />
+		</jar>
+		<jar destfile="dist/lombok-utils-${lombok.version}-sources.jar">
+			<fileset dir="src/utils" />
+		</jar>
+		<mkdir dir="build/utils-mavenPublish" />
+		<copy tofile="build/utils-mavenPublish/pom.xml" overwrite="true" file="doc/utils-maven-pom.xml">
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${lombok.version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<tar destfile="build/utils-mavenPublish/utils-mavenPublish.tar.bz2" compression="bzip2">
+			<tarfileset dir="dist">
+				<include name="lombok-utils-${lombok.version}.jar" />
+				<include name="lombok-utils-${lombok.version}-sources.jar" />
+				<include name="lombok-utils-${lombok.version}-javadoc.jar" />
+			</tarfileset>
+			<tarfileset dir="build/utils-mavenPublish" includes="pom.xml" />
+		</tar>
+	</target>
+	
+	<target name="javadoc" depends="compile, version" description="Builds javadoc into doc/api.">
+		<ant antfile="buildScripts/website.ant.xml" target="javadoc" inheritAll="false">
+			<property name="lombok.version" value="${lombok.version}" />
+			<property name="lombok.fullversion" value="${lombok.fullversion}" />
+		</ant>
+	</target>
+	
+	<target name="maven" depends="version, dist, test, javadoc" description="Build a maven artifact bundle.">
+		<jar destfile="dist/lombok-${lombok.version}-javadoc.jar">
+			<fileset dir="doc/api" />
+		</jar>
+		<jar destfile="dist/lombok-${lombok.version}-sources.jar">
+			<fileset dir="src/core" />
+			<fileset dir="src/launch" />
+			<fileset dir="src/utils" />
+			<fileset dir="src/eclipseAgent" />
+			<fileset dir="src/installer" />
+			<fileset dir="src/delombok" />
+			<fileset dir="test/transform/src" />
+			<fileset dir="test/core/src" />
+		</jar>
+		<mkdir dir="build/mavenPublish" />
+		<copy tofile="build/mavenPublish/pom.xml" overwrite="true" file="doc/maven-pom.xml">
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${lombok.version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<tar destfile="build/mavenPublish/mavenPublish.tar.bz2" compression="bzip2">
+			<tarfileset dir="dist">
+				<include name="lombok-${lombok.version}.jar" />
+				<include name="lombok-${lombok.version}-sources.jar" />
+				<include name="lombok-${lombok.version}-javadoc.jar" />
+			</tarfileset>
+			<tarfileset dir="build/mavenPublish" includes="pom.xml" />
+		</tar>
+	</target>
+	
+	<target name="maven-publish" depends="config-ssh, -defSSH, maven, utils-maven" description="Build a maven artifact bundle then upload it to projectlombok.org and ask the server to upload it to maven central">
+		<scp
+			localFile="build/mavenPublish/mavenPublish.tar.bz2"
+			todir="${ssh.username}@projectlombok.org:/data/lombok/staging"
+			keyfile="${ssh.keyfile}" passphrase=""
+			sftp="false" verbose="true" trust="true" />
+		<scp
+			localFile="build/utils-mavenPublish/utils-mavenPublish.tar.bz2"
+			todir="${ssh.username}@projectlombok.org:/data/lombok/staging"
+			keyfile="${ssh.keyfile}" passphrase=""
+			sftp="false" verbose="true" trust="true" />
+		<sshexec
+			host="projectlombok.org"
+			username="${ssh.username}"
+			keyfile="${ssh.keyfile}" passphrase=""
+			trust="true" command="/data/lombok/stagingCmd/publishToMavenCentral" />
+		<echo>The artifact has been published to staging. Now go to https://oss.sonatype.org/ and log in as Reinier, then doublecheck if all is well and 'release' it.</echo>
+		<sshexec
+			host="projectlombok.org"
+			username="${ssh.username}"
+			keyfile="${ssh.keyfile}" passphrase=""
+			trust="true" command="/data/lombok/stagingCmd/showMavenCentralPassword" />
+	</target>
+	
+	<target name="publish" description="Publishes the latest build to googlecode." depends="config-ssh, -defSSH, version, dist, dist-utils, test">
+		<scp
+			localFile="dist/lombok-utils-${lombok.version}.jar"
+			todir="${ssh.username}@projectlombok.org:/data/lombok/staging"
+			keyfile="${ssh.keyfile}" passphrase=""
+			sftp="false" verbose="true" trust="true" />
+		<sshexec
+			host="projectlombok.org"
+			username="${ssh.username}"
+			keyfile="${ssh.keyfile}" passphrase=""
+			trust="true" command="/data/lombok/stagingCmd/deployLombokUtils '${lombok.version}'" />
+		<scp
+			localFile="dist/lombok-${lombok.version}.jar"
+			todir="${ssh.username}@projectlombok.org:/data/lombok/staging"
+			keyfile="${ssh.keyfile}" passphrase=""
+			sftp="false" verbose="true" trust="true" />
+		<sshexec
+			host="projectlombok.org"
+			username="${ssh.username}"
+			keyfile="${ssh.keyfile}" passphrase=""
+			trust="true" command="/data/lombok/stagingCmd/deployLombok '${lombok.version}'" />
+	</target>
+	
+	<target name="publish-all" depends="clean, version, website-publish, maven-publish, publish"
+		description="Publishes lombok itself, updates the maven repository and the website." />
+	
+	<target name="edge-release" depends="config-ssh, clean, version, dist"
+		description="Publishes an edge release for those who need to test a cutting edge build.">
+		<ant antfile="buildScripts/website.ant.xml" target="edgeRelease" inheritAll="false">
+			<property name="lombok.version" value="${lombok.version}" />
+			<property name="lombok.fullversion" value="${lombok.fullversion}" />
+			<property name="ssh.username" value="${ssh.username}" />
+			<property name="ssh.keyfile" value="${ssh.keyfile}" />
+		</ant>
+	</target>
+	
+	<property file="ssh.configuration" />
 
-<target name="utils-maven" depends="version, dist-utils, test, utils-javadoc" description="Build a maven artifact bundle for lombok-utils.">
-	<jar destfile="dist/lombok-utils-${lombok.version}-javadoc.jar">
-		<fileset dir="build/utils-api" />
-	</jar>
-	<jar destfile="dist/lombok-utils-${lombok.version}-sources.jar">
-		<fileset dir="src/utils" />
-	</jar>
-	<mkdir dir="build/utils-mavenPublish" />
-	<copy tofile="build/utils-mavenPublish/pom.xml" overwrite="true" file="doc/utils-maven-pom.xml">
-		<filterchain>
-			<replacetokens>
-				<token key="VERSION" value="${lombok.version}" />
-			</replacetokens>
-		</filterchain>
-	</copy>
-	<tar destfile="build/utils-mavenPublish/utils-mavenPublish.tar.bz2" compression="bzip2">
-		<tarfileset dir="dist">
-			<include name="lombok-utils-${lombok.version}.jar" />
-			<include name="lombok-utils-${lombok.version}-sources.jar" />
-			<include name="lombok-utils-${lombok.version}-javadoc.jar" />
-		</tarfileset>
-		<tarfileset dir="build/utils-mavenPublish" includes="pom.xml" />
-	</tar>
-</target>
+	<target name="config-ssh" unless="ssh.username">
+		<input message="What is your SSH username on the projectlombok.org server? (Enter to abort)." addproperty="ssh.username" />
+		<condition property="ssh.usernameBlank"><equals arg1="${ssh.username}" arg2="" trim="true" /></condition>
+		<fail if="ssh.usernameBlank">Aborted.</fail>
+		<input message="Where is your ssh keyfile located?" addproperty="ssh.keyfile" defaultvalue="${user.home}/.ssh/id_rsa" />
+		<input message="SSH configuration saved as 'ssh.configuration'. Delete this file to reconfigure. Press enter to continue." />
+		<propertyfile file="ssh.configuration">
+			<entry key="ssh.username" value="${ssh.username}" />
+			<entry key="ssh.keyfile" value="${ssh.keyfile}" />
+		</propertyfile>
+	</target>
+	
+	<target name="website" depends="version" description="Prepares the website for distribution.">
+		<ant antfile="buildScripts/website.ant.xml" target="website" inheritAll="false">
+			<property name="lombok.version" value="${lombok.version}" />
+			<property name="lombok.fullversion" value="${lombok.fullversion}" />
+		</ant>
+	</target>
+	
+	<target name="website-publish" depends="config-ssh, clean, version"
+			description="Prepares the website for distribution and then publishes it to projectlombok.org.">
+		<ant antfile="buildScripts/website.ant.xml" target="website-publish" inheritAll="false">
+			<property name="lombok.version" value="${lombok.version}" />
+			<property name="lombok.fullversion" value="${lombok.fullversion}" />
+			<property name="ssh.username" value="${ssh.username}" />
+			<property name="ssh.keyfile" value="${ssh.keyfile}" />
+		</ant>
+	</target>
 
-<target name="javadoc" depends="compile, version" description="Builds javadoc into doc/api.">
-	<ant antfile="buildScripts/website.ant.xml" target="javadoc" inheritAll="false">
-		<property name="lombok.version" value="${lombok.version}" />
-	</ant>
-</target>
+	<target name="testAp-compile" depends="ensureBuildDeps">
+		<delete file="build/testAP/META-INF/services/javax.annotation.processing.Processor" quiet="true" />
+		<ivy:compile destdir="build/testAP" source="1.7" target="1.7" includeantruntime="false">
+			<src path="src/testAP" />
+		</ivy:compile>
+		
+		<mkdir dir="build/testAP/META-INF" />
+		<mkdir dir="build/testAP/META-INF/services" />
+		<echo file="build/testAP/META-INF/services/javax.annotation.processing.Processor">org.projectlombok.testAp.TestAp</echo>
+	</target>
 
-<target name="maven" depends="version, dist, test, javadoc" description="Build a maven artifact bundle.">
-	<jar destfile="dist/lombok-${lombok.version}-javadoc.jar">
-		<fileset dir="doc/api" />
-	</jar>
-	<jar destfile="dist/lombok-${lombok.version}-sources.jar">
-		<fileset dir="src/core" />
-		<fileset dir="src/launch" />
-		<fileset dir="src/utils" />
-		<fileset dir="src/eclipseAgent" />
-		<fileset dir="src/installer" />
-		<fileset dir="src/delombok" />
-		<fileset dir="test/transform/src" />
-		<fileset dir="test/core/src" />
-	</jar>
-	<mkdir dir="build/mavenPublish" />
-	<copy tofile="build/mavenPublish/pom.xml" overwrite="true" file="doc/maven-pom.xml">
-		<filterchain>
-			<replacetokens>
-				<token key="VERSION" value="${lombok.version}" />
-			</replacetokens>
-		</filterchain>
-	</copy>
-	<tar destfile="build/mavenPublish/mavenPublish.tar.bz2" compression="bzip2">
-		<tarfileset dir="dist">
-			<include name="lombok-${lombok.version}.jar" />
-			<include name="lombok-${lombok.version}-sources.jar" />
-			<include name="lombok-${lombok.version}-javadoc.jar" />
-		</tarfileset>
-		<tarfileset dir="build/mavenPublish" includes="pom.xml" />
-	</tar>
-</target>
+	<target name="testAp-dist" depends="testAp-compile">
+		<mkdir dir="dist" />
+		<tstamp>
+			<format property="releaseTimestamp" pattern="yyyy-MM-dd" />
+		</tstamp>
+		<zip destfile="dist/testAp-${releaseTimestamp}.jar">
+			<fileset dir="." includes="LICENSE" />
+			<fileset dir="build/testAp" />
+		</zip>
+		<copy file="dist/testAp-${releaseTimestamp}.jar" tofile="dist/testAp.jar" />
+	</target>
 
-<target name="maven-publish" depends="config-ssh, -defSSH, maven, utils-maven" description="Build a maven artifact bundle then upload it to projectlombok.org and ask the server to upload it to maven central">
-	<scp localFile="build/mavenPublish/mavenPublish.tar.bz2" todir="${ssh.username}@projectlombok.org:/data/lombok/staging" keyfile="${ssh.keyfile}" passphrase="" sftp="false" verbose="true" trust="true" />
-	<scp localFile="build/utils-mavenPublish/utils-mavenPublish.tar.bz2" todir="${ssh.username}@projectlombok.org:/data/lombok/staging" keyfile="${ssh.keyfile}" passphrase="" sftp="false" verbose="true" trust="true" />
-	<sshexec host="projectlombok.org" username="${ssh.username}" keyfile="${ssh.keyfile}" passphrase="" trust="true" command="/data/lombok/stagingCmd/publishToMavenCentral" />
-	<echo>The artifact has been published to staging. Now go to https://oss.sonatype.org/ and log in as Reinier, then doublecheck if all is well and 'release' it.</echo>
-	<sshexec host="projectlombok.org" username="${ssh.username}" keyfile="${ssh.keyfile}" passphrase="" trust="true" command="/data/lombok/stagingCmd/showMavenCentralPassword" />
-</target>
+	<target name="testAp" depends="testAp-dist, dist">
+		<echo>Running in order: First Lombok, Then testAP</echo>
 
-<target name="publish" description="Publishes the latest build to googlecode." depends="config-ssh, -defSSH, version, dist, dist-utils, test">
-	<scp localFile="dist/lombok-utils-${lombok.version}.jar" todir="${ssh.username}@projectlombok.org:/data/lombok/staging" keyfile="${ssh.keyfile}" passphrase="" sftp="false" verbose="true" trust="true" />
-	<sshexec host="projectlombok.org" username="${ssh.username}" keyfile="${ssh.keyfile}" passphrase="" trust="true" command="/data/lombok/stagingCmd/deployLombokUtils '${lombok.version}'" />
-	<scp localFile="dist/lombok-${lombok.version}.jar" todir="${ssh.username}@projectlombok.org:/data/lombok/staging" keyfile="${ssh.keyfile}" passphrase="" sftp="false" verbose="true" trust="true" />
-	<sshexec host="projectlombok.org" username="${ssh.username}" keyfile="${ssh.keyfile}" passphrase="" trust="true" command="/data/lombok/stagingCmd/deployLombok '${lombok.version}'" />
-</target>
+		<delete dir="build/useTestAp" quiet="true" />
+		<mkdir dir="build/useTestAp" />
+		<javac verbose="false" source="1.7" target="1.7" destdir="build/useTestAp" includeantruntime="false">
+			<src path="src/useTestAP" />
+			<classpath location="dist/lombok.jar" />
+			<classpath location="dist/testAp.jar" />
+			<compilerarg value="-processor" />
+			<compilerarg value="lombok.launch.AnnotationProcessorHider$AnnotationProcessor,org.projectlombok.testAp.TestAp" />
+		</javac>
 
-<target name="publish-all" depends="clean, version, website-publish, maven-publish, publish" description="Publishes lombok itself, updates the maven repository and the website." />
+		<echo>Running in order: First TestAP, Then Lombok</echo>
 
-<target name="edge-release" depends="config-ssh, clean, version, dist" description="Publishes an edge release for those who need to test a cutting edge build.">
-	<ant antfile="buildScripts/website.ant.xml" target="edgeRelease" inheritAll="false">
-		<property name="lombok.version" value="${lombok.version}" />
-		<property name="ssh.username" value="${ssh.username}" />
-		<property name="ssh.keyfile" value="${ssh.keyfile}" />
-	</ant>
-</target>
-
-<property file="ssh.configuration" />
-
-<target name="config-ssh" unless="ssh.username">
-	<input message="What is your SSH username on the projectlombok.org server? (Enter to abort)." addproperty="ssh.username" />
-	<condition property="ssh.usernameBlank">
-		<equals arg1="${ssh.username}" arg2="" trim="true" />
-	</condition>
-	<fail if="ssh.usernameBlank">Aborted.</fail>
-	<input message="Where is your ssh keyfile located?" addproperty="ssh.keyfile" defaultvalue="${user.home}/.ssh/id_rsa" />
-	<input message="SSH configuration saved as 'ssh.configuration'. Delete this file to reconfigure. Press enter to continue." />
-	<propertyfile file="ssh.configuration">
-		<entry key="ssh.username" value="${ssh.username}" />
-		<entry key="ssh.keyfile" value="${ssh.keyfile}" />
-	</propertyfile>
-</target>
-
-<target name="website" depends="version" description="Prepares the website for distribution.">
-	<ant antfile="buildScripts/website.ant.xml" target="website" inheritAll="false">
-		<property name="lombok.version" value="${lombok.version}" />
-	</ant>
-</target>
-
-<target name="website-publish" depends="config-ssh, clean, version" description="Prepares the website for distribution and then publishes it to projectlombok.org.">
-	<ant antfile="buildScripts/website.ant.xml" target="website-publish" inheritAll="false">
-		<property name="lombok.version" value="${lombok.version}" />
-		<property name="ssh.username" value="${ssh.username}" />
-		<property name="ssh.keyfile" value="${ssh.keyfile}" />
-	</ant>
-</target>
-
-<target name="testAp-compile" depends="ensureBuildDeps">
-	<delete file="build/testAP/META-INF/services/javax.annotation.processing.Processor" quiet="true" />
-	<ivy:compile destdir="build/testAP" source="1.7" target="1.7" includeantruntime="false">
-		<src path="src/testAP" />
-	</ivy:compile>
-
-	<mkdir dir="build/testAP/META-INF" />
-	<mkdir dir="build/testAP/META-INF/services" />
-	<echo file="build/testAP/META-INF/services/javax.annotation.processing.Processor">org.projectlombok.testAp.TestAp</echo>
-</target>
-
-<target name="testAp-dist" depends="testAp-compile">
-	<mkdir dir="dist" />
-	<tstamp>
-		<format property="releaseTimestamp" pattern="yyyy-MM-dd" />
-	</tstamp>
-	<zip destfile="dist/testAp-${releaseTimestamp}.jar">
-		<fileset dir="." includes="LICENSE" />
-		<fileset dir="build/testAp" />
-	</zip>
-	<copy file="dist/testAp-${releaseTimestamp}.jar" tofile="dist/testAp.jar" />
-</target>
-
-<target name="testAp" depends="testAp-dist, dist">
-	<echo>Running in order: First Lombok, Then testAP</echo>
-
-	<delete dir="build/useTestAp" quiet="true" />
-	<mkdir dir="build/useTestAp" />
-	<javac verbose="false" source="1.7" target="1.7" destdir="build/useTestAp" includeantruntime="false">
-		<src path="src/useTestAP" />
-		<classpath location="dist/lombok.jar" />
-		<classpath location="dist/testAp.jar" />
-		<compilerarg value="-processor" />
-		<compilerarg value="lombok.launch.AnnotationProcessorHider$AnnotationProcessor,org.projectlombok.testAp.TestAp" />
-	</javac>
-
-	<echo>Running in order: First TestAP, Then Lombok</echo>
-
-	<delete dir="build/useTestAp" quiet="true" />
-	<mkdir dir="build/useTestAp" />
-	<javac verbose="false" source="1.7" target="1.7" destdir="build/useTestAp" includeantruntime="false">
-		<src path="src/useTestAP" />
-		<classpath location="dist/lombok.jar" />
-		<classpath location="dist/testAp.jar" />
-		<compilerarg value="-processor" />
-		<compilerarg value="org.projectlombok.testAp.TestAp,lombok.launch.AnnotationProcessorHider$AnnotationProcessor" />
-	</javac>
-</target>
+		<delete dir="build/useTestAp" quiet="true" />
+		<mkdir dir="build/useTestAp" />
+		<javac verbose="false" source="1.7" target="1.7" destdir="build/useTestAp" includeantruntime="false">
+			<src path="src/useTestAP" />
+			<classpath location="dist/lombok.jar" />
+			<classpath location="dist/testAp.jar" />
+			<compilerarg value="-processor" />
+			<compilerarg value="org.projectlombok.testAp.TestAp,lombok.launch.AnnotationProcessorHider$AnnotationProcessor" />
+		</javac>
+	</target>
 </project>
