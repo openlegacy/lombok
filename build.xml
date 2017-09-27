@@ -506,7 +506,7 @@ ${sourceWarning}</echo>
 	<target name="test-ecj" depends="dist, contrib" unless="tests.skip">
 		<java jar="lib/ecj7/org.eclipse.custom-ecj.jar" fork="true" failonerror="true">
 			<jvmarg value="-javaagent:dist/openlegacy-lombok.jar=ecj" />
-			<jvmarg value="-Xbootclasspath/p:org.openlegacy-openlegacy-api.jar;javax.persistence-persistence-api.jar" />
+			<jvmarg value="-Xbootclasspath/p:javax.persistence-persistence-api.jar" />
 			<arg value="-source" />
 			<arg value="1.6" />
 			<arg value="-target" />
