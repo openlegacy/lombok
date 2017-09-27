@@ -139,7 +139,7 @@ public class TransformEclipseAST {
 	public static void transform(Parser parser, CompilationUnitDeclaration ast) {
 		if (disableLombok) return;
 		
-		if (Symbols.hasSymbol("lombok.disabled")) return;
+		if (Symbols.hasSymbol("lombok.disable")) return;
 
 		String disabled = System.getProperty("ol.lombok.disabled");
 		if (disabled != null && Boolean.valueOf(disabled)) {

@@ -24,6 +24,7 @@ package lombok.javac.apt;
 
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -31,9 +32,9 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 
-import com.sun.tools.javac.file.BaseFileManager;
-
 import lombok.core.DiagnosticsReceiver;
+
+import com.sun.tools.javac.file.BaseFileManager;
 
 //Can't use SimpleJavaFileObject so we copy/paste most of its content here, because javac doesn't follow the interface,
 //and casts to its own BaseFileObject type. D'oh!
@@ -98,7 +99,9 @@ final class LombokFileObjects {
 		String jfmClassName = jfm != null ? jfm.getClass().getName() : "null";
 		if (jfmClassName.equals("com.sun.tools.javac.util.DefaultFileManager")) return Compiler.JAVAC6;
 		if (jfmClassName.equals("com.sun.tools.javac.util.JavacFileManager")) return Compiler.JAVAC6;
-		if (jfmClassName.equals("com.sun.tools.javac.file.JavacFileManager")) {
+		if (jfmClassName.equals("com.sun.tools.javac.file.JavacFileManager") ||
+				jfmClassName.equals("com.google.errorprone.MaskedClassLoader$MaskedFileManager") ||
+				jfmClassName.equals("com.google.devtools.build.buildjar.javac.BlazeJavacMain$ClassloaderMaskingFileManager")) {
 			try {
 				Class<?> superType = Class.forName("com.sun.tools.javac.file.BaseFileManager");
 				if (superType.isInstance(jfm)) {
@@ -116,7 +119,15 @@ final class LombokFileObjects {
 			if (Class.forName("com.sun.tools.javac.util.BaseFileObject") == null) throw new NullPointerException();
 			return Compiler.JAVAC6;
 		} catch (Exception e) {}
-		return null;
+		
+		StringBuilder sb = new StringBuilder(jfmClassName);
+		if (jfm != null) {
+			sb.append(" extends ").append(jfm.getClass().getSuperclass().getName());
+			for (Class<?> cls : jfm.getClass().getInterfaces()) {
+				sb.append(" implements ").append(cls.getName());
+			}
+		}
+		throw new IllegalArgumentException(sb.toString());
 	}
 	
 	static JavaFileObject createEmpty(Compiler compiler, String name, Kind kind) {
@@ -137,9 +148,15 @@ final class LombokFileObjects {
 		@Override public JavaFileObject wrap(LombokFileObject fileObject) {
 			URI uri = fileObject.toUri();
 			if (uri.getScheme() == null) {
-				uri = URI.create("file://" + uri);
+				uri = URI.create("file:///" + uri);
 			}
-			return new Javac9BaseFileObjectWrapper(fileManager, Paths.get(uri), fileObject);
+			Path path;
+			try {
+				path = Paths.get(uri);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("Problems in URI '" + uri + "' (" + fileObject.toUri() + ")", e);
+			}
+			return new Javac9BaseFileObjectWrapper(fileManager, path, fileObject);
 		}
 		
 		@Override public Method getDecoderMethod() {
