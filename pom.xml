@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openlegacy</groupId>
 		<artifactId>openlegacy-dependencies-manager</artifactId>
-		<version>4.1.0-SNAPSHOT</version>
+		<version>4.0.0-RELEASE</version>
 	</parent>
 
 	<artifactId>openlegacy-lombok</artifactId>
@@ -84,7 +84,7 @@
 								<phase>package</phase>
 								<configuration>
 									<target name="publish_lib">
-										<copy file="dist/openlegacy-lombok-1.16.15.jar" tofile="${openlegacy-lombok.lib.path}" 
+										<copy file="dist/openlegacy-lombok.jar" tofile="${openlegacy-lombok.lib.path}" 
 											overwrite="true"/>
 									</target>
 								</configuration>
