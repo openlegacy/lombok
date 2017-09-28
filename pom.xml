@@ -25,6 +25,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<openlegacy-lombok.lib.path>C:\</openlegacy-lombok.lib.path>
 	</properties>
 
 	<dependencies>
@@ -84,7 +85,7 @@
 								<phase>package</phase>
 								<configuration>
 									<target name="publish_lib">
-										<copy file="dist/openlegacy-lombok.jar" tofile="${openlegacy-lombok.lib.path}" 
+										<copy file="dist/openlegacy-lombok.jar" tofile="${openlegacy-lombok.lib.path}/${project.artifactId}/${project.version}/${project.artifactId}.jar" 
 											overwrite="true"/>
 									</target>
 								</configuration>
