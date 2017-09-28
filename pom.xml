@@ -84,7 +84,7 @@
 								<phase>package</phase>
 								<configuration>
 									<target name="publish_lib">
-										<copy file="dist/openlegacy-lombok.jar" tofile="${openlegacy-lombok.lib.path}" 
+										<copy file="dist/openlegacy-lombok.jar" tofile="${openlegacy-lombok.lib.path}/${project.artifactId}/${project.version}/${project.artifactId}.jar" 
 											overwrite="true"/>
 									</target>
 								</configuration>
