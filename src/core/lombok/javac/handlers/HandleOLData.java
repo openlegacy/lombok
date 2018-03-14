@@ -1,23 +1,27 @@
 package lombok.javac.handlers;
 
+import static lombok.javac.handlers.OLJavacHandlerUtil.*;
+
+import java.io.Serializable;
+
+import org.mangosdk.spi.ProviderFor;
+import org.openlegacy.core.annotations.BusinessEntity;
+import org.openlegacy.core.db.DbEntity;
+import org.openlegacy.core.rpc.RpcEntity;
+import org.openlegacy.core.terminal.ScreenEntity;
+
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import com.sun.tools.javac.tree.JCTree.JCClassDecl;
+
 import lombok.AccessLevel;
 import lombok.OLData;
 import lombok.core.AnnotationValues;
 import lombok.javac.JavacAnnotationHandler;
 import lombok.javac.JavacNode;
+import lombok.javac.handlers.openlegacy.BusinessEntityHandler;
 import lombok.javac.handlers.openlegacy.DbEntityHandler;
 import lombok.javac.handlers.openlegacy.RpcEntityHandler;
 import lombok.javac.handlers.openlegacy.ScreenEntityHandler;
-import org.mangosdk.spi.ProviderFor;
-import org.openlegacy.core.db.DbEntity;
-import org.openlegacy.core.rpc.RpcEntity;
-import org.openlegacy.core.terminal.ScreenEntity;
-
-import java.io.Serializable;
-
-import static lombok.javac.handlers.OLJavacHandlerUtil.*;
 
 /**
  * <h1>Prototype Handler</h1>
@@ -60,6 +64,10 @@ public class HandleOLData extends JavacAnnotationHandler<OLData> {
             addImplements(typeNode, interfaceName);
 
             RpcEntityHandler.handle(typeNode, true);
+        }
+		
+        if (entityType.getName().equals(BusinessEntity.class.getName())) {
+            BusinessEntityHandler.handle(typeNode);
         }
 
         if (entityType.getName().equals(DbEntity.class.getName())) {

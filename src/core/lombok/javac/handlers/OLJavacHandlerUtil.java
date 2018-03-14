@@ -31,6 +31,18 @@
  *******************************************************************************/
 package lombok.javac.handlers;
 
+import static lombok.javac.handlers.JavacHandlerUtil.chainDotsString;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
+import org.openlegacy.core.annotations.screen.ScreenField;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree;
@@ -39,25 +51,12 @@ import com.sun.tools.javac.tree.JCTree.JCClassDecl;
 import com.sun.tools.javac.tree.JCTree.JCExpression;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import com.sun.tools.javac.util.List;
+
 import lombok.AccessLevel;
 import lombok.core.AST;
 import lombok.javac.JavacNode;
 import lombok.javac.JavacTreeMaker;
 import lombok.javac.handlers.builders.AnnotationBuilder;
-
-import org.eclipse.jdt.internal.compiler.ast.Annotation;
-import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
-import org.openlegacy.core.annotations.rpc.RpcList;
-import org.openlegacy.core.annotations.screen.ScreenField;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-
-import static lombok.javac.handlers.JavacHandlerUtil.*;
 
 /**
  * @author Matvey Mitnitsky
@@ -237,13 +236,15 @@ public class OLJavacHandlerUtil {
 	 * @param typeNode
 	 */
 	public static void addXmlAccessorType(JavacNode typeNode) {
-		for (JCAnnotation annotation : ((JCTree.JCClassDecl) typeNode.get()).getModifiers().annotations) {
+		JCTree.JCModifiers modifiers = ((JCTree.JCClassDecl) typeNode.get()).getModifiers();
+		if (modifiers.annotations == null) {
+			modifiers.annotations = com.sun.tools.javac.util.List.nil();
+		}
+		for (JCAnnotation annotation : modifiers.annotations) {
 				String annotationName = annotation.toString();
 				if (annotationName.contains("XmlAccessorType")) 
 					return;
 		}
-		
-		JCTree.JCModifiers modifiers = ((JCTree.JCClassDecl) typeNode.get()).getModifiers();
 		com.sun.tools.javac.util.List<JCTree.JCAnnotation> annotations = modifiers.annotations;
 		modifiers.annotations = annotations.append(
 				new AnnotationBuilder(typeNode, XmlAccessorType.class)

@@ -1,16 +1,16 @@
 package lombok.eclipse.handlers.openlegacy;
 
-import lombok.AccessLevel;
-import lombok.core.AST;
-import lombok.eclipse.Eclipse;
-import lombok.eclipse.EclipseNode;
-import lombok.eclipse.handlers.HandleConstructor;
-import lombok.eclipse.handlers.HandleEqualsAndHashCode;
-import lombok.eclipse.handlers.HandleGetter;
-import lombok.eclipse.handlers.HandleSetter;
-import lombok.eclipse.handlers.HandleToString;
-import lombok.eclipse.handlers.builders.AnnotationBuilder;
-import openlegacy.utils.EclipseAstUtil;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import org.eclipse.jdt.internal.compiler.ast.Annotation;
 import org.eclipse.jdt.internal.compiler.ast.Expression;
 import org.eclipse.jdt.internal.compiler.ast.FalseLiteral;
@@ -24,17 +24,17 @@ import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.openlegacy.core.annotations.screen.ScreenEntity;
 import org.openlegacy.core.annotations.screen.ScreenField;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import static lombok.eclipse.handlers.EclipseHandlerUtil.hasAnnotation;
+import lombok.AccessLevel;
+import lombok.core.AST;
+import lombok.eclipse.Eclipse;
+import lombok.eclipse.EclipseNode;
+import lombok.eclipse.handlers.HandleConstructor;
+import lombok.eclipse.handlers.HandleEqualsAndHashCode;
+import lombok.eclipse.handlers.HandleGetter;
+import lombok.eclipse.handlers.HandleSetter;
+import lombok.eclipse.handlers.HandleToString;
+import lombok.eclipse.handlers.builders.AnnotationBuilder;
+import openlegacy.utils.EclipseAstUtil;
 
 /**
  * @author Matvey Mitnitsky
@@ -228,11 +228,13 @@ public class EclipseHandlerUtil {
 	 */
 	public static void addXmlAccessorType(EclipseNode typeNode) {
 		TypeDeclaration typeDeclaration = (TypeDeclaration) typeNode.get();
-		Annotation[] annotaitons = typeDeclaration.annotations;
-		for (Annotation annotaiton : annotaitons) {
-			String javaAnnotation = annotaiton.toString();
-			if (javaAnnotation.contains("XmlAccessorType")) 
-				return;
+		if(typeDeclaration.annotations != null) {
+			for (Annotation annotaiton : typeDeclaration.annotations) {
+				String javaAnnotation = annotaiton.toString();
+				if (javaAnnotation.contains("XmlAccessorType")) {
+					return;
+				}
+			}
 		}
 		
 		NormalAnnotation annotation = new AnnotationBuilder(XmlAccessorType.class)

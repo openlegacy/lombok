@@ -6,6 +6,7 @@ import lombok.core.AnnotationValues;
 import lombok.eclipse.Eclipse;
 import lombok.eclipse.EclipseAnnotationHandler;
 import lombok.eclipse.EclipseNode;
+import lombok.eclipse.handlers.openlegacy.BusinessEntityHandler;
 import lombok.eclipse.handlers.openlegacy.DbEntityHandler;
 import lombok.eclipse.handlers.openlegacy.EclipseHandlerUtil;
 import lombok.eclipse.handlers.openlegacy.RpcEntityHandler;
@@ -21,6 +22,7 @@ import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.mangosdk.spi.ProviderFor;
+import org.openlegacy.core.annotations.BusinessEntity;
 import org.openlegacy.core.db.DbEntity;
 import org.openlegacy.core.rpc.RpcEntity;
 import org.openlegacy.core.terminal.ScreenEntity;
@@ -67,6 +69,10 @@ public class HandleOLData extends EclipseAnnotationHandler<OLData> {
         if (entityType.getName().equals(DbEntity.class.getName())) {
             addImplements(typeNode, entityType, Serializable.class);
             DbEntityHandler.handle(typeNode);
+        }
+        
+        if (entityType.getName().equals(BusinessEntity.class.getName())) {
+            BusinessEntityHandler.handle(typeNode);
         }
 
         if (instance.getters()) {
