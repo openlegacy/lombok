@@ -29,8 +29,6 @@ public class ScreenEntityWithPart implements org.openlegacy.core.terminal.Screen
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
 		private java.lang.String partFieldDescription;
-		@com.fasterxml.jackson.annotation.JsonIgnore
-		@javax.xml.bind.annotation.XmlTransient
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
 		private org.openlegacy.core.terminal.TerminalField partFieldField;

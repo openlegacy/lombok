@@ -93,7 +93,6 @@ public class ScreenEntityHandler {
             JCVariableDecl terminalDataDecl = new FieldDeclBuilder(typeNode, TERMINAL_SNAPSHOT)
                     .withModifiers(Flags.PRIVATE)
                     .withType(TerminalSnapshot.class)
-                    .setAnnotations(JsonIgnore.class, XmlTransient.class)
                     .build();
             newFields.add(terminalDataDecl);
         }
@@ -150,7 +149,6 @@ public class ScreenEntityHandler {
                 JCVariableDecl terminalField = new FieldDeclBuilder(typeNode, nameWithFieldSuffix)
                         .withModifiers(Flags.PRIVATE)
                         .withType(TerminalField.class)
-                        .setAnnotations(JsonIgnore.class, XmlTransient.class)
                         .build();
 
                 newFields.add(terminalField);

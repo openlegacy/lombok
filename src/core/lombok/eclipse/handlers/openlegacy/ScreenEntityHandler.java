@@ -60,8 +60,6 @@ public class ScreenEntityHandler {
             FieldDeclaration decl = new FieldDeclarationBuilder(TERMINAL_SNAPSHOT)
                     .withModifiers(EclipseModifier.PRIVATE)
                     .withType(TerminalSnapshot.class)
-                    .appendAnnotation(JsonIgnore.class)
-                    .appendAnnotation(XmlTransient.class)
                     .build();
             newFields.add(decl);
         }
@@ -122,8 +120,6 @@ public class ScreenEntityHandler {
                 FieldDeclaration decl = new FieldDeclarationBuilder(nameWithFieldSuffix)
                         .withModifiers(EclipseModifier.PRIVATE)
                         .withType(TerminalField.class)
-                        .appendAnnotation(JsonIgnore.class)
-                        .appendAnnotation(XmlTransient.class)
                         .build();
 
                 newFields.add(decl);

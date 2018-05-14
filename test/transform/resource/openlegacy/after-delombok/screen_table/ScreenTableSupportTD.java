@@ -23,23 +23,15 @@ public class ScreenTableSupportTD implements org.openlegacy.core.terminal.Screen
 	@org.openlegacy.core.annotations.screen.ScreenTable(supportTerminalData = true, startRow = 1, endRow = 2)
 	@javax.xml.bind.annotation.XmlAccessorType(javax.xml.bind.annotation.XmlAccessType.FIELD)
 	private static class ScreenTable {
-		@com.fasterxml.jackson.annotation.JsonIgnore
-		@javax.xml.bind.annotation.XmlTransient
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
 		private org.openlegacy.core.terminal.TerminalField nationalIdField;
-		@com.fasterxml.jackson.annotation.JsonIgnore
-		@javax.xml.bind.annotation.XmlTransient
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
 		private org.openlegacy.core.terminal.TerminalField ageField;
-		@com.fasterxml.jackson.annotation.JsonIgnore
-		@javax.xml.bind.annotation.XmlTransient
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
 		private org.openlegacy.core.terminal.TerminalField surnameField;
-		@com.fasterxml.jackson.annotation.JsonIgnore
-		@javax.xml.bind.annotation.XmlTransient
 		@java.lang.SuppressWarnings("all")
 		@javax.annotation.Generated("lombok")
 		private org.openlegacy.core.terminal.TerminalField nameField;

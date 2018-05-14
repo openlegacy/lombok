@@ -1,14 +1,14 @@
 package lombok.test;
 public @org.openlegacy.core.annotations.screen.ScreenEntity(supportTerminalData = true) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenEntitySupportTD implements org.openlegacy.core.terminal.ScreenEntity {
-  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField outerQuantityField;
-  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField outerUnitOfMeasureField;
-  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField packingMultiplierField;
-  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField itemNumberField;
-  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField itemNameField;
+  private org.openlegacy.core.terminal.TerminalField outerQuantityField;
+  private org.openlegacy.core.terminal.TerminalField outerUnitOfMeasureField;
+  private org.openlegacy.core.terminal.TerminalField packingMultiplierField;
+  private org.openlegacy.core.terminal.TerminalField itemNumberField;
+  private org.openlegacy.core.terminal.TerminalField itemNameField;
   private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.util.List<org.openlegacy.core.terminal.definitions.TerminalActionDefinition> actions = new java.util.ArrayList<org.openlegacy.core.terminal.definitions.TerminalActionDefinition>();
   private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String pcCommand;
   private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String focusField;
-  private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalSnapshot terminalSnapshot;
+  private org.openlegacy.core.terminal.TerminalSnapshot terminalSnapshot;
   private @org.openlegacy.core.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Name",sampleValue = "A") String itemName;
   private @org.openlegacy.core.annotations.screen.ScreenField(row = 6,column = 33,endColumn = 52,labelColumn = 2,displayName = "Item Number",sampleValue = "A") Integer itemNumber;
   private @org.openlegacy.core.annotations.screen.ScreenField(key = true,row = 17,column = 33,endColumn = 37,labelColumn = 2,displayName = "Packing Multiplier",sampleValue = "0") Double packingMultiplier;

@@ -1,10 +1,10 @@
 package lombok.test;
 public @org.openlegacy.core.annotations.screen.ScreenEntity @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenTableSupportTD implements org.openlegacy.core.terminal.ScreenEntity {
   private static @org.openlegacy.core.annotations.screen.ScreenTable(supportTerminalData = true,startRow = 1,endRow = 2) @javax.xml.bind.annotation.XmlAccessorType(value = javax.xml.bind.annotation.XmlAccessType.FIELD) class ScreenTable {
-    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField nationalIdField;
-    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField ageField;
-    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField surnameField;
-    private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() org.openlegacy.core.terminal.TerminalField nameField;
+    private org.openlegacy.core.terminal.TerminalField nationalIdField;
+    private org.openlegacy.core.terminal.TerminalField ageField;
+    private org.openlegacy.core.terminal.TerminalField surnameField;
+    private org.openlegacy.core.terminal.TerminalField nameField;
     private @com.fasterxml.jackson.annotation.JsonIgnore() @javax.xml.bind.annotation.XmlTransient() java.lang.String focusField;
     private @org.openlegacy.core.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String name;
     private @org.openlegacy.core.annotations.screen.ScreenField(row = 1,column = 1,endRow = 1,endColumn = 5) String surname;

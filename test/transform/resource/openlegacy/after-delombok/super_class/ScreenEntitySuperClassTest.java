@@ -8,8 +8,6 @@ class ScreenEntitySuperClassTest {
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private java.lang.String superClassFieldDescription;
-	@com.fasterxml.jackson.annotation.JsonIgnore
-	@javax.xml.bind.annotation.XmlTransient
 	@java.lang.SuppressWarnings("all")
 	@javax.annotation.Generated("lombok")
 	private org.openlegacy.core.terminal.TerminalField superClassFieldField;

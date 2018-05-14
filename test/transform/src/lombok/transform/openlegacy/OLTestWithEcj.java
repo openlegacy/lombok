@@ -17,6 +17,7 @@ import org.junit.runners.Suite;
 // -Ddelombok.bootclasspath=lib/oracleJDK8Environment/rt.jar
 //  also you need to attach openlegacy-openlegacy-api.jar to the test launch to get use of openlegacy annotaions
 // and javax.persistence.jar to test persistence annotations
+// Important! Edit your Eclipse JRE and add tools.jar from JAVA_HOME/lib folder (Otherwise you'll be not able to run Delombok tests)
 // When running inside eclipse's junit tester, you don't actually need to run 'ant dist' after updating code, though.
 
 /**

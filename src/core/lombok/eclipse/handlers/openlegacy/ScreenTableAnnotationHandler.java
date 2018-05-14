@@ -63,8 +63,6 @@ public class ScreenTableAnnotationHandler {
                 FieldDeclaration decl = new FieldDeclarationBuilder(nameWithFieldSuffix)
                         .withModifiers(EclipseModifier.PRIVATE)
                         .withType(TerminalField.class)
-                        .appendAnnotation(JsonIgnore.class)
-                        .appendAnnotation(XmlTransient.class)
                         .build();
 
                 injectField(typeNode, decl);

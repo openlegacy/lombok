@@ -62,7 +62,6 @@ public class ScreenTableAnnotationHandler {
                 JCTree.JCVariableDecl terminalField = new FieldDeclBuilder(typeNode, nameWithFieldSuffix)
                         .withModifiers(Flags.PRIVATE)
                         .withType(TerminalField.class)
-                        .setAnnotations(JsonIgnore.class, XmlTransient.class)
                         .build();
 
                 terminalFields.add(terminalField);
