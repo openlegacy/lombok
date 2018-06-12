@@ -596,7 +596,7 @@ ${sourceWarning}</echo>
 		<propertyfile file="testenvironment.properties">
 			<entry key="test.location.javac" value="lib/oracleJDK8Environment/javac8.jar" />
 			<entry key="test.location.ecj" value="lib/ecj8/org.eclipse.custom-ecj.jar" />
-			<entry key="test.location.bootclasspath" value="lib/oracleJDK8Environment/rt.jar" />
+			<entry key="test.location.bootclasspath" value="./lib/oracleJDK8Environment/rt.jar" />
 			<entry key="test.location.name" value="OracleJDK8" />
 			<entry key="test.javaversion" value="8" />
 		</propertyfile>
@@ -651,16 +651,18 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 	<target name="test-ol-lombok" depends="-loadTestEnvironmentProperties, -failIfNoTestEnvironmentProperties, -test-compile, dist, test-ecj" unless="tests.skip" description="Runs the ol lombok tests.">
 		<junit haltonfailure="yes" fork="true" showoutput="true">
 			<jvmarg value="-javaagent:dist/openlegacy-lombok.jar" />
-			<jvmarg value="-Ddelombok.bootclasspath=${test.location.bootclasspath};lib/runtime/*" />
-			<jvmarg value="-Xbootclasspath/p:lib/build/org.openlegacy-openlegacy-core.jar;lib/build/javax.persistence-persistence-api.jar" />
+			<jvmarg value="-Ddelombok.bootclasspath=${test.location.bootclasspath}" />
+			<jvmarg value="-Xbootclasspath/p:lib/build/org.openlegacy-openlegacy-core.jar;lib/build/javax.persistence-persistence-api.jar;lib/oracleJDK8Environment/rt.jar;" />
 			<formatter type="plain" usefile="false" unless="tests.quiet" />
 			<classpath refid="test.path" />
 			<classpath path="${test.location.ecj}" />
 			<classpath path="${test.location.javac}" />
+			<classpath path="lib/build/org.openlegacy-openlegacy-core.jar" />
 			<classpath>
 				<fileset dir="lib/build">
 					<include name="org.openlegacy-openlegacy-core.jar" />
-					<include name="javax.persistence-persistence-api.jar" />
+					<include name="lib/build/org.openlegacy-openlegacy-core.jar" />
+					<include name="lib/build/javax.persistence-persistence-api.jar" />
 				</fileset>
 			</classpath>
 			<classpath path="build/lombok" />
