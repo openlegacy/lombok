@@ -649,14 +649,15 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 	</target>
 
 	<target name="test-ol-lombok" depends="-loadTestEnvironmentProperties, -failIfNoTestEnvironmentProperties, -test-compile, dist, test-ecj" unless="tests.skip" description="Runs the ol lombok tests.">
-		<junit haltonfailure="yes" fork="true" showoutput="true">
+		<junit haltonfailure="yes" fork="true" showoutput="yes">
 			<jvmarg value="-javaagent:dist/openlegacy-lombok.jar" />
-			<jvmarg value="-Ddelombok.bootclasspath=${test.location.bootclasspath};lib/runtime/*" />
+			<jvmarg value="-Ddelombok.bootclasspath=${test.location.bootclasspath}" />
 			<jvmarg value="-Xbootclasspath/p:lib/build/org.openlegacy-openlegacy-core.jar;lib/build/javax.persistence-persistence-api.jar" />
 			<formatter type="plain" usefile="false" unless="tests.quiet" />
 			<classpath refid="test.path" />
 			<classpath path="${test.location.ecj}" />
 			<classpath path="${test.location.javac}" />
+			<classpath path="lib/build/org.openlegacy-openlegacy-core.jar" />
 			<classpath>
 				<fileset dir="lib/build">
 					<include name="org.openlegacy-openlegacy-core.jar" />
