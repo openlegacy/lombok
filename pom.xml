@@ -1,117 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.openlegacy</groupId>
-		<artifactId>openlegacy-dependencies-manager</artifactId>
-		<version>4.2.2.b1</version>
-	</parent>
+    <parent>
+        <groupId>org.openlegacy</groupId>
+        <artifactId>openlegacy-dependencies-manager</artifactId>
+        <version>${revision}.${sha1}</version>
+    </parent>
 
-	<artifactId>openlegacy-lombok</artifactId>
-	<packaging>pom</packaging>
+    <artifactId>openlegacy-lombok</artifactId>
+    <packaging>pom</packaging>
 
-	<name>OpenLegacyLombok</name>
-	<description>OpenLegacyLombok is a fork of the Lombok project by Reinier Zwitserloot</description>
+    <name>OpenLegacyLombok</name>
+    <description>OpenLegacyLombok is a fork of the Lombok project by Reinier Zwitserloot</description>
 
-	<licenses>
-		<license>
-			<name>Eclipse Public License - v 1.0</name>
-			<url>http://www.eclipse.org/legal/epl-v10.html</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Eclipse Public License - v 1.0</name>
+            <url>http://www.eclipse.org/legal/epl-v10.html</url>
+        </license>
+    </licenses>
 
-	<!--<distributionManagement>-->
-		<!--<snapshotRepository>-->
-			<!--<id>openlegacy-ftp</id>-->
-			<!--<uniqueVersion>false</uniqueVersion>-->
-			<!--<name>OpenLegacy Snapshot Repository</name>-->
-			<!--<url>http://maven.openlegacy.org/maven2/openlegacy</url>-->
-		<!--</snapshotRepository>-->
-		<!--<repository>-->
-			<!--<id>openlegacy-ftp</id>-->
-			<!--<name>OpenLegacy Release Repository</name>-->
-			<!--<url>http://maven.openlegacy.org/maven2/openlegacy</url>-->
-		<!--</repository>-->
-	<!--</distributionManagement>-->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <artifactory.repository.name>ol-dev</artifactory.repository.name>
+    </properties>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<openlegacy-lombok.lib.path>C:\</openlegacy-lombok.lib.path>
-	</properties>
+    <repositories>
+        <repository>
+            <id>ol-dev-libs</id>
+            <url>https://openlegacy.jfrog.io/openlegacy/ol-dev</url>
+        </repository>
+    </repositories>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openlegacy</groupId>
-			<artifactId>openlegacy-core</artifactId>
-			<version>${openlegacy.version}</version>
-		</dependency>
-	</dependencies>
+    <pluginRepositories>
+        <!-- JCenter -->
+        <pluginRepository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com</url>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.3</version>
-				<executions>
-					<execution>
-						<id>add-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>attach-artifact</goal>
-						</goals>
-						<configuration>
-							<artifacts>
-								<artifact>
-									<file>dist/openlegacy-lombok.jar</file>
-									<type>jar</type>
-								</artifact>
-							</artifacts>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>2.10</version>
-			</plugin>
-		</plugins>
-	</build>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openlegacy</groupId>
+            <artifactId>openlegacy-core</artifactId>
+            <version>${openlegacy.version}</version>
+        </dependency>
+    </dependencies>
 
-	<profiles>
-		<profile>
-			<id>publish_lib</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<configuration>
-									<target name="publish_lib">
-										<copy file="dist/openlegacy-lombok.jar" tofile="${openlegacy-lombok.lib.path}/${project.artifactId}/${project.version}/${project.artifactId}.jar" 
-											overwrite="true"/>
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <id>add-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>dist/openlegacy-lombok.jar</file>
+                                    <type>jar</type>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>2.10</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>ol-deploy-internal</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jfrog.buildinfo</groupId>
+                        <artifactId>artifactory-maven-plugin</artifactId>
+                        <version>2.6.1</version>
+                        <executions>
+                            <execution>
+                                <id>build-info</id>
+                                <goals>
+                                    <goal>publish</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactory>
+                                        <includeEnvVars>true</includeEnvVars>
+                                        <envVarsExcludePatterns>*password*,*secret*,*key*,*token*,*passphrase*
+                                        </envVarsExcludePatterns>
+                                        <timeoutSec>3600</timeoutSec>
+                                    </artifactory>
+                                    <publisher>
+                                        <contextUrl>https://openlegacy.jfrog.io/openlegacy/</contextUrl>
+                                        <username>${ARTIFACTORY_OL_OPS_USER}</username>
+                                        <password>${ARTIFACTORY_OL_OPS_PASSWORD}</password>
+                                        <excludePatterns>*-tests.jar</excludePatterns>
+                                        <repoKey>${artifactory.repository.name}</repoKey>
+                                    </publisher>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
