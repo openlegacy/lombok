@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-	<info organisation="org.openlegacy" module="openlegacy-core" revision="4.2.2.b1">
+	<info organisation="org.openlegacy" module="openlegacy-core" revision="4.2.2.b">
 		<license name="Eclipse Public License - v 1.0" url="https://www.eclipse.org/legal/epl-v10.html" />
 		<description homepage="https://openlegacy.com/" />
 	</info>
