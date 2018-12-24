@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.openlegacy</groupId>
+  <artifactId>openlegacy-lombok</artifactId>
+  <version>4.2.2.b</version>
+  <packaging>pom</packaging>
+  <licenses>
+    <license>
+      <name>Eclipse Public License - v 1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license>
+  </licenses>
+  <dependencies>
+    <dependency>
+      <groupId>org.openlegacy</groupId>
+      <artifactId>openlegacy-core</artifactId>
+      <version>4.2.2.b</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <repositories>
+    <repository>
+      <id>ol-dev-libs</id>
+      <url>https://openlegacy.jfrog.io/openlegacy/ol-dev</url>
+    </repository>
+    <repository>
+      <id>jcenter</id>
+      <url>https://jcenter.bintray.com</url>
+    </repository>
+    <repository>
+      <id>openlegacy-m2</id>
+      <url>http://maven.openlegacy.org/maven2/openlegacy-dev</url>
+    </repository>
+    <repository>
+      <id>ol-3rd-party-libs</id>
+      <url>https://openlegacy.jfrog.io/openlegacy/ol-3rd-party-libs</url>
+    </repository>
+    <repository>
+      <id>ol-3rd-party-libs-proprietary</id>
+      <url>https://openlegacy.jfrog.io/openlegacy/ol-3rd-party-libs-proprietary</url>
+    </repository>
+    <repository>
+      <id>codelds</id>
+      <url>https://code.lds.org/nexus/content/groups/main-repo</url>
+    </repository>
+    <repository>
+      <id>atlassian</id>
+      <url>https://packages.atlassian.com/maven-3rdparty</url>
+    </repository>
+    <repository>
+      <id>tudelft</id>
+      <url>https://simulation.tudelft.nl/maven</url>
+    </repository>
+  </repositories>
+</project>
