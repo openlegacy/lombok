@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openlegacy</groupId>
   <artifactId>openlegacy-lombok</artifactId>
-  <version>4.2.2.b</version>
+  <version>4.2.2.BUILD</version>
   <packaging>pom</packaging>
   <licenses>
     <license>
@@ -16,13 +16,13 @@
     <dependency>
       <groupId>org.openlegacy</groupId>
       <artifactId>openlegacy-core</artifactId>
-      <version>4.2.2.b</version>
+      <version>4.2.2.BUILD</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
   <repositories>
     <repository>
-      <id>ol-dev-libs</id>
+      <id>openlegacy-m2</id>
       <url>https://openlegacy.jfrog.io/openlegacy/ol-dev</url>
     </repository>
     <repository>
@@ -30,16 +30,12 @@
       <url>https://jcenter.bintray.com</url>
     </repository>
     <repository>
-      <id>openlegacy-m2</id>
-      <url>http://maven.openlegacy.org/maven2/openlegacy-dev</url>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
     </repository>
     <repository>
       <id>ol-3rd-party-libs</id>
       <url>https://openlegacy.jfrog.io/openlegacy/ol-3rd-party-libs</url>
-    </repository>
-    <repository>
-      <id>ol-3rd-party-libs-proprietary</id>
-      <url>https://openlegacy.jfrog.io/openlegacy/ol-3rd-party-libs-proprietary</url>
     </repository>
     <repository>
       <id>codelds</id>
