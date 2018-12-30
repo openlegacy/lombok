@@ -140,6 +140,10 @@
                                         <excludePatterns>*-tests.jar</excludePatterns>
                                         <repoKey>${artifactory.repository.name}</repoKey>
                                     </publisher>
+                                    <buildInfo>
+                                        <buildName>ol-core</buildName>
+                                        <buildNumber>${sha1}</buildNumber>
+                                    </buildInfo>
                                 </configuration>
                             </execution>
                         </executions>
