@@ -141,8 +141,9 @@
                                         <repoKey>${artifactory.repository.name}</repoKey>
                                     </publisher>
                                     <buildInfo>
-                                        <buildName>ol-lombok</buildName>
+                                        <buildName>ol-lombok-${revision}</buildName>
                                         <buildNumber>${sha1}</buildNumber>
+                                        <buildRetentionCount>3</buildRetentionCount>
                                     </buildInfo>
                                 </configuration>
                             </execution>
