@@ -7,6 +7,6 @@
 		<conf name="default" />
 	</configurations>
 	<publications>
-		<artifact conf="default" url="http://maven.openlegacy.org/maven2/openlegacy-dev/org/openlegacy/openlegacy-core/4.3.0.BUILD/openlegacy-core-4.3.0.BUILD.jar" />
+		<artifact conf="default" url="https://openlegacy.jfrog.io/openlegacy/ol-dev/org/openlegacy/openlegacy-core/4.3.0.BUILD/openlegacy-core-4.3.0.BUILD.jar" />
 	</publications>
 </ivy-module>
