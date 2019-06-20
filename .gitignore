@@ -21,3 +21,5 @@
 /.apt_generated/
 /out
 openlegacy-lombok.iml
+.flattened-pom.xml
+target/
