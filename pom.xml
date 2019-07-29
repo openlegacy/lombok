@@ -142,8 +142,8 @@
                                     </publisher>
                                     <buildInfo>
                                         <buildName>ol-lombok-${revision}</buildName>
-                                        <buildNumber>${sha1}</buildNumber>
-                                        <buildRetentionCount>3</buildRetentionCount>
+                                        <buildNumber>${TRAVIS_BUILD_NUMBER}</buildNumber>
+                                        <buildRetentionCount>2</buildRetentionCount>
                                     </buildInfo>
                                 </configuration>
                             </execution>
