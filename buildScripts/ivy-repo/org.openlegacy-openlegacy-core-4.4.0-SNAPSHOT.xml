@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-	<info organisation="org.openlegacy" module="openlegacy-core" revision="4.3.2-SNAPSHOT">
+	<info organisation="org.openlegacy" module="openlegacy-core" revision="4.4.0-SNAPSHOT">
 		<license name="Eclipse Public License - v 1.0" url="https://www.eclipse.org/legal/epl-v10.html" />
 		<description homepage="https://openlegacy.com/" />
 	</info>
@@ -7,6 +7,6 @@
 		<conf name="default" />
 	</configurations>
 	<publications>
-		<artifact conf="default" url="https://openlegacy.jfrog.io/openlegacy/ol-dev/org/openlegacy/openlegacy-core/4.3.2-SNAPSHOT/openlegacy-core-4.3.2-SNAPSHOT.jar" />
+		<artifact conf="default" url="https://openlegacy.jfrog.io/openlegacy/ol-dev/org/openlegacy/openlegacy-core/4.4.0-SNAPSHOT/openlegacy-core-4.4.0-SNAPSHOT.jar" />
 	</publications>
 </ivy-module>
