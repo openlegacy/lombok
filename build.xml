@@ -99,7 +99,7 @@ the common tasks and can be called on to run the main aspects of all the sub-scr
 
 	<target name="contrib" depends="config-ivy" description="Downloads various non-crucial documentation, sources, etc that are useful when developing lombok.ast.">
 		<ivy:resolve file="buildScripts/ivy.xml" refresh="true" conf="contrib, ecj7, ecj8" />
-		<ivy:retrieve />
+		<ivy:retrieve pattern="lib/[artifact]-[revision](-[classifier]).[ext]"/>
 	</target>
 
 	<target name="jackson" depends="config-ivy" description="Downloads and installs jackson-mapper">
